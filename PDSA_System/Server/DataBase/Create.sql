@@ -8,33 +8,36 @@ CREATE TABLE Bruker(
             );
 
 CREATE TABLE Gruppe(
-                LagId INTEGER NOT NULL AUTO_INCREMENT,
+                GruppeId INTEGER NOT NULL AUTO_INCREMENT,
                 Navn VARCHAR(50),
                 AvdelingsId INTEGER,
-                CONSTRAINT PK_Lag PRIMARY KEY (LagId)
+                CONSTRAINT PK_Gruppe PRIMARY KEY (GruppeId)
             );
 
 CREATE TABLE Forslag(
                 ForslagsId INTEGER NOT NULL AUTO_INCREMENT,
                 ForfatterId INTEGER NOT NULL,
-                LagId INTEGER NOT NULL,
+                GruppeId INTEGER NOT NULL,
                 Emne VARCHAR(150) NOT NULL,
                 Beskrivelse VARCHAR(2000) NOT NULL,
                 Bilde MEDIUMBLOB,
                 Status INTEGER DEFAULT 1 NOT NULL,
                 Tidspunkt DATE,
                 CONSTRAINT PK_Forslag PRIMARY KEY (ForslagsId),
-                CONSTRAINT FK_Forslag_Lag FOREIGN KEY (LagId) REFERENCES Gruppe(LagId)
+                CONSTRAINT FK_Forslag_Bruker FOREIGN KEY (ForfatterId) REFERENCES  Bruker(BrukerId)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+                CONSTRAINT FK_Forslag_Gruppe FOREIGN KEY (GruppeId) REFERENCES Gruppe(GruppeId)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE
             );
 
-CREATE TABLE LagMedlemskap(
+CREATE TABLE GruppeMedlemskap(
                 Id INTEGER NOT NULL AUTO_INCREMENT,
-                LagId INTEGER,
+                GruppeId INTEGER,
                 BrukerId INTEGER,
                 CONSTRAINT PK_LagMedlemskap PRIMARY KEY (Id),
-                CONSTRAINT FK_LagMedlemskap_Lag FOREIGN KEY (LagId) REFERENCES Gruppe(LagId)
+                CONSTRAINT FK_LagMedlemskap_Lag FOREIGN KEY (GruppeId) REFERENCES Gruppe(GruppeId)
                 ON DELETE CASCADE
                 ON UPDATE CASCADE,
                 CONSTRAINT FK_LagMedlemskap_Bruker FOREIGN KEY (BrukerId) REFERENCES Bruker(BrukerId)
