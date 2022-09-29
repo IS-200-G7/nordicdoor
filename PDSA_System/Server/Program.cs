@@ -39,7 +39,7 @@ app.Run();
 /**
  * app.Run() kjøres i evig-loop til man avbryter.
  * For å teste tilkobling må du først kjøre prosjektet PDSA_System.Server og avbryte det slik at den fullfører resterende av filen.
- * Husk å bytte passord til ditt eget i TestingDbConn ved PASSWORD.
+ * Husk å bytte passord til ditt eget i appsettings.json filen.
  */
 
 var test = new TestingDbConn();

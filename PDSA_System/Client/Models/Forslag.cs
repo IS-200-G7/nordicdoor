@@ -10,7 +10,7 @@ namespace PDSA_System.Client.Models
 
         public string Beskrivelse { get; set; }
 
-        public Object Bilde { get; set; }
+        public byte[] Bilde { get; set; }
 
         public int Status { get; set; }
 

@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Configuration;
 using PDSA_System.Client;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace PDSA_System.Server.Models
 {
@@ -11,10 +14,16 @@ namespace PDSA_System.Server.Models
 
         public void TestConn()
         {
-            /*
-             Endre din connectionString her.
+            /** ConfigurationBuilder()
+             * Brukes for å bygge nøkkel/verdi som baserer seg på config settinger som brukes i en applikasjon.
+             * Legger til appsettings filen.
+             * Dette lagres i et Json Objekt MyConfig.
+             * Dette objektet kan hente verdier fra appsettings.json filen
              */
-            using var connector = new DbHelper("server=localhost;user=root;database=NordicDoor;port=3306;password=PASSWORD");
+            var MyConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var connString = MyConfig.GetValue<string>("ConnectionStrings:DefaultConnection");
+
+            using var connector = new DbHelper(connString);
 
             try
             {
@@ -22,14 +31,13 @@ namespace PDSA_System.Server.Models
                 connector.Connection.Open();                    // tester connection
 
             }
-            catch (Exception ex)                                // Dersom Open() kaster en error blir den fanget.
+            catch (Exception error)                                // Dersom Open() kaster en error blir den fanget.
             {
-                Console.WriteLine(ex.ToString());
+                Console.WriteLine("ErrorMessage:");
+                Console.WriteLine(error.Message);
             }
             connector.Connection.Close();                       // Dersom ingen error blir kastet closer vi connection og Skriver Done.
             Console.WriteLine("Done.");
-
-
         }
     }
 }
