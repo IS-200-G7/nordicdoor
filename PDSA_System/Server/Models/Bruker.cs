@@ -5,7 +5,9 @@ namespace PDSA_System.Client.Models
     {
         public int BrukerId { get; set; }
 
-        public string Navn { get; set; }
+        public string Fornavn { get; set; }
+        
+        public string Etternavn { get; set; }
 
         public string Email { get; set; }
 
