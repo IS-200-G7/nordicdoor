@@ -11,7 +11,7 @@ namespace PDSA_System.Client.Models
 
         public string Email { get; set; }
 
-        private string PassordHash { get; set; } //Trenger rettninglinsjer her.
+        public string PassordHash { get; set; } //Trenger rettninglinsjer her.
 
         public string Rolle { get; set; }
 
