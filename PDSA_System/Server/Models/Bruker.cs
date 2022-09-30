@@ -24,7 +24,12 @@ namespace PDSA_System.Client.Models
 
         public Bruker()
         {
-            
+            BrukerId = 0;
+            Fornavn = "";
+            Etternavn = "";
+            Email = "";
+            PassordHash = "";
+            Rolle = "";
         }
 
 
