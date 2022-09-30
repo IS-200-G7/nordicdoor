@@ -1,7 +1,7 @@
 using System.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace PDSA_System.Client
+namespace PDSA_System.Server
 {
     /**
      * Klasse "Helper" bruker interfasen IDisposable som lover å ha en Dispose() metode.
