@@ -65,8 +65,10 @@ public class JWTClaims
         var etternavn = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
         var rolle = tokenS.Claims.First(claim => claim.Type == "role").Value;
         var brukerId = tokenS.Claims.First(claim => claim.Type == "userId").Value;
-        var exp = tokenS.Claims.First(claim => claim.Type == "exp").Value;
         
-        return new JWTClaims(epost, fornavn, etternavn, rolle, brukerId, int.Parse(exp));
+        // Exp er ikke nødvendig å hente ut, da den ikke brukes i applikasjonen, bør implementeres senere
+        //var exp = tokenS.Claims.First(claim => claim.Type == "exp").Value;
+        
+        return new JWTClaims(epost, fornavn, etternavn, rolle, brukerId);
     }
 }
