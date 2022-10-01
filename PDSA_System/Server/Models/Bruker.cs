@@ -1,5 +1,5 @@
 
-namespace PDSA_System.Client.Models
+namespace PDSA_System.Server.Models
 {
     public class Bruker
     {
