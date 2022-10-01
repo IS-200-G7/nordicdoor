@@ -39,7 +39,7 @@ public class JWTClaims
         
         // Hente og generere nøkler for autentisering
         // Key er hardcoded kun for utvikling. Denne MÅ endres til å hente fra appsettings.json
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("secret"));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ED02457B5C41D964DBD2F2A609D63FE1BB7528DBE55E1ABF5B52C249CD735797"));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         
         // Generer token, issuer og audience kan vi vente med til senere
