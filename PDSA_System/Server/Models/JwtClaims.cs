@@ -14,14 +14,14 @@ public class JWTClaims
     private string BrukerId { get; set; }
     private int Exp { get; set; }
     
-    public JWTClaims(string epost, string fornavn, string etternavn, string rolle, string brukerId, int exp)
+    public JWTClaims(string epost, string fornavn, string etternavn, string rolle, string brukerId)
     {
         this.Epost = epost;
         this.Fornavn = fornavn;
         this.Etternavn = etternavn;
         this.Rolle = rolle;
         this.BrukerId = brukerId;
-        this.Exp = exp;
+        //this.Exp = exp;
     }
     
     // Generer en JWT token
