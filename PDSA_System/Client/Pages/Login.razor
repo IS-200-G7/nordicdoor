@@ -1,16 +1,25 @@
 @page "/Login";
+@using PDSA_System.Client.Models
 
 <h3>Login</h3>
 
-<form id="loginForm">
-<TextInput id="usernameInput" name="usernameInput" label="Epostadresse" type="text"/>
+<EditForm Model=@data OnSubmit=@FormSubmitted>
+    <DataAnnotationsValidator/>
+    <!--<TextInput BindValue="@data.email" id="usernameInput" name="usernameInput" label="Epostadresse" type="text"/>-->
+    <input type="text" class="form-control" id="firstName" @bind-value="@data.email" placeholder="enter first name..." />
+                        
+    <TextInput BindValue="@data.password" id="passwordInput" name="passwordInput" label="Passord" type="password"/>
 
-<TextInput id="passwordInput" name="passwordInput" label="Passord" type="password"/>
+    <SubmitInput/>
 
-<SubmitInput/>
-
-</form>
+</EditForm>
 
 @code {
+    LoginData data = new LoginData();
     
+    void FormSubmitted(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        Console.WriteLine(data.email + " " + data.password + " " + formIsValid);
+    }
 }
