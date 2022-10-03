@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.9" />
     <PackageReference Include="MySql.Data" Version="8.0.30" />
+    <PackageReference Include="Dapper" Version="2.0.123" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,5 +21,6 @@
 
   <ItemGroup>
     <None Remove="MySql.Data" />
+    <None Remove="Dapper" />
   </ItemGroup>
 </Project>

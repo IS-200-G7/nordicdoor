@@ -5,7 +5,7 @@ namespace PDSA_System.Server.Models
     {
         public int BrukerId { get; set; }
 
-        public string Fornavn { get; set; }
+        public string ForNavn { get; set; }
 
         public string EtterNavn { get; set; }
 
@@ -17,22 +17,6 @@ namespace PDSA_System.Server.Models
 
         // public List<Lag> Lag{ get; set; }
 
-        /*
-         Er List den beste datastrukturen? Kanskje HashMap <K,V>.
-         */
-
-        // Constructor for Bruker
-        public Bruker(string forNavn, string etterNavn, string email, string rolle)
-        {
-            this.Fornavn = forNavn;
-            this.EtterNavn = etterNavn;
-            this.Email = email;
-            this.PassordHash = ""; //Hente passord fra authController.
-            this.Rolle = rolle;
-            
-        }
-
-
-
+        //Dersom man bruker dapper må man ha en default/tom ctor("param")
     }
 }
