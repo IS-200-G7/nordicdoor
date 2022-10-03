@@ -5,11 +5,13 @@ namespace PDSA_System.Server.Models
     {
         public int BrukerId { get; set; }
 
-        public string Navn { get; set; }
+        public string Fornavn { get; set; }
+        
+        public string Etternavn { get; set; }
 
         public string Email { get; set; }
 
-        private string PassordHash { get; set; } //Trenger rettninglinsjer her.
+        public string PassordHash { get; set; } //Trenger rettninglinsjer her.
 
         public string Rolle { get; set; }
 
@@ -22,7 +24,12 @@ namespace PDSA_System.Server.Models
 
         public Bruker()
         {
-            
+            BrukerId = 0;
+            Fornavn = "";
+            Etternavn = "";
+            Email = "";
+            PassordHash = "";
+            Rolle = "";
         }
 
 
