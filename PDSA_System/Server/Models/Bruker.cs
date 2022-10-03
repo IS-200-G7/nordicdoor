@@ -5,7 +5,9 @@ namespace PDSA_System.Server.Models
     {
         public int BrukerId { get; set; }
 
-        public string Navn { get; set; }
+        public string Fornavn { get; set; }
+
+        public string EtterNavn { get; set; }
 
         public string Email { get; set; }
 
@@ -19,9 +21,14 @@ namespace PDSA_System.Server.Models
          Er List den beste datastrukturen? Kanskje HashMap <K,V>.
          */
 
-
-        public Bruker()
+        // Constructor for Bruker
+        public Bruker(string forNavn, string etterNavn, string email, string rolle)
         {
+            this.Fornavn = forNavn;
+            this.EtterNavn = etterNavn;
+            this.Email = email;
+            this.PassordHash = ""; //Hente passord fra authController.
+            this.Rolle = rolle;
             
         }
 
