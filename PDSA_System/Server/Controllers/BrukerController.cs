@@ -10,8 +10,9 @@ using Dapper;
 
 namespace PDSA_System.Server.Controllers
 {
-    [Route("[controller]")]
+    [Route("/api/[controller]")]
     [ApiController]
+
     public class BrukerController : Controller
     {
 
@@ -22,19 +23,12 @@ namespace PDSA_System.Server.Controllers
             this._configuration = configuration;
         }
 
-        // GET: /<controller>/
-        public IActionResult Index()
-        {
-            
-            return View();
-        }
-
-      
         /**
          * Henter alle brukerene fra databasen.
          * Returnerer statuskode 200 dersom det ikke oppstår feil.
          */
         [HttpGet]
+
         public async Task<ActionResult<List<Bruker>>> GetAllBrukere()
         {
 
@@ -52,6 +46,7 @@ namespace PDSA_System.Server.Controllers
          * URL --> NordicDoor/Bruker/1 vil hente ut bruker med brukerId 1.
          * Returnerer statuskode 200 dersom det ikke oppstår feil.
         */
+
         [HttpGet("{brukerId}")]
         public async Task<ActionResult<List<Bruker>>> GetBruker (int brukerId)
         {
