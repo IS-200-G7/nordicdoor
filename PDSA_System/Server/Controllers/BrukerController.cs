@@ -70,34 +70,38 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "INSERT INTO Bruker(ForNavn, EtterNavn, Email, Rolle, PassordHash) values (@ForNavn, @EtterNavn, @Email, @Rolle, @PassordHash))", bruker);
+                "INSERT INTO Bruker(BrukerId, ForNavn, EtterNavn, Email, PassordHash) VALUES (@BrukerId, @ForNavn, @EtterNavn, @Email, @PassordHash)", bruker);
 
             return Ok(await GetBruker(bruker.BrukerId));
         }
 
+        /*
+         Updater en Bruker --> ikke helt funksjonell enda.
+         */
         [HttpPut]
-
         public async Task<ActionResult<List<Bruker>>> UpdateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET ForNavn = @ForNavn, EtterNavn = @EtterNavn, Email = @Email, Rolle = @Rolle, PassordHash = @PassordHash", bruker);
+                "UPDATE Bruker SET ForNavn = @ForNavn, EtterNavn = @EtterNavn, Email = @Email, PassordHash = @PassordHash, WHERE BrukerId = @BrukerId", bruker);
 
             return Ok(await GetBruker(bruker.BrukerId));
         }
 
 
+        /*
+         Deleter brukere etter BrukerId
+         */
         [HttpDelete]
-
-        public async Task<ActionResult<List<Bruker>>> DeleteBruker(Bruker bruker)
+        public async Task<ActionResult<List<Bruker>>> DeleteBruker(Bruker bruker, int brukerId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "DELETE FROM Bruker WHERE BrukerId = @BrukerId", bruker);
+                "DELETE FROM Bruker WHERE BrukerId = @Id", new {id = brukerId});
 
             return Ok(await GetAllBrukere());
         }

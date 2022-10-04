@@ -13,7 +13,7 @@ namespace PDSA_System.Server.Models
 
         public string PassordHash { get; set; } //Trenger rettninglinsjer her.
 
-        public string Rolle { get; set; }
+        // public string Rolle { get; set; }
 
         public DateTime Opprettet { get; set; }
 
@@ -24,16 +24,6 @@ namespace PDSA_System.Server.Models
 
         Er List den beste datastrukturen? Kanskje HashMap <K,V>.
          */
-
-        public Bruker()
-        {
-            BrukerId = 0;
-            Fornavn = "";
-            Etternavn = "";
-            Email = "";
-            PassordHash = "";
-            Rolle = "";
-        }
 
     }
 }
