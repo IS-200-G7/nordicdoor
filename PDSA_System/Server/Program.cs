@@ -17,16 +17,9 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-<<<<<<< HEAD
     
     app.UseSwagger();
     app.UseSwaggerUI();
-=======
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
-
->>>>>>> 9881461 (lagt til Swagger nuget Pack)
 }
 else
 {
