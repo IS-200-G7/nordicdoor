@@ -12,12 +12,18 @@
 
 ## Hvordan starte serveren?
 ### Kjøre programmet:
-`dotnet run`
+```console
+$ cd nordicdoor/PDSA_System/Server/ 
+$ dotnet run
+```
 
 ### Kjøre programmet med Hot Reload:
 Dette vil automatisk laste inn nye endringer når du lagrer filer, noe som gjør at du ikke trenger å restarte programmet for hver endring
 
-`dotnet watch run`
+```console
+$ cd nordicdoor/PDSA_System/Server/ 
+$ dotnet watch run
+```
 
 ### Kjøre testene:
 *Ikke implementert*
