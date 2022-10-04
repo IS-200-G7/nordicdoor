@@ -1,5 +1,7 @@
 @page "/Login";
 @using PDSA_System.Client.Models
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
 
 <h3>Login</h3>
 
@@ -24,6 +26,21 @@
     void FormSubmitted(EditContext editContext)
     {
         bool formIsValid = editContext.Validate();
-        Console.WriteLine(data.email + " " + data.password + " " + formIsValid);
+        Console.WriteLine(data.brukernavn + " " + data.passord + " " + formIsValid);
+
+        HttpClient.PostAsJsonAsync("/auth/login", data).ContinueWith(task =>
+        {
+            if (task.Result.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Success");
+                var token = task.Result.Content.ReadAsStringAsync().Result;
+                
+                CreateCookie("authentication", token, 1);
+            }
+            else
+            {
+                Console.WriteLine("Failed");
+            }
+        });
     }
 }
