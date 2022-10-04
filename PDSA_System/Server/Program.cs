@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen();
 
@@ -16,9 +17,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+<<<<<<< HEAD
     
     app.UseSwagger();
     app.UseSwaggerUI();
+=======
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+>>>>>>> 9881461 (lagt til Swagger nuget Pack)
 }
 else
 {

@@ -15,6 +15,9 @@ namespace PDSA_System.Server.Models
 
         public string Rolle { get; set; }
 
+        public DateTime Opprettet { get; set; }
+
+
         // public List<Lag> Lag{ get; set; }
 
         //Dersom man bruker dapper må man ha en default/tom ctor("param")
