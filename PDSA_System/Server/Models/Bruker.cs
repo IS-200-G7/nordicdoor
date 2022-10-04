@@ -21,5 +21,6 @@ namespace PDSA_System.Server.Models
         // public List<Lag> Lag{ get; set; }
 
         //Dersom man bruker dapper må man ha en default/tom ctor("param")
+
     }
 }
