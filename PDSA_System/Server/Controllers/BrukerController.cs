@@ -61,7 +61,7 @@ namespace PDSA_System.Server.Controllers
 
         /*
             Create for en ny Bruker.
-            Fungerer ikke akkurat nå siden PassordHash har sikkerthetsfunksjoner jeg ikke kjenner til.
+            
          */
         [HttpPost]
         public async Task<ActionResult<List<Bruker>>> CreateBruker(Bruker bruker)
@@ -95,7 +95,7 @@ namespace PDSA_System.Server.Controllers
          Deleter brukere etter BrukerId
          */
         [HttpDelete]
-        public async Task<ActionResult<List<Bruker>>> DeleteBruker(Bruker bruker, int brukerId)
+        public async Task<ActionResult<List<Bruker>>> DeleteBruker(int brukerId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
