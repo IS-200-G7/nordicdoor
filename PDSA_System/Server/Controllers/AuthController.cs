@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
 
     // login controller
     [HttpPost("login")]
-    public IActionResult Login([FromBody]LoginFormData data)
+    public IActionResult Login([FromBody] LoginFormData data)
     {
         // Hente til connection string fra appsettings.json og åpne en connection til database
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -39,14 +39,15 @@ public class AuthController : ControllerBase
         Bruker bruker;
         try
         {
-            bruker = conn.QueryFirstOrDefault<Bruker>("SELECT * FROM Bruker WHERE Email = @brukernavn", new {data.brukernavn});
+            bruker = conn.QueryFirstOrDefault<Bruker>("SELECT * FROM Bruker WHERE Email = @brukernavn",
+                new { data.brukernavn });
         }
         catch (Exception e)
         {
             Console.WriteLine($"databaseerror: {e.Message}");
             return StatusCode(500, "En feil har skjedd");
         }
-        
+
         // Sjekk om bruker finnes
         if (bruker == null)
         {
@@ -54,7 +55,7 @@ public class AuthController : ControllerBase
         }
 
         PasswordHash hasher = new PasswordHash();
-        
+
         //hashString[0] er hash, hashString[1] er salt
         string[] hashString = bruker.PassordHash.Split(':');
         // base64 til byte array
@@ -63,20 +64,19 @@ public class AuthController : ControllerBase
 
         // Valider passordet ved å hashe det igjen med samme salt og sammenligne med resultat fra DB
         var valid = hasher.Verify(data.passord, salt, hash);
-        
+
         // Send token om passordet er riktig
         if (valid)
         {
-            JWTClaims claims = new JWTClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, "Bruker", bruker.BrukerId.ToString());
+            JWTClaims claims = new JWTClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, "Bruker",
+                bruker.BrukerId.ToString());
 
-            var token = claims.GenerateToken();;
-            
+            var token = claims.GenerateToken();
+
             return Ok(token);
         }
-        
+
         // Feilmelding om passordet er feil
         return Unauthorized("Feil brukernavn eller passord");
     }
-
-
 }

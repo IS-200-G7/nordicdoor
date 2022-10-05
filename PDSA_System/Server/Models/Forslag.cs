@@ -1,4 +1,3 @@
-
 namespace PDSA_System.Server.Models
 {
     public class Forslag
@@ -18,10 +17,8 @@ namespace PDSA_System.Server.Models
 
         public Forslag()
         {
-            
         }
     }
-
 }
 
 /*

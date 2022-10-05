@@ -4,6 +4,4 @@ public class LoginData
 {
     public string brukernavn { get; set; }
     public string passord { get; set; }
-    
-    
 }

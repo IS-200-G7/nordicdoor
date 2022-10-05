@@ -4,7 +4,7 @@ public class LoginFormData
 {
     public string brukernavn { get; set; }
     public string passord { get; set; }
-    
+
     /*
      public LoginFormData(string brukernavn, string passord)
     {
@@ -12,5 +12,4 @@ public class LoginFormData
         this.passord = passord;
     }
     */
-
 }

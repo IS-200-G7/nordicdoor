@@ -14,7 +14,7 @@ public class PasswordHash
         rng.GetBytes(buffer);
         return buffer;
     }
-    
+
     // Generere hash fra passord og salt
     public byte[] HashPassword(string password, byte[] salt)
     {
@@ -27,11 +27,10 @@ public class PasswordHash
 
         return argon2.GetBytes(32);
     }
-    
+
     // Verifisere et hash mot et passord og salt
     public bool Verify(string password, byte[] salt, byte[] hash)
     {
         return HashPassword(password, salt).SequenceEqual(hash);
     }
-    
 }

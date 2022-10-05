@@ -17,6 +17,5 @@ namespace PDSA_System.Server
         }
 
         public void Dispose() => Connection.Dispose();
-
     }
 }
