@@ -13,26 +13,17 @@ namespace PDSA_System.Server.Models
 
         public string PassordHash { get; set; } //Trenger rettninglinsjer her.
 
-        public string Rolle { get; set; }
+        // public string Rolle { get; set; }
 
-        // public List<Lag> Lag{ get; set; }
+        public DateTime Opprettet { get; set; }
 
-        /*
-         Er List den beste datastrukturen? Kanskje HashMap <K,V>.
+
+        /* public List<Lag> Lag{ get; set; }
+
+        Dersom man bruker dapper må man ha en default/tom ctor("param")
+
+        Er List den beste datastrukturen? Kanskje HashMap <K,V>.
          */
-
-
-        public Bruker()
-        {
-            BrukerId = 0;
-            Fornavn = "";
-            Etternavn = "";
-            Email = "";
-            PassordHash = "";
-            Rolle = "";
-        }
-
-
 
     }
 }

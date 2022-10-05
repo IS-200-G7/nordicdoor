@@ -23,5 +23,8 @@
 
   <ItemGroup>
     <None Remove="MySql.Data" />
+    <None Remove="Dapper" />
+    <None Remove="Swashbuckle.AspNetCore.Swagger" />
+    <None Remove="Swashbuckle.AspNetCore" />
   </ItemGroup>
 </Project>
