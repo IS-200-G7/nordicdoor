@@ -1,0 +1,51 @@
+@page "/Login";
+@using PDSA_System.Client.Models
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
+
+<h3>Login</h3>
+
+<EditForm Model=@data OnSubmit=@FormSubmitted>
+    <DataAnnotationsValidator/>
+    <!--<TextInput BindValue="@data.brukernavn" id="usernameInput" name="usernameInput" label="Epostadresse" type="text"/>-->
+    <label for="epostInput">Epostadresse: </label>
+    <input type="text" class="form-control" id="epostInput" name="epostInput" @bind-value="@data.brukernavn" placeholder="Epostadresse" />
+                        
+    <!--<TextInput BindValue="@data.passord" id="passwordInput" name="passwordInput" label="Passord" type="password"/>-->
+    <label for="passwordInput">Passord: </label>
+    <input type="password" name="passwordInput" id="passwordInput" @bind-value="@data.passord" class="form-control" placeholder="Passord"/>
+
+
+    <SubmitInput/>
+
+</EditForm>
+
+@code {
+    LoginData data = new LoginData();
+    
+    private async void CreateCookie(string name, string value, int days)
+    {
+        var test = await JSRuntime.InvokeAsync<string>("methods.CreateCookie", name, value, days);
+    }
+    
+    void FormSubmitted(EditContext editContext)
+    {
+        bool formIsValid = editContext.Validate();
+        Console.WriteLine(data.brukernavn + " " + data.passord + " " + formIsValid);
+
+        HttpClient.PostAsJsonAsync("/auth/login", data).ContinueWith(task =>
+        {
+            if (task.Result.IsSuccessStatusCode)
+            {
+                Console.WriteLine("Success");
+                var token = task.Result.Content.ReadAsStringAsync().Result;
+                
+                CreateCookie("authentication", token, 1);
+            }
+            else
+            {
+                Console.WriteLine("Failed");
+            }
+        });
+    }
+}
