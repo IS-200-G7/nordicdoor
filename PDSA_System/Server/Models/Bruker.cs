@@ -1,4 +1,3 @@
-
 namespace PDSA_System.Server.Models
 {
     public class Bruker
@@ -6,7 +5,7 @@ namespace PDSA_System.Server.Models
         public int BrukerId { get; set; }
 
         public string Fornavn { get; set; }
-        
+
         public string Etternavn { get; set; }
 
         public string Email { get; set; }
@@ -24,6 +23,5 @@ namespace PDSA_System.Server.Models
 
         Er List den beste datastrukturen? Kanskje HashMap <K,V>.
          */
-
     }
 }

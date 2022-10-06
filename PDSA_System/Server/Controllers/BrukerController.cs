@@ -12,10 +12,8 @@ namespace PDSA_System.Server.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-
     public class BrukerController : Controller
     {
-
         private readonly IConfiguration _configuration;
 
         public BrukerController(IConfiguration configuration)
@@ -30,7 +28,6 @@ namespace PDSA_System.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Bruker>>> GetAllBrukere()
         {
-
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
@@ -45,7 +42,6 @@ namespace PDSA_System.Server.Controllers
          * URL --> NordicDoor/Bruker/1 vil hente ut bruker med brukerId 1.
          * Returnerer statuskode 200 dersom det ikke oppstår feil.
         */
-
         [HttpGet("/api/[controller]/{brukerId}")]
         public async Task<ActionResult<List<Bruker>>> GetBruker(int brukerId)
         {
@@ -70,7 +66,8 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "INSERT INTO Bruker(BrukerId, ForNavn, EtterNavn, Email, PassordHash) VALUES (@BrukerId, @ForNavn, @EtterNavn, @Email, @PassordHash)", bruker);
+                "INSERT INTO Bruker(BrukerId, ForNavn, EtterNavn, Email, PassordHash) VALUES (@BrukerId, @ForNavn, @EtterNavn, @Email, @PassordHash)",
+                bruker);
 
             return Ok(await GetBruker(bruker.BrukerId));
         }
@@ -85,7 +82,8 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET ForNavn = @ForNavn, EtterNavn = @EtterNavn, Email = @Email, PassordHash = @PassordHash, WHERE BrukerId = @BrukerId", bruker);
+                "UPDATE Bruker SET ForNavn = @ForNavn, EtterNavn = @EtterNavn, Email = @Email, PassordHash = @PassordHash, WHERE BrukerId = @BrukerId",
+                bruker);
 
             return Ok(await GetBruker(bruker.BrukerId));
         }
@@ -101,12 +99,9 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "DELETE FROM Bruker WHERE BrukerId = @Id", new {id = brukerId});
+                "DELETE FROM Bruker WHERE BrukerId = @Id", new { id = brukerId });
 
             return Ok(await GetAllBrukere());
         }
     }
 }
-
-
-

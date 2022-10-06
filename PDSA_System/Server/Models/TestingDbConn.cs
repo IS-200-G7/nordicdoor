@@ -11,7 +11,6 @@ namespace PDSA_System.Server.Models
      */
     public class TestingDbConn
     {
-
         public void TestConn()
         {
             /** ConfigurationBuilder()
@@ -28,17 +27,16 @@ namespace PDSA_System.Server.Models
             try
             {
                 Console.WriteLine("Connecting to Server...");
-                connector.Connection.Open();                    // tester connection
-
+                connector.Connection.Open(); // tester connection
             }
-            catch (Exception error)                                // Dersom Open() kaster en error blir den fanget.
+            catch (Exception error) // Dersom Open() kaster en error blir den fanget.
             {
                 Console.WriteLine("ErrorMessage:");
                 Console.WriteLine(error.Message);
             }
-            connector.Connection.Close();                       // Dersom ingen error blir kastet closer vi connection og Skriver Done.
+
+            connector.Connection.Close(); // Dersom ingen error blir kastet closer vi connection og Skriver Done.
             Console.WriteLine("Done.");
         }
     }
 }
-

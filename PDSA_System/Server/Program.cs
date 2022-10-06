@@ -15,7 +15,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
-    
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -49,7 +49,3 @@ app.Run();
 var test = new TestingDbConn();
 
 test.TestConn();
-
-
-
-
