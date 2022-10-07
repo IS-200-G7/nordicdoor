@@ -13,7 +13,7 @@ public class JwtClaims
     private string Rolle { get; set; } // Admin, bruker, etc.
 
     private string BrukerId { get; set; }
-    private int Exp { get; set; }
+    //private int Exp { get; set; }
 
     public JwtClaims(string epost, string fornavn, string etternavn, string rolle, string brukerId)
     {
