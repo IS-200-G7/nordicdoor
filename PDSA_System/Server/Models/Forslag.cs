@@ -14,10 +14,6 @@ namespace PDSA_System.Server.Models
         public int Status { get; set; }
 
         public DateTime Tidspunkt { get; set; }
-
-        public Forslag()
-        {
-        }
     }
 }
 
