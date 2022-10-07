@@ -29,7 +29,7 @@ public class AuthController : ControllerBase
         //TODO: FJERN!
         var hash2 = new PasswordHash();
         var salt2 = hash2.CreateSalt();
-        var passord2 = hash2.HashPassword(data.passord, salt2);
+        var passord2 = hash2.HashPassword(data.Passord, salt2);
         //byte to base64
         var salt2Base64 = Convert.ToBase64String(salt2);
         var hash2Base64 = Convert.ToBase64String(passord2);
@@ -39,8 +39,8 @@ public class AuthController : ControllerBase
         Bruker bruker;
         try
         {
-            bruker = conn.QueryFirstOrDefault<Bruker>("SELECT * FROM Bruker WHERE Email = @brukernavn",
-                new { data.brukernavn });
+            bruker = conn.QueryFirstOrDefault<Bruker>("SELECT * FROM Bruker WHERE Email = @Brukernavn",
+                new { data.Brukernavn });
         }
         catch (Exception e)
         {
@@ -63,12 +63,12 @@ public class AuthController : ControllerBase
         byte[] salt = Convert.FromBase64String(hashString[1]);
 
         // Valider passordet ved å hashe det igjen med samme salt og sammenligne med resultat fra DB
-        var valid = hasher.Verify(data.passord, salt, hash);
+        var valid = hasher.Verify(data.Passord, salt, hash);
 
         // Send token om passordet er riktig
         if (valid)
         {
-            JWTClaims claims = new JWTClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, "Bruker",
+            JwtClaims claims = new JwtClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, "Bruker",
                 bruker.BrukerId.ToString());
 
             var token = claims.GenerateToken();

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace PDSA_System.Server.Models;
 
-public class JWTClaims
+public class JwtClaims
 {
     private string Epost { get; set; }
     private string Fornavn { get; set; }
@@ -14,7 +14,7 @@ public class JWTClaims
     private string BrukerId { get; set; }
     private int Exp { get; set; }
 
-    public JWTClaims(string epost, string fornavn, string etternavn, string rolle, string brukerId)
+    public JwtClaims(string epost, string fornavn, string etternavn, string rolle, string brukerId)
     {
         this.Epost = epost;
         this.Fornavn = fornavn;
@@ -55,7 +55,7 @@ public class JWTClaims
     }
 
     // Hente claims fra en JWT token
-    public static JWTClaims GetClaims(string token)
+    public static JwtClaims GetClaims(string token)
     {
         var handler = new JwtSecurityTokenHandler();
         var jsonToken = handler.ReadToken(token);
@@ -70,6 +70,6 @@ public class JWTClaims
         // Exp er ikke nødvendig å hente ut, da den ikke brukes i applikasjonen, bør implementeres senere
         //var exp = tokenS.Claims.First(claim => claim.Type == "exp").Value;
 
-        return new JWTClaims(epost, fornavn, etternavn, rolle, brukerId);
+        return new JwtClaims(epost, fornavn, etternavn, rolle, brukerId);
     }
 }
