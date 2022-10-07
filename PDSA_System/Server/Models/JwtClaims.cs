@@ -62,6 +62,11 @@ public class JwtClaims
         var jsonToken = handler.ReadToken(token);
         var tokenS = jsonToken as JwtSecurityToken;
 
+        if (tokenS == null)
+        {
+            return new JwtClaims("", "", "", "", "");
+        }
+
         var epost = tokenS.Claims.First(claim => claim.Type == "email").Value;
         var fornavn = tokenS.Claims.First(claim => claim.Type == "given_name").Value;
         var etternavn = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
