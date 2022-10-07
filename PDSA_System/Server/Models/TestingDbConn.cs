@@ -7,7 +7,7 @@
     {
         public void TestConn()
         {
-            /** ConfigurationBuilder()
+            /* ConfigurationBuilder()
              * Brukes for å bygge nøkkel/verdi som baserer seg på config settinger som brukes i en applikasjon.
              * Legger til appsettings filen.
              * Dette lagres i et Json Objekt MyConfig.
