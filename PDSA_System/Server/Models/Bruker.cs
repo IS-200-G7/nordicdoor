@@ -2,15 +2,15 @@ namespace PDSA_System.Server.Models
 {
     public class Bruker
     {
-        public int BrukerId { get; set; }
+        public int BrukerId { get; set; } = 0;
 
-        public string Fornavn { get; set; }
+        public string Fornavn { get; set; } = "";
 
-        public string Etternavn { get; set; }
+        public string Etternavn { get; set; } = "";
 
-        public string Email { get; set; }
+        public string Email { get; set; } = "";
 
-        public string PassordHash { get; set; } //Trenger rettninglinsjer her.
+        public string PassordHash { get; set; } = "";
 
         // public string Rolle { get; set; }
 
