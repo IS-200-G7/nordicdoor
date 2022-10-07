@@ -1,10 +1,4 @@
-﻿using System;
-using System.Configuration;
-using PDSA_System.Client;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-
-namespace PDSA_System.Server.Models
+﻿namespace PDSA_System.Server.Models
 {
     /*
      Denne klassen er for å teste din egen tilkobling til Databasen.

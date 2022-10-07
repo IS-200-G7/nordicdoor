@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.ResponseCompression;
-using PDSA_System.Server.Models;
+﻿using PDSA_System.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -11,6 +11,7 @@ public class JwtClaims
     private string Fornavn { get; set; }
     private string Etternavn { get; set; }
     private string Rolle { get; set; } // Admin, bruker, etc.
+
     private string BrukerId { get; set; }
     private int Exp { get; set; }
 

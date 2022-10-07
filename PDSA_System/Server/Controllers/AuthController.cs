@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PDSA_System.Server.Models;
 using Dapper;
-using PDSA_System.Client;
 
 namespace PDSA_System.Server.Controllers;
 
