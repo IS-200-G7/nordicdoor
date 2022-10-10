@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PDSA_System.Server.Models;
 using Dapper;
 
@@ -57,7 +53,7 @@ namespace PDSA_System.Server.Controllers
 
         /*
             Create for en ny Bruker.
-            
+
          */
         [HttpPost]
         public async Task<ActionResult<List<Bruker>>> CreateBruker(Bruker bruker)

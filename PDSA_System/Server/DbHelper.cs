@@ -1,4 +1,3 @@
-using System.Configuration;
 using MySql.Data.MySqlClient;
 
 namespace PDSA_System.Server

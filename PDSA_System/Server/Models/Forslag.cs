@@ -5,19 +5,15 @@ namespace PDSA_System.Server.Models
         public int ForfatterId { get; set; }
         public int GruppeId { get; set; }
 
-        public string Emne { get; set; }
+        public string Emne { get; set; } = "";
 
-        public string Beskrivelse { get; set; }
+        public string Beskrivelse { get; set; } = "";
 
-        public byte[] Bilde { get; set; }
+        public byte[]? Bilde { get; set; }
 
         public int Status { get; set; }
 
         public DateTime Tidspunkt { get; set; }
-
-        public Forslag()
-        {
-        }
     }
 }
 
