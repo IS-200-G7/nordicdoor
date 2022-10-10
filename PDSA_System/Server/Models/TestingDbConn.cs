@@ -1,10 +1,4 @@
-﻿using System;
-using System.Configuration;
-using PDSA_System.Client;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-
-namespace PDSA_System.Server.Models
+﻿namespace PDSA_System.Server.Models
 {
     /*
      Denne klassen er for å teste din egen tilkobling til Databasen.
@@ -13,14 +7,14 @@ namespace PDSA_System.Server.Models
     {
         public void TestConn()
         {
-            /** ConfigurationBuilder()
+            /* ConfigurationBuilder()
              * Brukes for å bygge nøkkel/verdi som baserer seg på config settinger som brukes i en applikasjon.
              * Legger til appsettings filen.
              * Dette lagres i et Json Objekt MyConfig.
              * Dette objektet kan hente verdier fra appsettings.json filen
              */
-            var MyConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
-            var connString = MyConfig.GetValue<string>("ConnectionStrings:DefaultConnection");
+            var myConfig = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+            var connString = myConfig.GetValue<string>("ConnectionStrings:DefaultConnection");
 
             using var connector = new DbHelper(connString);
 

@@ -1,7 +1,4 @@
-﻿using System;
-using PDSA_System.Client;
-
-namespace PDSA_System.Server
+﻿namespace PDSA_System.Server
 {
     public class Startup
     {
@@ -14,7 +11,7 @@ namespace PDSA_System.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
-            /* 
+            /*
             Services er en IServiceCollection som er en interface, med andre ord en kontrakt som spesifiserer kolleksjonen av andre kontrakter.
             Holder styr på Kontrakter systemet bruker.
             */
