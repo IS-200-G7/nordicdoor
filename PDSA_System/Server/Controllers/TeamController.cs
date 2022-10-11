@@ -125,7 +125,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<String>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync("DELETE FROM teammedlemskap WHERE BrukerId = @id AND TeamId = @TeamId", new { id = BrukerId, TeamId = TeamId });
+            await conn.ExecuteAsync("DELETE FROM TeamMedlemskap WHERE BrukerId = @id AND TeamId = @TeamId", new { id = BrukerId, TeamId = TeamId });
 
             return Ok(BrukerId);
         }
