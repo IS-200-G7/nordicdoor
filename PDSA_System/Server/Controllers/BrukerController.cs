@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using PDSA_System.Server.Models;
 using Dapper;
+
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -50,19 +51,34 @@ namespace PDSA_System.Server.Controllers
             return Ok(brukere);
         }
 
+        /**
+        * Sjekker om bruker har admin eller teamleder rolle, for å så legge til bruker i et Team
+        */
+        [HttpPost("/api/[controller]/addBrukerToTeam/")]
+        public async Task<ActionResult<List<Bruker>>> OppdaterTeam(int TeamId, int BrukerId)
+        {
+            
+            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(connString).Connection;
+
+            await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, BrukerId) Values (@TeamId, @BrukerId)", new { TeamId = TeamId, BrukerId = BrukerId });
+
+
+            return Ok();
+        }
+
 
         /*
             Create for en ny Bruker.
-
          */
-        [HttpPost]
+        [HttpPost("/api/[controller]/createBruker/")]
         public async Task<ActionResult<List<Bruker>>> CreateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "INSERT INTO Bruker(BrukerId, ForNavn, EtterNavn, Email, PassordHash) VALUES (@BrukerId, @ForNavn, @EtterNavn, @Email, @PassordHash)",
+                "INSERT INTO Bruker(BrukerId, ForNavn, EtterNavn, Email, PassordHash, Rolle, Opprettet, LederId) VALUES(@BrukerId, @ForNavn, @EtterNavn, @Email, @PassordHash, @Rolle, @Opprettet, @LederId)",
                 bruker);
 
             return Ok(await GetBruker(bruker.BrukerId));
@@ -71,24 +87,24 @@ namespace PDSA_System.Server.Controllers
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
-        [HttpPut]
+        [HttpPut("/api[Controller]/admin/UpdateBruker")]
         public async Task<ActionResult<List<Bruker>>> UpdateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET ForNavn = @ForNavn, EtterNavn = @EtterNavn, Email = @Email, PassordHash = @PassordHash, WHERE BrukerId = @BrukerId",
+                "UPDATE Bruker SET ForNavn = @ForNavn, EtterNavn = @EtterNavn, Email = @Email, PassordHash = @PassordHash, SjefId = @SjefId, WHERE BrukerId = @BrukerId",
                 bruker);
 
-            return Ok(await GetBruker(bruker.BrukerId));
+            return Ok(bruker);
         }
 
 
         /*
          Deleter brukere etter BrukerId
          */
-        [HttpDelete]
+        [HttpDelete("/api[controller]/admin/DeleteBruker")]
         public async Task<ActionResult<List<Bruker>>> DeleteBruker(int brukerId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -99,5 +115,22 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(await GetAllBrukere());
         }
+
+
+        /*
+        Denne metoden oppdaterer en Bruker sin Rolle med brukerId som betingelse.
+        */
+        [HttpPut("/api/[controller]/admin/updateBrukerRolle")]
+        public async Task<ActionResult<List<Bruker>>> UpdateRolle(string rolle, int brukerId)
+        {
+            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(connString).Connection;
+
+            await conn.ExecuteAsync(
+                "UPDATE Bruker SET Rolle = @Rolle WHERE BrukeriD = @Id", new { Rolle = rolle, Id = brukerId });
+
+            return Ok(await GetAllBrukere());
+        }
+
     }
 }
