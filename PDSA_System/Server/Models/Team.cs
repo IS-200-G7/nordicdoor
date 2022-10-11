@@ -3,7 +3,7 @@ namespace PDSA_System.Server.Models
      public class Team
     {
 
-        public int teamId { get; set; }
+        public int TeamId { get; set; }
 
         public string? Navn { get; set; }
 

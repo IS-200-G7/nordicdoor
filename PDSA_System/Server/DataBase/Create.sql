@@ -9,8 +9,9 @@ CREATE TABLE IF NOT EXISTS Bruker(
   PassordHash VARCHAR(200) NOT NULL,
   Opprettet DATETIME NOT NULL,
   Rolle VARCHAR(50),
-  SjefsId INTEGER,
-  FOREIGN KEY (SjefsId) REFERENCES Bruker(BrukerId),
+  LederId INTEGER DEFAULT NULL,
+  KEY LederId (LederId),
+  FOREIGN KEY (LederId) REFERENCES Bruker(BrukerId),
   CONSTRAINT PK_Bruker PRIMARY KEY(BrukerId) 
 );
 
@@ -43,7 +44,7 @@ CREATE TABLE IF NOT EXISTS TeamMedlemskap(
   BrukerId INTEGER,
   CONSTRAINT PK_TeamMedlemskap PRIMARY KEY (TeamId, BrukerId),
   FOREIGN KEY (TeamId) REFERENCES Team(TeamId),
-  CONSTRAINT FK_TeamMedlemskap_Bruker FOREIGN KEY (BrukerId) REFERENCES Bruker(BrukerId)
+  FOREIGN KEY (BrukerId) REFERENCES Bruker(BrukerId)
 );
 
 CREATE TABLE IF NOT EXISTS Rolle(
