@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS Bruker(
   Opprettet DATETIME NOT NULL,
   CONSTRAINT PK_Bruker PRIMARY KEY(BrukerId)
 );
-INSERT INTO NordicDoor.Bruker (BrukerId, ForNavn, EtterNavn, Email, PassordHash, Opprettet) VALUES (1, 'Tobias', 'Hansen', 'tob@mail.com', 'hashhash', '2022-10-10 10:19:40');
-INSERT INTO NordicDoor.Bruker (BrukerId, ForNavn, EtterNavn, Email, PassordHash, Opprettet) VALUES (2, 'Siddharth', 'Dushantha', 'satan@sidd.no', 'passordhash', '2022-10-01 23:25:21');
+INSERT INTO NordicDoor.Bruker (BrukerId, ForNavn, EtterNavn, Email, PassordHash, Opprettet) VALUES (1, 'Tobias', 'Hansen', 'tob@mail.com', 'OTOiYdFITlCQGxI+/MGSUO3MGmK46v8LV45DgHFVHNg=:T4sen2e7YnMALZpNRTz5dQJfcg/RZBhnpxVKR2donyg=', '2022-10-10 10:19:40');
+INSERT INTO NordicDoor.Bruker (BrukerId, ForNavn, EtterNavn, Email, PassordHash, Opprettet) VALUES (2, 'Siddharth', 'Dushantha', 'satan@sidd.no', '02BNAhz1nQOV6Rrdoyalqyug9xh5mJlWmUxgXerpO74=:2k5s/T2rgp0e8vB75+a9fhtUbQFWeWIanwgP/mEqy34=', '2022-10-01 23:25:21');
 
 
 CREATE TABLE IF NOT EXISTS Team(
