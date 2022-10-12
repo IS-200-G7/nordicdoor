@@ -15,7 +15,7 @@ public class StatusController : ControllerBase
     }
 
     // status controller
-    [HttpPost("status")]
+    [HttpPost]
     public IActionResult Status([FromQuery] int ForslagsID, [FromQuery] string Status)
     {   // Hente til connection string fra appsettings.json og åpne en connection til database
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
