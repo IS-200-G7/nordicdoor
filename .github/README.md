@@ -2,7 +2,7 @@
 
 ## Før du kjører programmet:
 * Lag en database i MariaDB
-    * Du kan installere enten lokalt eller i Docker, følg gjerne en tutorial på det
+    * Du kan installere enten lokalt eller i Docker. Se veiledningen 'MariaDb database gjennom docker'.
     * Kjør kommandoene i `PDSA_System.Server/Database/Create.sql` i en egen database
     * Opprett en testbruker i tabellen `Bruker` etter gjeldende instruksjoner (TBA)
 * Sett inn en connection string i filen `appsettings.json`, der du ser `ConnectionString.DefaultConnection`. Denne skal følge dette formatet:
@@ -21,3 +21,25 @@ Dette vil automatisk laste inn nye endringer når du lagrer filer, noe som gjør
 
 ### Kjøre testene:
 *Ikke implementert*
+
+### MariaDb database som Docker konteiner
+
+1. Opprett MariaDb konteiner.
+  
+
+```docker
+docker run --name db -e MYSQL_ROOT_PASSWORD=PASSORD -p 3306:3306 -d docker.io/library/mariadb:latest
+```
+
+2. Verifiser at konteineren har status 'Running'
+  
+3. Koble til konteiner og logg på som root.
+  
+  ```
+  docker exec -it db bash
+  mariadb -u root –p 
+  ```
+  
+4. Skriv inn passord som ble satt ved opprettelse av konteiner. I dette tilfellet: PASSORD
+  
+5. Kopier og lim inn kode fra PDSA_System.Server/Database/Create.sql
