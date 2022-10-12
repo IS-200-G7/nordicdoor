@@ -20,6 +20,6 @@ INSERT INTO NordicDoor.TeamMedlemskap (Id, TeamId, BrukerId) VALUES (1, 1, 2);
 INSERT INTO NordicDoor.TeamMedlemskap (Id, TeamId, BrukerId) VALUES (2, 2, 1);
 
 -- Rolle
-INSERT INTO NordicDoor.Rolle (RolleId, RolleNavn) VALUES (1, 'Ansatt');
+// Rolle entitet skal bli fjernet. 
 INSERT INTO NordicDoor.Rolle (RolleId, RolleNavn) VALUES (2, 'Teamleder');
 INSERT INTO NordicDoor.Rolle (RolleId, RolleNavn) VALUES (3, 'Administrator');
