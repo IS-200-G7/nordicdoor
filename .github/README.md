@@ -36,7 +36,7 @@ docker run --name db -e MYSQL_ROOT_PASSWORD=PASSORD -p 3306:3306 -d docker.io/li
 3. Koble til konteiner og logg på som root.
   
   ```
-  docker exec -it NordicDoor bash
+  docker exec -it db bash
   mariadb -u root –p 
   ```
   
