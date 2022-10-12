@@ -2,7 +2,7 @@
 
 ## Før du kjører programmet:
 * Lag en database i MariaDB
-    * Du kan installere enten lokalt eller i Docker. Se veiledningen 'MariaDb database gjennom docker'.
+    * Du kan installere enten lokalt eller i Docker. Se veiledningen 'MariaDb database som Docker konteiner'.
     * Kjør kommandoene i `PDSA_System.Server/Database/Create.sql` i en egen database
     * Opprett en testbruker i tabellen `Bruker` etter gjeldende instruksjoner (TBA)
 * Sett inn en connection string i filen `appsettings.json`, der du ser `ConnectionString.DefaultConnection`. Denne skal følge dette formatet:
