@@ -16,7 +16,7 @@ INSERT INTO NordicDoor.Team (TeamId, Navn, AvdelingsId) VALUES (1, 'Produksjon',
 INSERT INTO NordicDoor.Team (TeamId, Navn, AvdelingsId) VALUES (2, 'Salg', 2);
 
 -- TeamMedlemskap
-INSERT INTO NordicDoor.TeamMedlemskap (Id, TeamId, BrukerId) VALUES (1, 1, 2);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, BrukerId) VALUES (1, 2);
 INSERT INTO NordicDoor.TeamMedlemskap (Id, TeamId, BrukerId) VALUES (2, 2, 1);
 
 -- Rolle
