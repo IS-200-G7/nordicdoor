@@ -57,7 +57,7 @@ namespace PDSA_System.Server.Controllers
         [HttpPost("/api/[controller]/addBrukerToTeam/")]
         public async Task<ActionResult<List<Bruker>>> OppdaterTeam(int TeamId, int BrukerId)
         {
-            
+
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
@@ -78,7 +78,7 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "INSERT INTO Bruker(BrukerId, ForNavn, EtterNavn, Email, PassordHash, Rolle, Opprettet, LederId) VALUES(@BrukerId, @ForNavn, @EtterNavn, @Email, @PassordHash, @Rolle, @Opprettet, @LederId)",
+                "INSERT INTO Bruker(BrukerId, Fornavn, Etternavn, Email, PassordHash, Rolle, Opprettet, LederId) VALUES(@BrukerId, @Fornavn, @Etternavn, @Email, @PassordHash, @Rolle, @Opprettet, @LederId)",
                 bruker);
 
             return Ok(await GetBruker(bruker.BrukerId));
@@ -94,7 +94,7 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET ForNavn = @ForNavn, EtterNavn = @EtterNavn, Email = @Email, PassordHash = @PassordHash, SjefId = @SjefId, WHERE BrukerId = @BrukerId",
+                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId, WHERE BrukerId = @BrukerId",
                 bruker);
 
             return Ok(bruker);
