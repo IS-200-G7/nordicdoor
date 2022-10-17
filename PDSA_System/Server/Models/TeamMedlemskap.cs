@@ -9,6 +9,6 @@ namespace PDSA_System.Server.Models
     {
         public int TeamId { get; set; }    
 
-        public int BrukerId { get; set; }
+        public int AnsattNr { get; set; }
     }
 }

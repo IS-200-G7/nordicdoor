@@ -36,17 +36,17 @@ namespace PDSA_System.Server.Controllers
 
         /**
          * Henter en spesifikk bruker iforhold til hvilken route man er på.
-         * URL --> NordicDoor/Bruker/1 vil hente ut bruker med brukerId 1.
+         * URL --> NordicDoor/Bruker/1 vil hente ut bruker med AnsattNr 1.
          * Returnerer statuskode 200 dersom det ikke oppstår feil.
         */
-        [HttpGet("/api/[controller]/{brukerId}")]
-        public async Task<ActionResult<List<Bruker>>> GetBruker(int brukerId)
+        [HttpGet("/api/[controller]/{AnsattNr}")]
+        public async Task<ActionResult<List<Bruker>>> GetBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukere = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE BrukerId = @id",
-                new { id = brukerId });
+            var brukere = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE AnsattNr = @id",
+                new { id = AnsattNr });
 
             return Ok(brukere);
         }
@@ -55,13 +55,13 @@ namespace PDSA_System.Server.Controllers
         * Sjekker om bruker har admin eller teamleder rolle, for å så legge til bruker i et Team
         */
         [HttpPost("/api/[controller]/addBrukerToTeam/")]
-        public async Task<ActionResult<List<Bruker>>> OppdaterTeam(int TeamId, int BrukerId)
+        public async Task<ActionResult<List<Bruker>>> OppdaterTeam(int TeamId, int AnsattNr)
         {
 
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, BrukerId) Values (@TeamId, @BrukerId)", new { TeamId = TeamId, BrukerId = BrukerId });
+            await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, AnsattNr) Values (@TeamId, @AnsattNr)", new { TeamId = TeamId, AnsattNr = AnsattNr});
 
 
             return Ok();
@@ -78,10 +78,10 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "INSERT INTO Bruker(BrukerId, Fornavn, Etternavn, Email, PassordHash, Rolle, Opprettet, LederId) VALUES(@BrukerId, @Fornavn, @Etternavn, @Email, @PassordHash, @Rolle, @Opprettet, @LederId)",
+                "INSERT INTO Bruker(AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle, Opprettet, LederId) VALUES(@AnsattNr, @Fornavn, @Etternavn, @Email, @PassordHash, @Rolle, @Opprettet, @LederId)",
                 bruker);
 
-            return Ok(await GetBruker(bruker.BrukerId));
+            return Ok(await GetBruker(bruker.AnsattNr));
         }
 
         /*
@@ -94,7 +94,7 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId, WHERE BrukerId = @BrukerId",
+                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId, WHERE AnsattNr = @AnsattNr",
                 bruker);
 
             return Ok(bruker);
@@ -102,32 +102,32 @@ namespace PDSA_System.Server.Controllers
 
 
         /*
-         Deleter brukere etter BrukerId
+         Deleter brukere etter AnsattNr
          */
         [HttpDelete("/api[controller]/admin/DeleteBruker")]
-        public async Task<ActionResult<List<Bruker>>> DeleteBruker(int brukerId)
+        public async Task<ActionResult<List<Bruker>>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "DELETE FROM Bruker WHERE BrukerId = @Id", new { id = brukerId });
+                "DELETE FROM Bruker WHERE AnsattNr = @Id", new { id = AnsattNr });
 
             return Ok(await GetAllBrukere());
         }
 
 
         /*
-        Denne metoden oppdaterer en Bruker sin Rolle med brukerId som betingelse.
+        Denne metoden oppdaterer en Bruker sin Rolle med AnsattNr som betingelse.
         */
         [HttpPut("/api/[controller]/admin/updateBrukerRolle")]
-        public async Task<ActionResult<List<Bruker>>> UpdateRolle(string rolle, int brukerId)
+        public async Task<ActionResult<List<Bruker>>> UpdateRolle(string rolle, int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET Rolle = @Rolle WHERE BrukeriD = @Id", new { Rolle = rolle, Id = brukerId });
+                "UPDATE Bruker SET Rolle = @Rolle WHERE AnsattNr = @Id", new { Rolle = rolle, Id = AnsattNr });
 
             return Ok(await GetAllBrukere());
         }

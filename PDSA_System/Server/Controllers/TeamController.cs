@@ -120,14 +120,14 @@ namespace PDSA_System.Server.Controllers
          * Denne sletter brukere fra et team ved å slette deres teamedlemskap
         */
         [HttpDelete("/api/[controller]/DeleteBrukere")]
-        public async Task<ActionResult<List<Team>>> DeleteUsersFromTeam(int BrukerId, int TeamId)
+        public async Task<ActionResult<List<Team>>> DeleteUsersFromTeam(int AnsattNr, int TeamId)
         {
             var connString = _configuration.GetValue<String>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync("DELETE FROM TeamMedlemskap WHERE BrukerId = @id AND TeamId = @TeamId", new { id = BrukerId, TeamId = TeamId });
+            await conn.ExecuteAsync("DELETE FROM TeamMedlemskap WHERE AnsattNr = @id AND TeamId = @TeamId", new { id = AnsattNr, TeamId = TeamId });
 
-            return Ok(BrukerId);
+            return Ok(AnsattNr);
         }
 
 

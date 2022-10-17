@@ -2,7 +2,7 @@ namespace PDSA_System.Server.Models
 {
     public class Bruker
     {
-        public int BrukerId { get; set; }
+        public int AnsattNr { get; set; }
 
         public string? Fornavn { get; set; }
 
