@@ -24,7 +24,7 @@ public class ForslagController : Controller
      * Returnerer statuskode 200 dersom det ikke oppstår feil.
      */
     [HttpGet]
-    public async Task<ActionResult<List<Forslag>>> GetAllBrukere()
+    public async Task<ActionResult<List<Forslag>>> GetAllForslag()
     {
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
@@ -32,5 +32,21 @@ public class ForslagController : Controller
         var forslag = await conn.QueryAsync<Forslag>("SELECT * FROM Forslag");
 
         return Ok(forslag);
+    }
+
+    /**
+    * Funksjon for å opprette forslag
+    * Returnerer statuskode 200 dersom det ikke oppstår feil.
+    * Fjernet bilde da det ikke fungerte å legge til pga kluss med datatype
+     */
+    [HttpPost("/api/[controller]/createforslag/")]
+    public async Task<ActionResult<List<Forslag>>> CreateForslag(Forslag forslag)
+    {
+        var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+        using var conn = new DbHelper(connString).Connection;
+
+        await conn.ExecuteAsync("INSERT INTO Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Kategori) VALUES (@ForfatterId, @TeamId, @Emne, @Beskrivelse, @Kategori)", forslag);
+
+        return Ok(await GetAllForslag());
     }
 }
