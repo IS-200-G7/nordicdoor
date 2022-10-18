@@ -68,7 +68,7 @@ public class AuthController : ControllerBase
         if (valid)
         {
             JwtClaims claims = new JwtClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, "Bruker",
-                bruker.BrukerId.ToString());
+                bruker.AnsattNr.ToString());
 
             var token = claims.GenerateToken();
 

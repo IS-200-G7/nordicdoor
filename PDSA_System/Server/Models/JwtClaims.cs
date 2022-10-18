@@ -12,16 +12,16 @@ public class JwtClaims
     private string Etternavn { get; set; }
     private string Rolle { get; set; } // Admin, bruker, etc.
 
-    private string BrukerId { get; set; }
+    private string AnsattNr { get; set; }
     //private int Exp { get; set; }
 
-    public JwtClaims(string epost, string fornavn, string etternavn, string rolle, string brukerId)
+    public JwtClaims(string epost, string fornavn, string etternavn, string rolle, string ansattNr)
     {
         this.Epost = epost;
         this.Fornavn = fornavn;
         this.Etternavn = etternavn;
         this.Rolle = rolle;
-        this.BrukerId = brukerId;
+        this.AnsattNr = ansattNr;
         //this.Exp = exp;
     }
 
@@ -35,9 +35,9 @@ public class JwtClaims
             new Claim(JwtRegisteredClaimNames.Email, Epost),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim("role", Rolle),
-            new Claim("userId", BrukerId)
+            new Claim("userId", AnsattNr)
         };
-
+        
         // Hente og generere nøkler for autentisering
         // Key er hardcoded kun for utvikling. Denne MÅ endres til å hente fra appsettings.json
         var key = new SymmetricSecurityKey(
@@ -71,11 +71,11 @@ public class JwtClaims
         var fornavn = tokenS.Claims.First(claim => claim.Type == "given_name").Value;
         var etternavn = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
         var rolle = tokenS.Claims.First(claim => claim.Type == "role").Value;
-        var brukerId = tokenS.Claims.First(claim => claim.Type == "userId").Value;
+        var ansattNr = tokenS.Claims.First(claim => claim.Type == "userId").Value;
 
         // Exp er ikke nødvendig å hente ut, da den ikke brukes i applikasjonen, bør implementeres senere
         //var exp = tokenS.Claims.First(claim => claim.Type == "exp").Value;
 
-        return new JwtClaims(epost, fornavn, etternavn, rolle, brukerId);
+        return new JwtClaims(epost, fornavn, etternavn, rolle, ansattNr);
     }
 }
