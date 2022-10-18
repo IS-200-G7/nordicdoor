@@ -16,7 +16,7 @@ public class StatusController : ControllerBase
 
     // status controller
     [HttpPost]
-    public IActionResult Status([FromQuery] int ForslagsID, [FromQuery] string Status)
+    public async Task<ActionResult<List<Forslag>>> SetStatus([FromQuery] int ForslagsId, [FromQuery] string Status)
     {   // Hente til connection string fra appsettings.json og åpne en connection til database
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
@@ -34,7 +34,7 @@ public class StatusController : ControllerBase
         // Prøv skrive statusen inn i databasen
         try
         {
-            conn.QueryFirstOrDefault<int>("UPDATE Forslag SET Status = @Status WHERE ForslagsID = @ForslagsID", new { ForslagsID = ForslagsID, Status = Status });
+            await conn.QueryAsync<int>("UPDATE Forslag SET Status = @Status WHERE ForslagsId = @ForslagsId", new { ForslagsId = ForslagsId, Status = Status });
         }
         catch (Exception e)
         {
