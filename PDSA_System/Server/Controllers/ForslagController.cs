@@ -53,6 +53,22 @@ public class ForslagController : Controller
     }
 
     /**
+     * Funksjon for å hente spesifikke forslag til brukere basert på ForfatterId
+     */
+    [HttpGet("/api/[controller]/forfatter/{forfatterId}")]
+    public async Task<ActionResult<List<Forslag>>> GetBrukerForslag(int forfatterId)
+    {
+        var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+        using var conn = new DbHelper(connString).Connection;
+
+        var forslag = await conn.QueryAsync<Forslag>("SELECT * FROM Forslag WHERE ForfatterId = @id",
+            new { id = forfatterId });
+
+        return Ok(forslag);
+    }
+
+
+    /**
     * Funksjon for å opprette forslag
     * Returnerer statuskode 200 dersom det ikke oppstår feil.
     * Fjernet bilde da det ikke fungerte å legge til pga kluss med datatype
