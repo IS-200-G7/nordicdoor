@@ -14,3 +14,7 @@ INSERT INTO NordicDoor.Forslag (ForslagId, ForfatterId, TeamId, Emne, Beskrivels
 -- TeamMedlemskap
 INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (1, 2);
 INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (2, 1);
+
+-- ForslagKobling
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (1, 2);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (2, 1);
