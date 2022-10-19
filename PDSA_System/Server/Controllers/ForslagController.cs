@@ -46,7 +46,7 @@ public class ForslagController : Controller
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
-        var forslag = await conn.QueryAsync<Forslag>("SELECT * FROM Forslag WHERE ForslagsId = @id",
+        var forslag = await conn.QueryAsync<Forslag>("SELECT * FROM Forslag WHERE ForslagId = @id",
             new { id = forslagId });
 
         return Ok(forslag);
@@ -67,7 +67,7 @@ public class ForslagController : Controller
         using var conn = new DbHelper(connString).Connection;
 
         await conn.ExecuteAsync("INSERT INTO Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Kategori) VALUES (@ForfatterId, @TeamId, @Emne, @Beskrivelse, @Kategori)", forslag);
-        
+
         return Ok(await GetAllForslag());
     }
 
@@ -83,7 +83,7 @@ public class ForslagController : Controller
         using var conn = new DbHelper(connString).Connection;
 
         await conn.ExecuteAsync(
-            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagsId = @ForslagsId",
+            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagId = @ForslagId",
             forslag);
 
         return Ok(await GetAllForslag());
@@ -99,7 +99,7 @@ public class ForslagController : Controller
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
-        await conn.ExecuteAsync("DELETE FROM Forslag WHERE ForslagsId = @id", new { id = forslagId });
+        await conn.ExecuteAsync("DELETE FROM Forslag WHERE ForslagId = @id", new { id = forslagId });
 
         return Ok(await GetAllForslag());
     }
@@ -121,5 +121,5 @@ public class ForslagController : Controller
         return bilde;
     }
 
-    
+
 }
