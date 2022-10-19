@@ -58,7 +58,7 @@ namespace PDSA_System.Server.Controllers
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
-            await conn.ExecuteAsync("INSERT INTO Team (Navn, AvdelingsId) VALUES (@Navn, @AvdelingsId)", team);
+            await conn.ExecuteAsync("INSERT INTO Team (Navn, AvdelingId) VALUES (@Navn, @AvdelingId)", team);
 
             // Await conn.ExecudeAsync betyr at vi venter på at denne linjen skal bli ferdig før vi fortsetter med neste linje.
 
@@ -76,7 +76,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection; 
 
-            await conn.ExecuteAsync("UPDATE Team SET Navn = @Navn, AvdelingsId = @AvdelingsId WHERE TeamId = @TeamId", team); 
+            await conn.ExecuteAsync("UPDATE Team SET Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId", team);
 
         
 

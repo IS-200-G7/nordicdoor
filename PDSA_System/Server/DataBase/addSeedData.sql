@@ -3,8 +3,8 @@ INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash,
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Opprettet, Rolle, LederId) VALUES (2, 'Siddharth', 'Dushantha', 'satan@sidd.no', '02BNAhz1nQOV6Rrdoyalqyug9xh5mJlWmUxgXerpO74=:2k5s/T2rgp0e8vB75+a9fhtUbQFWeWIanwgP/mEqy34=', '2022-10-01 23:25:21', 'ansatt', 2);
 
 -- Team
-INSERT INTO NordicDoor.Team (TeamId, Navn, AvdelingsId) VALUES (1, 'Produksjon', 3);
-INSERT INTO NordicDoor.Team (TeamId, Navn, AvdelingsId) VALUES (2, 'Salg', 2);
+INSERT INTO NordicDoor.Team (TeamId, Navn, AvdelingId) VALUES (1, 'Produksjon', 3);
+INSERT INTO NordicDoor.Team (TeamId, Navn, AvdelingId) VALUES (2, 'Salg', 2);
 
 -- Forslag
 INSERT INTO NordicDoor.Forslag (ForslagsId, ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet, SistOppdatert, Frist, Kategori) VALUES (1, 1, 2, '"Fresing av hull til lås"', '"Kan dere øke diameteren på hullene med 3mm?"', null, 1, '2022-10-08 23:35:27', '2022-10-10 23:35:32', null, null);
