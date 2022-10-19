@@ -1,3 +1,5 @@
+using System.Reflection.Metadata;
+
 namespace PDSA_System.Server.Models
 {
     public class Forslag
@@ -12,7 +14,7 @@ namespace PDSA_System.Server.Models
 
         public byte[]? Bilde { get; set; }
 
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         public DateTime Opprettet { get; set; }
 
