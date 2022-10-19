@@ -53,7 +53,7 @@ public class ForslagController : Controller
     }
 
     /**
-     * Funksjon for å hente spesifikke forslag til brukere basert på ForfatterId
+     * Funksjon for å hente alle forslag til spesfikke brukere basert på ForfatterId
      */
     [HttpGet("/api/[controller]/forfatter/{forfatterId}")]
     public async Task<ActionResult<List<Forslag>>> GetBrukerForslag(int forfatterId)
