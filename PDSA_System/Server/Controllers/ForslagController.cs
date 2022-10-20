@@ -101,7 +101,7 @@ public class ForslagController : Controller
             "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagId = @ForslagId",
             forslag);
 
-        return Ok(await GetAllForslag());
+        return Ok(forslag);
     }
 
     /**
