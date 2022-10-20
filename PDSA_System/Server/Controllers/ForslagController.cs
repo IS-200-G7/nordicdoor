@@ -88,18 +88,17 @@ public class ForslagController : Controller
     }
 
     /**
-     * Funksjon for å oppdatere forslag
+     * Funksjon for å oppdatere forslag utifra forslagId
      * Returnerer statuskode 200 dersom det ikke oppstår feil.
-     * Funker ikke helt enda.
      */
     [HttpPut("/api/[controller]/updateforslag/{forslagId}")]
-    public async Task<ActionResult<List<Forslag>>> UpdateForslag(int forslagId, Forslag forslag)
+    public async Task<ActionResult<List<Forslag>>> UpdateForslag(Forslag forslag)
     {
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
         await conn.ExecuteAsync(
-            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagId = @id", new { id = forslagId },
+            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagId = @ForslagId",
             forslag);
 
         return Ok(await GetAllForslag());

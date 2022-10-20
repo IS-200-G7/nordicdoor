@@ -5,6 +5,7 @@ namespace PDSA_System.Server.Models
     public class Forslag
     {
         public int ForslagId { get; set; }
+
         public int ForfatterId { get; set; }
 
         public int TeamId { get; set; }
@@ -24,6 +25,7 @@ namespace PDSA_System.Server.Models
         public DateTime Frist { get; set; }
 
         public string Kategori { get; set; } = "";
+
         // Kategori er egentlig en definert liste.
         // Kan sette deafultverdi for en av de f.eks.
     }
