@@ -28,7 +28,7 @@ Dette vil automatisk laste inn nye endringer når du lagrer filer, noe som gjør
   
 
 ```docker
-docker run --name db -e TZ=Europe/Oslo -e MYSQL_ROOT_PASSWORD=PASSORD -p 3306:3306 -d mariadb:latest
+docker run --name db -e MYSQL_ROOT_PASSWORD=PASSORD -p 3306:3306 -d mariadb:latest
 ```
 
 2. Verifiser at konteineren har status 'Running'
