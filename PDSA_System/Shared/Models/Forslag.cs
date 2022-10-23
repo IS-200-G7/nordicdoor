@@ -1,6 +1,6 @@
 using System.Reflection.Metadata;
 
-namespace PDSA_System.Server.Models
+namespace PDSA_System.Shared.Models
 {
     public class Forslag
     {

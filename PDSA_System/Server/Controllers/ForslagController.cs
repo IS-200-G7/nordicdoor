@@ -3,6 +3,7 @@ using PDSA_System.Server.Models;
 using Dapper;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Pkcs;
+using PDSA_System.Shared.Models;
 
 namespace PDSA_System.Server.Controllers;
 
