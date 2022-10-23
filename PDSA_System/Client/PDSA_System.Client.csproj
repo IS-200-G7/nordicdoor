@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Shared\PDSA_System.Shared.csproj" />
+        <ProjectReference Include="..\Shared\PDSA_System.Shared.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Models" />
+        <Folder Include="Models"/>
     </ItemGroup>
 
 </Project>
