@@ -28,6 +28,22 @@ else
         <th>Emne</th>
         <th>Status</th>
     </tr>
+    <tr>
+        <td>Forslag</td>
+        <td>1</td>
+        <td>
+            @foreach (var item in _forslag)
+           {
+               @item.Emne
+           }
+        </td>
+        <td>
+           @foreach (var item in _forslag)
+           {
+               @item.Status
+           }
+        </td>
+    </tr>
     </thead>
     <tbody>
     </tbody>
