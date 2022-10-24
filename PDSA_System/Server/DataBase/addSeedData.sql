@@ -24,11 +24,17 @@ VALUES (6, 'Eirik', 'Bakkestad', 'bakke@example.no', 'softCactuses', 'ansatt', 5
 
 
 -- Team
-INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn) VALUES (1, 1, 'Produksjon');
+INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn)
+VALUES (1, 1, 'Produksjon');
 
-INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId) VALUES (2, 1, 'fase1', 1);
-INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId) VALUES (3, 3, 'fase2', 1);
-INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId) VALUES (4, 5, 'fase3', 1);
+INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId)
+VALUES (2, 1, 'fase1', 1);
+
+INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId)
+VALUES (3, 3, 'fase2', 1);
+
+INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId)
+VALUES (4, 5, 'fase3', 1);
 
 -- Forslag
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
@@ -65,34 +71,56 @@ VALUES (5, 2, '"Test forslag"', '"testing testing"', null, "act");
 
 -- TeamMedlemskap
 
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (2, 1);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (2, 2);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (2, 1);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (2, 2);
 
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (3, 3);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (3, 4);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (3, 3);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (3, 4);
 
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (4, 5);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (4, 6);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (4, 5);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (4, 6);
 
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (1, 1);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (1, 2);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (1, 3);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (1, 4);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (1, 5);
-INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr) VALUES (1, 6);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (1, 1);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (1, 2);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (1, 3);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (1, 4);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (1, 5);
+INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
+VALUES (1, 6);
 
 
 
 -- ForslagKobling
 
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (1, 1);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (2, 2);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (3, 3);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (3, 4);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (5, 5);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (4, 6);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (6, 7);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (4, 8);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (1, 9);
-INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId) VALUES (5, 10);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (1, 1);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (2, 2);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (3, 3);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (3, 4);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (5, 5);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (4, 6);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (6, 7);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (4, 8);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (1, 9);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (5, 10);
 
