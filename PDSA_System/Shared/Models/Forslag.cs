@@ -4,6 +4,12 @@ namespace PDSA_System.Shared.Models
 {
     public class Forslag
     {
+namespace PDSA_System.Server.Models
+{
+    public class Forslag
+    {
+        public int ForslagId { get; set; }
+        
         public int ForfatterId { get; set; }
 
         public int TeamId { get; set; }
