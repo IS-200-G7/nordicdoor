@@ -30,12 +30,12 @@ public class JwtClaims
     {
         var claims = new[] // Bruker standardiserte navn på claims
         {
-            new Claim(JwtRegisteredClaimNames.GivenName, Fornavn),
-            new Claim(JwtRegisteredClaimNames.FamilyName, Etternavn),
-            new Claim(JwtRegisteredClaimNames.Email, Epost),
+            new Claim("fornavn", Fornavn),
+            new Claim("etternavn", Etternavn),
+            new Claim("epost", Epost),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim("role", Rolle),
-            new Claim("userId", AnsattNr)
+            new Claim("rolle", Rolle),
+            new Claim("brukerId", AnsattNr)
         };
         
         // Hente og generere nøkler for autentisering
@@ -67,11 +67,11 @@ public class JwtClaims
             return new JwtClaims("", "", "", "", "");
         }
 
-        var epost = tokenS.Claims.First(claim => claim.Type == "email").Value;
-        var fornavn = tokenS.Claims.First(claim => claim.Type == "given_name").Value;
-        var etternavn = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
-        var rolle = tokenS.Claims.First(claim => claim.Type == "role").Value;
-        var ansattNr = tokenS.Claims.First(claim => claim.Type == "userId").Value;
+        var epost = tokenS.Claims.First(claim => claim.Type == "epost").Value;
+        var fornavn = tokenS.Claims.First(claim => claim.Type == "fornavn").Value;
+        var etternavn = tokenS.Claims.First(claim => claim.Type == "etternavn").Value;
+        var rolle = tokenS.Claims.First(claim => claim.Type == "rolle").Value;
+        var ansattNr = tokenS.Claims.First(claim => claim.Type == "brukerId").Value;
 
         // Exp er ikke nødvendig å hente ut, da den ikke brukes i applikasjonen, bør implementeres senere
         //var exp = tokenS.Claims.First(claim => claim.Type == "exp").Value;
