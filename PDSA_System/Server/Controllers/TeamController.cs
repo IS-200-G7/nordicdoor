@@ -4,11 +4,9 @@ using Dapper;
 
 namespace PDSA_System.Server.Controllers
 {
-
     [Route("/api/[controller]")]
     public class TeamController : Controller
     {
-
         private readonly IConfiguration _configuration;
 
         public TeamController(IConfiguration configuration)
@@ -35,7 +33,6 @@ namespace PDSA_System.Server.Controllers
         Metoden Henter ut et spesifikk lag med param(TeamId)
         */
         [HttpGet("/api/[controller]/{TeamId}")]
-
         public async Task<ActionResult<List<Team>>> GetTeam(int TeamId)
         {
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -53,7 +50,6 @@ namespace PDSA_System.Server.Controllers
 
         [HttpPost]
         // denne linjen sier at denne metoden skal kjøres når det kommer en POST request
-   
         public async Task<ActionResult<List<Team>>> CreateTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -65,29 +61,27 @@ namespace PDSA_System.Server.Controllers
             return Ok(team); // denne linjen returnerer statuskode 200 og teamet som ble lagt til i database
         }
 
-       
 
         /* EditTeam
         * Denne metoden oppdaterer et Team.
-        */ 
+        */
         [HttpPut]
         public async Task<ActionResult<List<Team>>> EditTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
-            using var conn = new DbHelper(connString).Connection; 
+            using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync("UPDATE Team SET Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId", team);
+            await conn.ExecuteAsync("UPDATE Team SET Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId",
+                team);
 
-        
 
-            return Ok(await GetTeam(team.TeamId)); 
+            return Ok(await GetTeam(team.TeamId));
         }
-        
+
         /* DeleteTeam
         * Denne metoden sletter Teams fra tabellen Team som er like teamid parameteret.
         */
         [HttpDelete("/api/[controller]/{TeamId}")]
-
         public async Task<ActionResult<List<Team>>> DeleteTeam(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -97,23 +91,22 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(TeamId);
         }
-        
+
         /* GetBrukere
          * Denne henter alle medlemmene tilknyttet et spesefikt team
          */
-        [HttpGet("/api/[controller]/GetBrukere")] 
-
+        [HttpGet("/api/[controller]/GetBrukere")]
         public async Task<ActionResult<List<Team>>> GetUsersFromTeam(int TeamId)
         {
-            var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection"); 
+            var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(conneString).Connection;
             // denne linjen henter ut teammedlemskap
-            var Brukere = await conn.QueryAsync<TeamMedlemskap>("SELECT * FROM TeamMedlemskap WHERE TeamId = @id", new { id = TeamId });
+            var Brukere = await conn.QueryAsync<TeamMedlemskap>("SELECT * FROM TeamMedlemskap WHERE TeamId = @id",
+                new { id = TeamId });
 
             // denne returnerer en statuskode 200 og temedlemskapet som ble hentet fra databasen
-            return Ok(Brukere); 
+            return Ok(Brukere);
         }
-
 
 
         /* DeleteBrukere
@@ -125,12 +118,10 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<String>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync("DELETE FROM TeamMedlemskap WHERE AnsattNr = @id AND TeamId = @TeamId", new { id = AnsattNr, TeamId = TeamId });
+            await conn.ExecuteAsync("DELETE FROM TeamMedlemskap WHERE AnsattNr = @id AND TeamId = @TeamId",
+                new { id = AnsattNr, TeamId = TeamId });
 
             return Ok(AnsattNr);
         }
-
-
     }
-
 }

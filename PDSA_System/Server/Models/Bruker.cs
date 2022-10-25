@@ -20,11 +20,10 @@ namespace PDSA_System.Server.Models
 
         // Create a dictionary that stores the different team the user is a part of.
 
-       // public Dictionary<int, Team> Teams { get; set; }
+        // public Dictionary<int, Team> Teams { get; set; }
 
         //Dersom man bruker dapper må man ha en default/tom ctor("param")
 
         // Er List den beste datastrukturen? Kanskje HashMap <K,V>.
-
     }
 }
