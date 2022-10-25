@@ -1,4 +1,7 @@
-﻿using PDSA_System.Server.Models;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using PDSA_System.Server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateAudience = false,
+        ValidateIssuer = false,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"] ??"ft2NueB9H8N9p8RpVvWfwWPstApP6gus")),
+        NameClaimType = "userId"
+    };
+});
 
 var app = builder.Build();
 
@@ -30,8 +46,11 @@ app.UseHttpsRedirection();
 app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
+app.UseAuthentication();
+
 app.UseRouting();
 
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
