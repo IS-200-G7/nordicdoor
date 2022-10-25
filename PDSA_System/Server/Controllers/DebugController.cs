@@ -20,7 +20,8 @@ public class DebugController : ControllerBase
     public IActionResult Debug()
     {
         //Returnerer tom string dersom `fornavn` ikke er definert. Slipper da feilmelding på grunn av nullverdier
-        var fornavn = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "fornavn")?.Value;
+        var fornavn = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "fornavn")
+            ?.Value;
 
         return Ok("Hei, " + fornavn);
     }

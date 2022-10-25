@@ -19,7 +19,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateIssuer = false,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"] ??"ft2NueB9H8N9p8RpVvWfwWPstApP6gus")),
+        IssuerSigningKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"] ??
+                                                            "ft2NueB9H8N9p8RpVvWfwWPstApP6gus")),
         NameClaimType = "userId"
     };
 });
