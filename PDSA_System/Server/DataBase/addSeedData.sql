@@ -20,9 +20,6 @@ VALUES (6, 'Eirik', 'Bakkestad', 'bakke@example.no', 'softCactuses', 'ansatt', 5
 
 
 
-
-
-
 -- Team
 INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn)
 VALUES (1, 1, 'Produksjon');
@@ -36,6 +33,7 @@ VALUES (3, 3, 'fase2', 1);
 INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId)
 VALUES (4, 5, 'fase3', 1);
 
+
 -- Forslag
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
 VALUES (1, 2, 'Fresing av hull til lås', 'Kan dere øke diameteren på hullene med 3mm?', null);
@@ -47,25 +45,39 @@ INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
 VALUES (3, 3, 'test', 'testing testing', null);
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
-VALUES (3, 2, '"Test forslag"', '"testing testing"', null);
+VALUES (3, 2, "Test forslag", "testing testing", null);
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
-VALUES (5, 2, '"Test forslag"', '"testing testing"', null);
+VALUES (5, 2, "Test forslag", "testing testing", null);
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (4, 1, '"Test forslag"', '"testing testing"', null, "do");
+VALUES (4, 1, "Test forslag", "testing testing", null, "do");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (6, 1, '"Test forslag"', '"testing testing"', null, "act");
+VALUES (6, 1, "Test forslag", "testing testing", null, "act");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (4, 3, '"Test forslag"', '"testing testing"', null, "do");
+VALUES (4, 3, "Test forslag", "testing testing", null, "do");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (1, 2, '"Test forslag"', '"testing testing"', null, "do");
+VALUES (1, 2, "Test forslag", "testing testing", null, "do");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (5, 2, '"Test forslag"', '"testing testing"', null, "act");
+VALUES (5, 2, "Test forslag", "testing testing", null, "act");
+
+-- Forslag hvor jeg eksplisitt setter inn dato for opprettet for å teste statistikkController
+
+INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
+
+INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
+
+INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
+
+INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
 
 
 
@@ -124,3 +136,13 @@ VALUES (1, 9);
 INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
 VALUES (5, 10);
 
+-- Forslag som er 20 dager gamle.
+
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (4, 11);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (4, 12);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (4, 13);
+INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
+VALUES (4, 14);
