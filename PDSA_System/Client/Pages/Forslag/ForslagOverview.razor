@@ -33,15 +33,15 @@ else
         <td>1</td>
         <td>
             @foreach (var item in _forslag)
-           {
-               @item.Emne
-           }
+            {
+                @item.Emne
+            }
         </td>
         <td>
-           @foreach (var item in _forslag)
-           {
-               @item.Status
-           }
+            @foreach (var item in _forslag)
+            {
+                @item.Status
+            }
         </td>
     </tr>
     </thead>
@@ -55,4 +55,5 @@ else
 
     protected override async Task OnInitializedAsync() =>
         _forslag = await Http.GetFromJsonAsync<Forslag[]>("/api/Forslag");
+
 }

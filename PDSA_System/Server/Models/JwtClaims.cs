@@ -37,7 +37,7 @@ public class JwtClaims
             new Claim("role", Rolle),
             new Claim("userId", AnsattNr)
         };
-        
+
         // Hente og generere nøkler for autentisering
         // Key er hardcoded kun for utvikling. Denne MÅ endres til å hente fra appsettings.json
         var key = new SymmetricSecurityKey(
