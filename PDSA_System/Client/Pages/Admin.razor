@@ -1,0 +1,102 @@
+@page "/admin"
+@using PDSA_System.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<h3>Admin</h3>
+<br/>
+  <h2>Brukere</h2>
+  @*Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST)*@
+<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBrukerPage"))">Legg til bruker</button> 
+<br />
+<br />
+@if(_bruker == null)
+{
+    <p>Error</p>
+} else
+     {
+ <table class="table align-middle mb-1 bg-white">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ms-auto">AnsattNr</th>
+                    <th class="ms-auto">Navn</th>
+                    <th class="ms-auto">Epost(Brukernavn)</th>
+                    <th class="ms-auto">Rolle</th>
+                    <th>Handlinger</th>
+                </tr>
+            </thead>
+
+    @foreach (var item in _bruker)
+    {
+            // bind ansattnr to id for delete
+          
+               
+            <tbody>
+                <tr>
+                         <div class="d-flex align-items-center">
+                             <td>
+                            <div class="ms-3">
+                             <p class="" >@item.AnsattNr</p>
+                            </div>
+                          </td>
+                          </div>
+                        <td>
+                          
+                        <div class="d-flex align-items-center">
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">@item.Fornavn @item.Etternavn</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="ms-3">
+                         <p class="fw-normal mb-1">@item.Email</p>
+                         </div>
+                      </div>
+                    </td>
+                    <td>@item.Rolle</td>
+                    <td>
+                      
+                      @* <button type="button" class="btn btn-warning" @onclick="@(()=>EditItem(item.AnsattNr))">Slett</button>*@
+                        @*<input @bind="id"/> This Works but you have to input the id which will be deleted....*@
+                         <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(item.AnsattNr))">Slett</button>
+                    </td>
+                </tr>
+             
+            </tbody>
+            
+
+    }
+     </table>
+}
+
+@code {
+
+    // Koden under er for å vise alle ansatte i databasen(GET)
+    private Bruker[]? _bruker;
+
+
+    protected override async Task OnInitializedAsync() =>
+    _bruker = await Http.GetFromJsonAsync<Bruker[]>("/api/Bruker");
+
+
+    // Delete section
+    private int id;
+
+    private async Task DeleteItem(int id)
+    {
+        await Http.DeleteAsync($"apiBruker/admin/DeleteBruker/{id}");
+        NavigationManager.NavigateTo("/Admin");
+    }
+
+    // Edit Item
+    // This will send the user to the edit page
+    private async Task EditItem(int id) =>
+    NavigationManager.NavigateTo($"/apiBruker/admin/UpdateBruker/{id}");
+
+
+
+
+}
+

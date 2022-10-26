@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PDSA_System.Server.Models;
+using PDSA_System.Shared.Models;
 using Dapper;
 
 
@@ -104,7 +104,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api[controller]/admin/DeleteBruker")]
+        [HttpDelete("/api[controller]/admin/DeleteBruker/{AnsattNr}")]
         public async Task<ActionResult<List<Bruker>>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
