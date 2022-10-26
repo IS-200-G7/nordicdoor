@@ -87,7 +87,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
-        [HttpPut("/api[Controller]/admin/UpdateBruker")]
+        [HttpPut("/api/[Controller]/admin/UpdateBruker")]
         public async Task<ActionResult<List<Bruker>>> UpdateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -104,7 +104,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api[controller]/admin/DeleteBruker")]
+        [HttpDelete("/api/[controller]/admin/DeleteBruker")]
         public async Task<ActionResult<List<Bruker>>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
