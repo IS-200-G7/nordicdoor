@@ -131,5 +131,31 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(await GetAllBrukere());
         }
+
+        [HttpPost("/api/[controller]/byttPassord/")]
+        public async Task<ActionResult<bool>> ByttPassord([FromBody] ByttPassord data)
+        {
+            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(connString).Connection;
+
+            // Forsøk å hente brukerId dersom ikke allerede definert
+            if (data.BrukerId == 0)
+            {
+                data.BrukerId = Int32.Parse(HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value ?? "0");
+            }
+
+            var hasher = new PasswordHash();
+            var salt = hasher.CreateSalt();
+            var hash = hasher.HashPassword(data.Passord, salt);
+            //byte to base64
+            var hash2Base64 = Convert.ToBase64String(hash);
+            var salt2Base64 = Convert.ToBase64String(salt);
+
+            var res = await conn.ExecuteAsync("UPDATE Bruker SET PassordHash = @newHash WHERE AnsattNr = @Id",
+                new { newHash = $"{hash2Base64}:{salt2Base64}", Id = data.BrukerId });
+
+
+            return Ok(res);
+        }
     }
 }
