@@ -15,7 +15,7 @@
 						<h5 class="card-title"><b>Plan</b></h5>
 					</div>
 					<div class="card-body p-3">
-						@foreach (var item in _forslag)
+						@foreach (var item in _forslag ?? Array.Empty<Forslag>())
 						{
 
 							if (item.Status != "plan")
