@@ -9,16 +9,20 @@ VALUES (2, 'Siddharth', 'Dushantha', 'satan@sidd.no',
         '02BNAhz1nQOV6Rrdoyalqyug9xh5mJlWmUxgXerpO74=:2k5s/T2rgp0e8vB75+a9fhtUbQFWeWIanwgP/mEqy34=', 'ansatt', 2);
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle)
-VALUES (3, 'Torkel', 'Ivarsøy', 'ivarsøy@example.no', 'EPIC_SHELTER', 'teamleder');
+VALUES (3, 'Torkel', 'Ivarsøy', 'ivarsøy@example.no',
+        'rcxg5TQUaKneWcQjWwhgZylnkMy46ttyZ9tCEbzKj2w=:tLc7dr65HJ4BeHgQmGTXmnDqsMseTMOMPu/0Sb1Bxy0=', 'teamleder');
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle, LederId)
-VALUES (4, 'Victor', 'Rolf', 'rolf@example.no', 'HEARTBEAT', 'ansatt', 3);
+VALUES (4, 'Victor', 'Rolf', 'rolf@example.no',
+        'cptkiQca0OoHQpIwTOkKs74ybtm6iuYCNw6439BZFgU=:CFdyXnCgT9XnYYAhTUBTKZ/jyfjMg8XuIJIxyO4Gyhc=', 'ansatt', 3);
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle)
-VALUES (5, 'Magnus', 'Menyo', 'menyo@example.no', 'goldenNugget', 'teamleder');
+VALUES (5, 'Magnus', 'Menyo', 'menyo@example.no',
+        'njY0hbuir7OBNCcWMDS1th2n3iniWeMEpotApDXDoXo=:D65mEE3hNhijmxLPSrNQcQMhmnV1Auid0hmaS31TqFM=', 'teamleder');
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle, LederId)
-VALUES (6, 'Eirik', 'Bakkestad', 'bakke@example.no', 'softCactuses', 'ansatt', 5);
+VALUES (6, 'Eirik', 'Bakkestad', 'bakke@example.no',
+        '2l0P/sn5eTgi8i5tJ5fOOXCzJEaU+wVtO+MODE3QlnQ=:H2g9Zs3JYAftr+3vVjV+edFrPO0kpV5OHgwuFToq71A=', 'ansatt', 5);
 
 
 -- Team
