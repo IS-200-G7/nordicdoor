@@ -63,7 +63,7 @@ INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, S
 VALUES (1, 2, 'Test forslag', 'testing testing', null, "do");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (5, 2, '"Test forslag"', '"testing testing"', null, "act");
+VALUES (5, 2, 'Test forslag', 'testing testing', null, "act");
 
 
 -- TeamMedlemskap
