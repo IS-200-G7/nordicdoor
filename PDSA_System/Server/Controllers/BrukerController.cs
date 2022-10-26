@@ -144,6 +144,12 @@ namespace PDSA_System.Server.Controllers
                 data.BrukerId = Int32.Parse(HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value ?? "0");
             }
 
+            // Hvis BrukerId fortsatt er 0, da har de rotet det til
+            if (data.BrukerId == 0)
+            {
+                return BadRequest(false);
+            }
+
             var hasher = new PasswordHash();
             var salt = hasher.CreateSalt();
             var hash = hasher.HashPassword(data.Passord, salt);
