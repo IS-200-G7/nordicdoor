@@ -1,10 +1,12 @@
 -- Bruker
 
-INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash,Rolle)
-VALUES (1, 'Tobias', 'Hansen', 'tob@mail.com', 'OTOiYdFITlCQGxI+/MGSUO3MGmK46v8LV45DgHFVHNg=:T4sen2e7YnMALZpNRTz5dQJfcg/RZBhnpxVKR2donyg=', 'teamleder');
+INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle)
+VALUES (1, 'Tobias', 'Hansen', 'tob@mail.com',
+        'OTOiYdFITlCQGxI+/MGSUO3MGmK46v8LV45DgHFVHNg=:T4sen2e7YnMALZpNRTz5dQJfcg/RZBhnpxVKR2donyg=', 'teamleder');
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle, LederId)
-VALUES (2, 'Siddharth', 'Dushantha', 'satan@sidd.no', '02BNAhz1nQOV6Rrdoyalqyug9xh5mJlWmUxgXerpO74=:2k5s/T2rgp0e8vB75+a9fhtUbQFWeWIanwgP/mEqy34=', 'ansatt', 2);
+VALUES (2, 'Siddharth', 'Dushantha', 'satan@sidd.no',
+        '02BNAhz1nQOV6Rrdoyalqyug9xh5mJlWmUxgXerpO74=:2k5s/T2rgp0e8vB75+a9fhtUbQFWeWIanwgP/mEqy34=', 'ansatt', 2);
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle)
 VALUES (3, 'Torkel', 'Ivarsøy', 'ivarsøy@example.no', 'EPIC_SHELTER', 'teamleder');
@@ -17,7 +19,6 @@ VALUES (5, 'Magnus', 'Menyo', 'menyo@example.no', 'goldenNugget', 'teamleder');
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle, LederId)
 VALUES (6, 'Eirik', 'Bakkestad', 'bakke@example.no', 'softCactuses', 'ansatt', 5);
-
 
 
 -- Team
@@ -80,7 +81,6 @@ INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, S
 VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL -20 DAY));
 
 
-
 -- TeamMedlemskap
 
 INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
@@ -110,7 +110,6 @@ INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
 VALUES (1, 5);
 INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
 VALUES (1, 6);
-
 
 
 -- ForslagKobling

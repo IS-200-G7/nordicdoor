@@ -5,7 +5,7 @@ namespace PDSA_System.Shared.Models
     public class Forslag
     {
         public int ForslagId { get; set; }
-        
+
         public int ForfatterId { get; set; }
 
         public int TeamId { get; set; }
@@ -29,5 +29,3 @@ namespace PDSA_System.Shared.Models
         // Kan sette deafultverdi for en av de f.eks.
     }
 }
-
-

@@ -7,12 +7,10 @@ using PDSA_System.Shared.Models;
 
 namespace PDSA_System.Server.Controllers;
 
-
 [Route("/api/[controller]")]
 [ApiController]
 public class ForslagController : Controller
 {
-
     private readonly IConfiguration _configuration;
 
     public ForslagController(IConfiguration configuration)
@@ -82,7 +80,9 @@ public class ForslagController : Controller
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
-        await conn.ExecuteAsync("INSERT INTO Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Kategori) VALUES (@ForfatterId, @TeamId, @Emne, @Beskrivelse, @Kategori)", forslag);
+        await conn.ExecuteAsync(
+            "INSERT INTO Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Kategori) VALUES (@ForfatterId, @TeamId, @Emne, @Beskrivelse, @Kategori)",
+            forslag);
 
         return Ok(await GetAllForslag());
     }
@@ -122,7 +122,8 @@ public class ForslagController : Controller
     // status controller
     [HttpPost("/api/[controller]/setstatus/")]
     public async Task<ActionResult<List<Forslag>>> SetStatus([FromQuery] int ForslagId, [FromQuery] string Status)
-    {   // Hente til connection string fra appsettings.json og åpne en connection til database
+    {
+        // Hente til connection string fra appsettings.json og åpne en connection til database
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
         conn.Open();
@@ -139,13 +140,15 @@ public class ForslagController : Controller
         // Prøv skrive statusen inn i databasen
         try
         {
-            await conn.QueryAsync<int>("UPDATE Forslag SET Status = @Status WHERE ForslagId = @ForslagId", new { ForslagId = ForslagId, Status = Status });
+            await conn.QueryAsync<int>("UPDATE Forslag SET Status = @Status WHERE ForslagId = @ForslagId",
+                new { ForslagId = ForslagId, Status = Status });
         }
         catch (Exception e)
         {
             Console.WriteLine($"databaseerror: {e.Message}");
             return StatusCode(500, "En feil har skjedd");
         }
+
         return Ok();
     }
 
@@ -165,6 +168,4 @@ public class ForslagController : Controller
 
         return bilde;
     }
-
-
 }

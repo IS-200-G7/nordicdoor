@@ -57,11 +57,11 @@ namespace PDSA_System.Server.Controllers
         [HttpPost("/api/[controller]/addBrukerToTeam/")]
         public async Task<ActionResult<List<Bruker>>> OppdaterTeam(int TeamId, int AnsattNr)
         {
-
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, AnsattNr) Values (@TeamId, @AnsattNr)", new { TeamId = TeamId, AnsattNr = AnsattNr});
+            await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, AnsattNr) Values (@TeamId, @AnsattNr)",
+                new { TeamId = TeamId, AnsattNr = AnsattNr });
 
 
             return Ok();
@@ -94,7 +94,7 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId, WHERE AnsattNr = @AnsattNr",
+                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId WHERE AnsattNr = @AnsattNr",
                 bruker);
 
             return Ok(bruker);
@@ -131,6 +131,5 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(await GetAllBrukere());
         }
-
     }
 }
