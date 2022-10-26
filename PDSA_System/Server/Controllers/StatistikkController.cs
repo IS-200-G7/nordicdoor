@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Dapper;
 using PDSA_System.Shared.Models;
+using PDSA_System.Server.Models;
+using Google.Protobuf.WellKnownTypes;
 
 namespace PDSA_System.Server.Controllers
 {
@@ -26,12 +28,12 @@ namespace PDSA_System.Server.Controllers
          * Henter hvor mange forslag en bruker har laget
          */
         [HttpGet("/api/[controller]/{AnsattNr}")]
-        public async Task<ActionResult<List<Object>>> GetBrukerForslagStatistikk(int AnsattNr)
+        public async Task<ActionResult<List<Statistikk>>> GetBrukerForslagStatistikk(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Object>("SELECT COUNT(*) FROM Forslag WHERE ForfatterId = @AnsattNr",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE F.ForfatterId = B.AnsattNr and F.ForfatterId = @AnsattNr",
                 new { AnsattNr = AnsattNr });
 
             return Ok(brukerStatistikk);
@@ -45,12 +47,12 @@ namespace PDSA_System.Server.Controllers
          * Henter hvor mange forslag en bruker har laget, filtrert med status
          */
         [HttpGet("/api/[controller]/{AnsattNr}/{Status}")]
-        public async Task<ActionResult<List<Object>>> GetBrukerForslagStatusStatistikk(int AnsattNr, string Status)
+        public async Task<ActionResult<List<Statistikk>>> GetBrukerForslagStatusStatistikk(int AnsattNr, string Status)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Object>("SELECT COUNT(*) FROM Forslag WHERE ForfatterId = @AnsattNr AND Status = @Status",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, F.Status, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE F.ForfatterId = B.AnsattNr AND F.ForfatterId = @AnsattNr AND Status = @Status",
                 new { AnsattNr = AnsattNr, Status = Status });
 
             return Ok(brukerStatistikk);
@@ -65,12 +67,12 @@ namespace PDSA_System.Server.Controllers
          * Henter hvor mange forslag en bruker har laget
          */
         [HttpGet("/api/[controller]/Team/{TeamId}")]
-        public async Task<ActionResult<List<Object>>> GetTeamForslagStatistikk(int TeamId)
+        public async Task<ActionResult<List<Statistikk>>> GetTeamForslagStatistikk(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Object>("SELECT COUNT(*) FROM Forslag WHERE TeamId = @TeamId",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Stat FROM Forslag WHERE TeamId = @TeamId",
                 new { TeamId = TeamId });
 
             return Ok(brukerStatistikk);
@@ -84,12 +86,12 @@ namespace PDSA_System.Server.Controllers
         * Henter hvor mange forslag et team har laget, filtrert med status
         */
         [HttpGet("/api/[controller]/Team/{TeamId}/{Status}")]
-        public async Task<ActionResult<List<Object>>> GetTeamForslagStatusStatistikk(int TeamId, string Status)
+        public async Task<ActionResult<List<Statistikk>>> GetTeamForslagStatusStatistikk(int TeamId, string Status)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Object>("SELECT COUNT(*) FROM Forslag WHERE TeamId = @TeamId AND Status = @Status",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, Status, COUNT(*) AS Stat FROM Forslag WHERE TeamId = @TeamId AND Status = @Status",
                 new { TeamId = TeamId, Status = Status });
 
             return Ok(brukerStatistikk);
@@ -107,12 +109,11 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk bruker innen en uke (7 dager).
          */
         [HttpGet("/api/[controller]/Bruker/{AnsattNr}/Uke")]
-        public async Task<ActionResult<List<Object>>> GetBrukerUkentligAktivitet(int AnsattNr)
+        public async Task<ActionResult<List<Statistikk>>> GetBrukerUkentligAktivitet(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
-
-            var brukerStatistikk = await conn.QueryAsync<Object>("SELECT Count(*) FROM Forslag WHERE DATEDIFF(Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -7 DAY)) <= 7 AND ForfatterId = @AnsattNr",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL - 7 DAY)) <= 7 AND F.ForfatterId = B.AnsattNr And F.ForfatterId = @AnsattNr",
                 new { AnsattNr = AnsattNr });
 
             return Ok(brukerStatistikk);
@@ -126,12 +127,12 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk bruker innen en måned (30 dager).
          */
         [HttpGet("/api/[controller]/Bruker/{AnsattNr}/Måned")]
-        public async Task<ActionResult<List<Object>>> GetBrukerMånedligAktivitet(int AnsattNr)
+        public async Task<ActionResult<List<Statistikk>>> GetBrukerMånedligAktivitet(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Object>("SELECT Count(*) FROM Forslag WHERE DATEDIFF(Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -30 DAY)) <= 30 AND ForfatterId = @AnsattNr",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL - 30 DAY)) <= 30 AND F.ForfatterId = B.AnsattNr And F.ForfatterId = @AnsattNr",
                 new { AnsattNr = AnsattNr });
 
             return Ok(brukerStatistikk);
@@ -146,12 +147,12 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk Team innen en uke (7 dager).
          */
         [HttpGet("/api/[controller]/Team/{TeamId}/Uke")]
-        public async Task<ActionResult<List<Object>>> GetTeamUkentligAktivitet(int TeamId)
+        public async Task<ActionResult<List<Statistikk>>> GetTeamUkentligAktivitet(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var teamStatistikk = await conn.QueryAsync<Object>("SELECT Count(*) FROM Forslag WHERE DATEDIFF(Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -7 DAY)) <= 7 AND TeamId = @TeamId",
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Stat FROM Forslag AS F WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -7 DAY)) <= 7 AND TeamId = @TeamId",
                 new { TeamId = TeamId });
 
             return Ok(teamStatistikk);
@@ -165,12 +166,12 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk Team innen en måned (30 dager).
          */
         [HttpGet("/api/[controller]/Team/{TeamId}/Måned")]
-        public async Task<ActionResult<List<Object>>> GetTeamMånedligAktivitet(int TeamId)
+        public async Task<ActionResult<List<Statistikk>>> GetTeamMånedligAktivitet(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var teamStatistikk = await conn.QueryAsync<Object>("SELECT Count(*) FROM Forslag WHERE DATEDIFF(Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  30 DAY)) <= 30 AND TeamId = @TeamId",
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Stat FROM Forslag AS F WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -30 DAY)) <= 30 AND TeamId = @TeamId",
                 new { TeamId = TeamId });
 
             return Ok(teamStatistikk);

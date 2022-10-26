@@ -68,16 +68,16 @@ VALUES (5, 2, "Test forslag", "testing testing", null, "act");
 -- Forslag hvor jeg eksplisitt setter inn dato for opprettet for å teste statistikkController
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
-VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL -20 DAY));
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
-VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL -20 DAY));
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
-VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL -20 DAY));
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
-VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL 20 DAY));
+VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL -20 DAY));
 
 
 
