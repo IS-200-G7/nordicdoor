@@ -13,7 +13,7 @@ namespace PDSA_System.Server.Models
 
         public string Status { get; set; }
 
-        public int Stat { get; set; }
+        public int Count { get; set; }
     }
 }
 

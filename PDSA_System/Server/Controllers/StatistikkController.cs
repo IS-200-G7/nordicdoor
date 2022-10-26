@@ -33,7 +33,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE F.ForfatterId = B.AnsattNr and F.ForfatterId = @AnsattNr",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Count FROM Forslag AS F, Bruker AS B WHERE F.ForfatterId = B.AnsattNr and F.ForfatterId = @AnsattNr",
                 new { AnsattNr = AnsattNr });
 
             return Ok(brukerStatistikk);
@@ -52,7 +52,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, F.Status, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE F.ForfatterId = B.AnsattNr AND F.ForfatterId = @AnsattNr AND Status = @Status",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, F.Status, COUNT(*) AS Count FROM Forslag AS F, Bruker AS B WHERE F.ForfatterId = B.AnsattNr AND F.ForfatterId = @AnsattNr AND Status = @Status",
                 new { AnsattNr = AnsattNr, Status = Status });
 
             return Ok(brukerStatistikk);
@@ -72,7 +72,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Stat FROM Forslag WHERE TeamId = @TeamId",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Count FROM Forslag WHERE TeamId = @TeamId",
                 new { TeamId = TeamId });
 
             return Ok(brukerStatistikk);
@@ -91,7 +91,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, Status, COUNT(*) AS Stat FROM Forslag WHERE TeamId = @TeamId AND Status = @Status",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, Status, COUNT(*) AS Count FROM Forslag WHERE TeamId = @TeamId AND Status = @Status",
                 new { TeamId = TeamId, Status = Status });
 
             return Ok(brukerStatistikk);
@@ -113,7 +113,7 @@ namespace PDSA_System.Server.Controllers
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL - 7 DAY)) <= 7 AND F.ForfatterId = B.AnsattNr And F.ForfatterId = @AnsattNr",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Count FROM Forslag AS F, Bruker AS B WHERE ABS(DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL - 7 DAY))) <= 7 AND F.ForfatterId = B.AnsattNr And F.ForfatterId = @AnsattNr",
                 new { AnsattNr = AnsattNr });
 
             return Ok(brukerStatistikk);
@@ -132,7 +132,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Stat FROM Forslag AS F, Bruker AS B WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL - 30 DAY)) <= 30 AND F.ForfatterId = B.AnsattNr And F.ForfatterId = @AnsattNr",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT F.ForfatterId, F.TeamId, B.Fornavn, B.Etternavn, COUNT(*) AS Count FROM Forslag AS F, Bruker AS B WHERE ABS(DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL - 30 DAY))) <= 30 AND F.ForfatterId = B.AnsattNr And F.ForfatterId = @AnsattNr",
                 new { AnsattNr = AnsattNr });
 
             return Ok(brukerStatistikk);
@@ -152,7 +152,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Stat FROM Forslag AS F WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -7 DAY)) <= 7 AND TeamId = @TeamId",
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Count FROM Forslag AS F WHERE ABS(DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -7 DAY))) <= 7 AND TeamId = @TeamId",
                 new { TeamId = TeamId });
 
             return Ok(teamStatistikk);
@@ -171,7 +171,7 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Stat FROM Forslag AS F WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -30 DAY)) <= 30 AND TeamId = @TeamId",
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Count FROM Forslag AS F WHERE ABS(DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -30 DAY))) <= 30 AND TeamId = @TeamId",
                 new { TeamId = TeamId });
 
             return Ok(teamStatistikk);
