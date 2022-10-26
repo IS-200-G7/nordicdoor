@@ -155,7 +155,7 @@ namespace PDSA_System.Server.Controllers
                 new { newHash = $"{hash2Base64}:{salt2Base64}", Id = data.BrukerId });
 
 
-            return Ok(res);
+            return Ok(res.Equals(1));
         }
     }
 }
