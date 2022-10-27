@@ -72,10 +72,10 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Count FROM Forslag WHERE TeamId = @TeamId",
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Count FROM Forslag WHERE TeamId = @TeamId",
                 new { TeamId = TeamId });
 
-            return Ok(brukerStatistikk);
+            return Ok(teamStatistikk);
         }
 
 
@@ -91,10 +91,10 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, Status, COUNT(*) AS Count FROM Forslag WHERE TeamId = @TeamId AND Status = @Status",
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, Status, COUNT(*) AS Count FROM Forslag WHERE TeamId = @TeamId AND Status = @Status",
                 new { TeamId = TeamId, Status = Status });
 
-            return Ok(brukerStatistikk);
+            return Ok(teamStatistikk);
 
         }
 
@@ -221,28 +221,46 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT Count(*) AS Count, TeamId FROM Forslag WHERE Opprettet BETWEEN @time01 AND @time02 AND TeamId = @TeamId",
-                new {time01 = time01, time02 = time02, TeamId = TeamId });
+                new { time01 = time01, time02 = time02, TeamId = TeamId });
 
             return Ok(teamStatistikk);
         }
 
 
         /** GetBrukerStatistikkBetween
-    * @param - DateTime time01, DateTime time02, int ForfatterId
-    * @return - Task
-    * 
-    * Henter alle forslagene til en spesifikk Bruker innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
-    */
+         * @param - DateTime time01, DateTime time02, int ForfatterId
+         * @return - Task
+         * 
+         * Henter alle forslagene til en spesifikk Bruker innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
+         */
         [HttpGet("/api/[controller]/Bruker/{ForfatterId}/Between")]
         public async Task<ActionResult<List<Statistikk>>> GetBrukerStatistikkBetween(DateTime time01, DateTime time02, int ForfatterId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT Count(*) AS Count, ForfatterId FROM Forslag WHERE Opprettet BETWEEN @time01 AND @time02 AND ForfatterId = @ForfatterId",
+            var brukerStatistikk = await conn.QueryAsync<Statistikk>("SELECT Count(*) AS Count, ForfatterId FROM Forslag WHERE Opprettet BETWEEN @time01 AND @time02 AND ForfatterId = @ForfatterId",
                 new { time01 = time01, time02 = time02, ForfatterId = ForfatterId });
 
-            return Ok(teamStatistikk);
+            return Ok(brukerStatistikk);
+        }
+
+        /** GetStatistikkBetween
+        * @param - DateTime time01, DateTime time02
+        * @return - Task
+        * 
+        * Henter alle forslagene innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
+        */
+        [HttpGet("/api/[controller]/Between")]
+        public async Task<ActionResult<List<Statistikk>>> GetStatistikkBetween(DateTime time01, DateTime time02)
+        {
+            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(connString).Connection;
+
+            var statistikk = await conn.QueryAsync<Statistikk>("SELECT Count(*) AS Count FROM Forslag WHERE Opprettet BETWEEN @time01 AND @time02",
+                new { time01 = time01, time02 = time02 });
+
+            return Ok(statistikk);
         }
 
     }
