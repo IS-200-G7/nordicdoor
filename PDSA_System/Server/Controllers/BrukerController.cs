@@ -87,14 +87,14 @@ namespace PDSA_System.Server.Controllers
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
-        [HttpPut("/api[Controller]/admin/UpdateBruker")]
+        [HttpPut("/api/[Controller]/admin/UpdateBruker")]
         public async Task<ActionResult<List<Bruker>>> UpdateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId, WHERE AnsattNr = @AnsattNr",
+                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId WHERE AnsattNr = @AnsattNr",
                 bruker);
 
             return Ok(bruker);
@@ -104,7 +104,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api[controller]/admin/DeleteBruker")]
+        [HttpDelete("/api/[controller]/admin/DeleteBruker")]
         public async Task<ActionResult<List<Bruker>>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -130,6 +130,38 @@ namespace PDSA_System.Server.Controllers
                 "UPDATE Bruker SET Rolle = @Rolle WHERE AnsattNr = @Id", new { Rolle = rolle, Id = AnsattNr });
 
             return Ok(await GetAllBrukere());
+        }
+
+        [HttpPost("/api/[controller]/byttPassord/")]
+        public async Task<ActionResult<bool>> ByttPassord([FromBody] ByttPassord data)
+        {
+            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(connString).Connection;
+
+            // Forsøk å hente brukerId dersom ikke allerede definert
+            if (data.BrukerId == 0)
+            {
+                data.BrukerId = Int32.Parse(HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value ?? "0");
+            }
+
+            // Hvis BrukerId fortsatt er 0, da har de rotet det til
+            if (data.BrukerId == 0)
+            {
+                return BadRequest(false);
+            }
+
+            var hasher = new PasswordHash();
+            var salt = hasher.CreateSalt();
+            var hash = hasher.HashPassword(data.Passord, salt);
+            //byte to base64
+            var hash2Base64 = Convert.ToBase64String(hash);
+            var salt2Base64 = Convert.ToBase64String(salt);
+
+            var res = await conn.ExecuteAsync("UPDATE Bruker SET PassordHash = @newHash WHERE AnsattNr = @Id",
+                new { newHash = $"{hash2Base64}:{salt2Base64}", Id = data.BrukerId });
+
+
+            return Ok(res.Equals(1));
         }
     }
 }

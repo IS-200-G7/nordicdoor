@@ -25,15 +25,6 @@ public class AuthController : ControllerBase
         using var conn = new DbHelper(connString).Connection;
         conn.Open();
 
-        //TODO: FJERN!
-        var hash2 = new PasswordHash();
-        var salt2 = hash2.CreateSalt();
-        var passord2 = hash2.HashPassword(data.Passord, salt2);
-        //byte to base64
-        var salt2Base64 = Convert.ToBase64String(salt2);
-        var hash2Base64 = Convert.ToBase64String(passord2);
-        Console.WriteLine($"{hash2Base64}:{salt2Base64}");
-
         // Hent bruker fra database basert på epostadresse
         Bruker bruker;
         try
@@ -68,7 +59,7 @@ public class AuthController : ControllerBase
         if (valid)
         {
             JwtClaims claims = new JwtClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, "Bruker",
-                bruker.AnsattNr.ToString());
+                bruker.AnsattNr.ToString(), _configuration.GetValue<string>("JwtSettings:Secret"));
 
             var token = claims.GenerateToken();
 
