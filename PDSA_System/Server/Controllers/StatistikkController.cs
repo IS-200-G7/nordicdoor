@@ -208,6 +208,43 @@ namespace PDSA_System.Server.Controllers
 
 
 
+        /** GetTeamStatistikkBetween
+        * @param - DateTime time01, DateTime time02, int TeamId
+        * @return - Task
+        * 
+        * Henter alle forslagene til et spesifikk Team innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
+        */
+        [HttpGet("/api/[controller]/Team/{TeamId}/Between")]
+        public async Task<ActionResult<List<Statistikk>>> GetTeamStatistikkBetween(DateTime time01, DateTime time02, int TeamId)
+        {
+            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(connString).Connection;
+
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT Count(*) AS Count, TeamId FROM Forslag WHERE Opprettet BETWEEN @time01 AND @time02 AND TeamId = @TeamId",
+                new {time01 = time01, time02 = time02, TeamId = TeamId });
+
+            return Ok(teamStatistikk);
+        }
+
+
+        /** GetBrukerStatistikkBetween
+    * @param - DateTime time01, DateTime time02, int ForfatterId
+    * @return - Task
+    * 
+    * Henter alle forslagene til en spesifikk Bruker innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
+    */
+        [HttpGet("/api/[controller]/Bruker/{ForfatterId}/Between")]
+        public async Task<ActionResult<List<Statistikk>>> GetBrukerStatistikkBetween(DateTime time01, DateTime time02, int ForfatterId)
+        {
+            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(connString).Connection;
+
+            var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT Count(*) AS Count, ForfatterId FROM Forslag WHERE Opprettet BETWEEN @time01 AND @time02 AND ForfatterId = @ForfatterId",
+                new { time01 = time01, time02 = time02, ForfatterId = ForfatterId });
+
+            return Ok(teamStatistikk);
+        }
+
     }
 }
 
