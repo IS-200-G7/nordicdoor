@@ -42,17 +42,22 @@
     <input type="datetime" @bind="_bruker.Opprettet" class="form-control" id="formGroupExampleInput" placeholder="Opprettet">
   </div>*@
 </form>
-<button type="button" class="btn btn-success" @onclick="AddItem" >Success</button>
+<button type="button" class="btn btn-success" @onclick="AddItem">Lag bruker</button>
 
 
 @code {
     private Bruker _bruker = new Bruker();
-    
+
+    // make the button route back to the admin page after adding a new user
 
     private async Task AddItem()
     {
         var LagBruker = new { Name = _bruker, IsComplete = false };
         await Http.PostAsJsonAsync("/api/Bruker/createBruker", _bruker);
-         
+        NavigationManager.NavigateTo("/admin");
     }
-}
+  }
+    
+
+   
+

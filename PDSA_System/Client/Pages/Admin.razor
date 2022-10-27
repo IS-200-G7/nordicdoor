@@ -6,6 +6,8 @@
 <h3>Admin</h3>
 <br/>
   <h2>Brukere</h2>
+
+
   @*Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST)*@
 <button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBrukerPage"))">Legg til bruker</button> 
 <br />
@@ -15,61 +17,103 @@
     <p>Error</p>
 } else
      {
- <table class="table align-middle mb-1 bg-white">
-            <thead class="bg-light">
-                <tr>
-                    <th class="ms-auto">AnsattNr</th>
-                    <th class="ms-auto">Navn</th>
-                    <th class="ms-auto">Epost(Brukernavn)</th>
-                    <th class="ms-auto">Rolle</th>
-                    <th>Handlinger</th>
-                </tr>
-            </thead>
 
+         <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th class="th-sm">AnsattNr
+      </th>
+      <th class="th-sm">Navn
+      </th>
+      <th class="th-sm">Email
+      </th>
+      <th class="th-sm">Rolle
+      </th>
+      <th class="th-sm">Handlinger
+                </th>
+    </tr>
+  </thead>
     @foreach (var item in _bruker)
     {
             // bind ansattnr to id for delete
-          
-               
-            <tbody>
-                <tr>
-                         <div class="d-flex align-items-center">
-                             <td>
-                            <div class="ms-3">
-                             <p class="" >@item.AnsattNr</p>
-                            </div>
-                          </td>
-                          </div>
-                        <td>
-                          
-                        <div class="d-flex align-items-center">
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1">@item.Fornavn @item.Etternavn</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div class="ms-3">
-                         <p class="fw-normal mb-1">@item.Email</p>
-                         </div>
-                      </div>
-                    </td>
-                    <td>@item.Rolle</td>
-                    <td>
+                        <tbody>
+                                <tr>
+                                  <td>@item.AnsattNr</td>
+                                  <td>@item.Fornavn @item.Etternavn</td>
+                                  <td>@item.Email</td>
+                                  <td>@item.Rolle</td>
+                                  <td> <button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
                       
-                      @* <button type="button" class="btn btn-warning" @onclick="@(()=>EditItem(item.AnsattNr))">Slett</button>*@
-                        @*<input @bind="id"/> This Works but you have to input the id which will be deleted....*@
-                         <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(item.AnsattNr))">Slett</button>
-                    </td>
-                </tr>
-             
-            </tbody>
-            
+                                       <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(item.AnsattNr))">Slett</button>
 
-    }
+                                       <button type="button" class="btn btn-success">Reset Passord</button>
+                                   </td>
+                                 </tr>
+            </tbody>
+                 
+ }
      </table>
+         
 }
+
+@if (showModal)
+{
+    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm action</h4>
+                    <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                       <div class="form-group">
+                        <label for="formGroupExampleInput">AnsattNr</label>
+                     <input type="number" class="form-control" @bind="bruker.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr">
+                </div>
+                </form>
+                <div>
+                <label for="formGroupExampleInput">Fornavn</label>
+                     <input type="text" class="form-control" @bind="bruker.Fornavn" id="formGroupExampleInput" placeholder="Fornavn">
+                        </div>
+                         <div>
+                     <label for="formGroupExampleInput">Etternavn</label>
+                <input type="text"  class="form-control" @bind="bruker.Etternavn" id="formGroupExampleInput" placeholder="Etternavn">
+                 </div>
+             <div>
+                <label for="formGroupExampleInput">Email</label>
+             <input type="text" class="form-control" @bind="bruker.Email" id="formGroupExampleInput" placeholder="Email">
+                </div>
+               @* <div>
+               @* <label for="formGroupExampleInput">PassordHash</label>
+                     <input type="text"  class="form-control" id="formGroupExampleInput" placeholder="PassordHash">
+                 </div>*@
+                    <div>
+                <label for="formGroupExampleInput">Rolle</label>
+            <input type="text"  class="form-control" @bind="bruker.Rolle" id="formGroupExampleInput" placeholder="Rolle">
+        </div>
+  <div>
+     <label for="formGroupExampleInput">LederId</label>
+    <input type="number" class="form-control" @bind="bruker.LederId" id="formGroupExampleInput" placeholder="LederId">
+  </div>
+                </div>
+                
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
+                    <button type="button" class="btn btn-success" @onclick="@(()=>SaveItem(bruker.AnsattNr))">Oppdater</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@*Delete Modal *@
 
 @code {
 
@@ -87,16 +131,32 @@
     private async Task DeleteItem(int id)
     {
         await Http.DeleteAsync($"apiBruker/admin/DeleteBruker/{id}");
-        NavigationManager.NavigateTo("/Admin");
+        NavigationManager.NavigateTo("/admin");
     }
 
-    // Edit Item
-    // This will send the user to the edit page
-    private async Task EditItem(int id) =>
-    NavigationManager.NavigateTo($"/apiBruker/admin/UpdateBruker/{id}");
 
 
+    // Modal
+    bool showModal = false;
 
+    void ModalShow() => showModal = true;
+    void ModalCancel() => showModal = false;
+    void ModalOk()
+    {
+        Console.WriteLine("Modal ok");
+        showModal = false;
+    }
+
+    // Edit
+
+    private Bruker bruker = new Bruker();
+    
+    private void EditItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
+    
+  
+    private async Task SaveItem(int id) =>
+    await Http.PutAsJsonAsync($"/apiBruker/admin/UpdateBruker/{id}", bruker);
 
 }
+
 
