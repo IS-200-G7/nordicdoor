@@ -43,7 +43,7 @@
                                   <td>@item.Email</td>
                                   <td>@item.Rolle</td>
                                   <td> <button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
-                                        <button class="btn btn-danger" @onclick="ModalShowd">Slett</button>
+                                        <button class="btn btn-danger" @onclick="@(() => { ModalShowd(); DeletesItem(item.AnsattNr);})">Slett</button>
                                       @* <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(item.AnsattNr))">Slett</button>*@
 
                                        <button type="button" class="btn btn-success">Reset Passord</button>
@@ -189,6 +189,7 @@
     private async Task SaveItem(int id) =>
     await Http.PutAsJsonAsync($"/apiBruker/admin/UpdateBruker/{id}", bruker);
 
+    private void DeletesItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
      // Delete section
     private async Task DeleteItem(int id) =>
    
@@ -196,5 +197,3 @@
         //NavigationManager.NavigateTo("/admin");
 
 }
-
-
