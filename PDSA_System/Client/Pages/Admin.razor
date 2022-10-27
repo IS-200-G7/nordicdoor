@@ -43,8 +43,8 @@
                                   <td>@item.Email</td>
                                   <td>@item.Rolle</td>
                                   <td> <button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
-                      
-                                       <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(item.AnsattNr))">Slett</button>
+                                        <button class="btn btn-danger" @onclick="ModalShowd">Slett</button>
+                                      @* <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(item.AnsattNr))">Slett</button>*@
 
                                        <button type="button" class="btn btn-success">Reset Passord</button>
                                    </td>
@@ -113,8 +113,39 @@
     </div>
 }
 
-@*Delete Modal *@
+@if (showModald)
+{
+    @*Delete Modal *@
+<div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Bekreft</h4>
+                    <button type="button" class="close" @onclick="@ModalCanceld">&times;</button>
+                </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                    <div></div>
+                       <div class="form-group">
+                     <h6>Bekfreft at du ønsker å slette denne brukeren</h6>
+                     <p>Dette kan ikke omgjøres</p>
+                     <div>
+                    </div>
+            </div>
+                </div>
+                 <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" @onclick="@ModalCanceld">Avbryt</button>
+                <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(bruker.AnsattNr))">Slett</button>
+            </div>
+                </div>
+                </div>
+                </div>
+                
+ }
+ 
 @code {
 
     // Koden under er for å vise alle ansatte i databasen(GET)
@@ -123,16 +154,6 @@
 
     protected override async Task OnInitializedAsync() =>
     _bruker = await Http.GetFromJsonAsync<Bruker[]>("/api/Bruker");
-
-
-    // Delete section
-    private int id;
-
-    private async Task DeleteItem(int id)
-    {
-        await Http.DeleteAsync($"apiBruker/admin/DeleteBruker/{id}");
-        NavigationManager.NavigateTo("/admin");
-    }
 
 
 
@@ -147,6 +168,17 @@
         showModal = false;
     }
 
+    bool showModald = false;
+
+    void ModalShowd() => showModald = true;
+    void ModalCanceld() => showModald = false;
+    void ModalOkd()
+    {
+        Console.WriteLine("Modal ok");
+        showModal = false;
+    }
+
+
     // Edit
 
     private Bruker bruker = new Bruker();
@@ -156,6 +188,12 @@
   
     private async Task SaveItem(int id) =>
     await Http.PutAsJsonAsync($"/apiBruker/admin/UpdateBruker/{id}", bruker);
+
+     // Delete section
+    private async Task DeleteItem(int id) =>
+   
+        await Http.DeleteAsync($"apiBruker/admin/DeleteBruker/{id}");
+        //NavigationManager.NavigateTo("/admin");
 
 }
 
