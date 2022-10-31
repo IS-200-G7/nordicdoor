@@ -1,9 +1,18 @@
-@page "/Profil";
+@page "/profil";
 @using PDSA_System.Shared.Models
 @inject HttpClient Http;
+@inject NavigationManager NavigationManager;
+@inject AuthenticationStateProvider AuthenticationStateProvider;
 
 <div class="content">
     <h1>Profil</h1>
+
+    <!--Knapp for å sende bruker til opprettBruker side-->
+    <p>Hvis du ikke har lagd bruker, vennligst legg til bruker for å endre profil informasjon</p>
+    <button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBrukerPage"))">Legg til bruker</button>
+    <br />
+    <br />
+
     <hr />
     <div class="form-group">
         <form>
@@ -22,7 +31,6 @@
 
             </div>
             <div class="form-group">
-                <!--TODO: Må ha inn logikk her for å catche feil input av passord-->
                 <label for="passord">Passord</label>
                 <input type="text" class="form-control" id="passord" name="passord" @bind="@bruker.PassordHash" placeholder="Passord" />
             </div>
@@ -32,15 +40,90 @@
     </div>
 </div>
 
+@if (showModal)
+{
+    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm action</h4>
+                    <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">AnsattNr</label>
+                            <input type="number" class="form-control" @bind="bruker.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr">
+                        </div>
+                    </form>
+                    <div>
+                        <label for="formGroupExampleInput">Fornavn</label>
+                        <input type="text" class="form-control" @bind="bruker.Fornavn" id="formGroupExampleInput" placeholder="Fornavn">
+                    </div>
+                    <div>
+                        <label for="formGroupExampleInput">Etternavn</label>
+                        <input type="text" class="form-control" @bind="bruker.Etternavn" id="formGroupExampleInput" placeholder="Etternavn">
+                    </div>
+                    <div>
+                        <label for="formGroupExampleInput">Email</label>
+                        <input type="text" class="form-control" @bind="bruker.Email" id="formGroupExampleInput" placeholder="Email">
+                    </div>
+                    @* <div>
+                @* <label for="formGroupExampleInput">PassordHash</label>
+                <input type="text"  class="form-control" id="formGroupExampleInput" placeholder="PassordHash">
+                </div>*@
+                    <div>
+                        <label for="formGroupExampleInput">Rolle</label>
+                        <input type="text" class="form-control" @bind="bruker.Rolle" id="formGroupExampleInput" placeholder="Rolle">
+                    </div>
+                    <div>
+                        <label for="formGroupExampleInput">LederId</label>
+                        <input type="number" class="form-control" @bind="bruker.LederId" id="formGroupExampleInput" placeholder="LederId">
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
+                    <button type="button" class="btn btn-success" @onclick="@(()=>SaveItem(bruker.AnsattNr))">Oppdater</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
         
 @code {
 
     //GET-metode for å hente alle brukere i db. Basert på Victor sitt
     private Bruker[]? _bruker;
 
+  private async Task BrukerCheck()
+    {
+        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var user = authstate.User;
+        var ansattNr = user.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
+        Console.WriteLine(ansattNr);
+    }
 
     protected override async Task OnInitializedAsync() =>
     _bruker = await Http.GetFromJsonAsync<Bruker[]>("/api/Bruker");
+
+    // Modal
+    bool showModal = false;
+
+    void ModalShow() => showModal = true;
+    void ModalCancel() => showModal = false;
+    void ModalOk()
+    {
+        Console.WriteLine("Modal ok");
+        showModal = false;
+    }
 
     // Edit
 
@@ -51,17 +134,6 @@
 
     private async Task SaveItem(int id) =>
     await Http.PutAsJsonAsync($"/apiBruker/admin/UpdateBruker/{id}", bruker);
-
-    // Modal, vet ikke hva dette gjør enda virker som det skal inkluderes hehe.
-    bool showModal = false;
-
-    void ModalShow() => showModal = true;
-    void ModalCancel() => showModal = false;
-    void ModalOk()
-    {
-        Console.WriteLine("Modal ok");
-        showModal = false;
-    }
 
 
 }
