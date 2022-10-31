@@ -17,7 +17,7 @@ VALUES (4, 'Victor', 'Rolf', 'vr@nordic.door',
         'MTpLT0uZAwxtRgaAackmK7+ALJM/QnI6pMf/egirRG8=:1W6dJEL9skOYSgA7w8O6Y7xShJamIu8VDEoGo2Sd1xU=', 'ansatt', 3);
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle)
-VALUES (5, 'Magnus', 'Menyo', 'mn@nordic.door',
+VALUES (5, 'Magnus', 'Nymo', 'mn@nordic.door',
         'umc8fWUggqYn9KwHMgYaoznEzwyvvrziBcKxSmg6Zy8=:A000000000000000000000000000000000000000000=', 'teamleder');
 
 INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle, LederId)
