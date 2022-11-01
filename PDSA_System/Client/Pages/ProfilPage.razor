@@ -7,6 +7,7 @@
 <div class="content">
     <h1>Profile</h1>
 
+    
     <!--Knapp for å sende bruker til opprettBruker side, fungerer ikke enda da Admin commit må på plass-->
     <p>Hvis du ikke har lagd bruker, vennligst legg til bruker for å endre profil informasjon</p>
     <button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBrukerPage"))">Legg til bruker</button>
@@ -14,31 +15,34 @@
     <br />
 
     <hr />
-    <div class="form-group">
-        <form>
-            <DataAnnotationsValidator />
+    @if (_bruker != null)
+    {
+        <div class="form-group">
+            <form>
+                
             <div class="form-group">
                 <label for="fornavn">Fornavn</label>
-                <input type="text" class="form-control" id="fornavn" name="fornavn" @bind="@bruker.Fornavn" placeholder="Fornavn" />
+                <input type="text" class="form-control" id="fornavn" name="fornavn" @bind="@_bruker.Fornavn" placeholder="Fornavn" />
             </div>
+            
             <div class="form-group">
                 <label for="etternavn">Etternavn</label>
-                <input type="text" class="form-control" id="etternavn" name="etternavn" @bind="@bruker.Etternavn" placeholder="Etternavn" />
+                <input type="text" class="form-control" id="etternavn" name="etternavn" @bind="@_bruker.Etternavn" placeholder="Etternavn" />
             </div>
+            
             <div class="form-group">
                 <label for="epost">Epost</label>
-                <input type="text" class="form-control" id="epost" name="epost" @bind="@bruker.Email" placeholder="Epost" />
-
+                <input type="text" class="form-control" id="epost" name="epost" @bind="@_bruker.Email" placeholder="Epost" />
             </div>
-            <div class="form-group">
-                <label for="passord">Passord</label>
-                <input type="password" class="form-control" id="passord" name="passord" @bind="@bruker.PassordHash" placeholder="Passord" />
-            </div>
+            
             <br />
+
             <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
             <button type="button" class="btn btn-success" @onclick="@ModalShow">Oppdater</button>
-        </form>       
-    </div>
+
+            </form>
+        </div>
+    }
 </div>
 
 @if (showModal)
@@ -57,9 +61,8 @@
                 <div class="modal-footer">
                     <h4>Du endrer nå din profilinformasjon, er du sikker du vil oppdatere?</h4>
                     <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
-                    <button type="button" class="btn btn-success" @onclick="@(()=>SaveItem(bruker.AnsattNr))">Oppdater</button>
+                    <button type="button" class="btn btn-success" @onclick="@SaveItem">Oppdater</button>
                 </div>
-
             </div>
         </div>
     </div>
@@ -68,22 +71,17 @@
         
 @code {
 
-    //GET-metode for å hente den spesifik bruker i db. Basert på Victor sitt
-    private Bruker bruker = new Bruker();
+    //GET-metode for å hente den spesifik brukeren i db.
     private Bruker? _bruker;
+    private AuthenticationState authState;
 
-    protected override async Task OnInitializedAsync() =>
-    _bruker = await Http.GetFromJsonAsync<Bruker>($"/api/Bruker/{_bruker.AnsattNr}");
-
-    //Sjekker om autentisert bruker er logget inn
-    private async Task BrukerCheck()
+    protected override async Task OnInitializedAsync()
     {
-        var authstate = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
-        var user = authstate.User;
-        var ansattNr = user.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
-        Console.WriteLine(ansattNr);
+        authState = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+        var AnsattNr = authState.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
+        _bruker = await Http.GetFromJsonAsync<Bruker>($"/api/Bruker/{int.Parse(AnsattNr)}");
+        
     }
-
     // Modal
     bool showModal = false;
 
@@ -94,9 +92,10 @@
         Console.WriteLine("Modal ok");
         showModal = false;
     }
-
-    private async Task SaveItem(int id) =>
-    await Http.PutAsJsonAsync($"/apiBruker/admin/UpdateBruker/{id}", bruker);
+    
+    //TODO: Endre UpdateBruker til å ikke ha list
+    private async Task SaveItem() =>
+    await Http.PutAsJsonAsync($"/api/Bruker/admin/UpdateBruker", _bruker); 
 
 
 }

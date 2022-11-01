@@ -14,7 +14,7 @@ namespace PDSA_System.Shared.Models
 
         public string? Rolle { get; set; }
 
-        public int LederId { get; set; }
+        public int? LederId { get; set; }
 
         public DateTime Opprettet { get; set; }
 
