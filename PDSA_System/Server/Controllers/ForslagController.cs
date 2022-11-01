@@ -73,6 +73,7 @@ public class ForslagController : Controller
     * Hvis den skal testes i swagger fjern bilde stringen og kjør
      */
     [HttpPost("/api/[controller]/createforslag/")]
+    [Authorize]
     public async Task<ActionResult<List<Forslag>>> CreateForslag(Forslag forslag)
     {
         //byte[] bilde = GetBilde("C:/Bjønn.jpeg");
