@@ -76,6 +76,8 @@ public class ForslagController : Controller
     public async Task<ActionResult<List<Forslag>>> CreateForslag(Forslag forslag)
     {
         //byte[] bilde = GetBilde("C:/Bjønn.jpeg");
+        var forfatterId = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
+        forslag.ForfatterId = int.Parse(forfatterId);
 
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
