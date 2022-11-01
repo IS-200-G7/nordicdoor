@@ -1,0 +1,182 @@
+@page "/TeamAdminPage"
+@using PDSA_System.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+<Authorized> 
+
+
+<h3>Teamm</h3>
+
+<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagTeamPage"))">Opprett et Team</button>
+
+@if (_team == null)
+{
+    <p>Error</p>
+} else
+{
+    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th class="th-sm">TeamId
+                </th>
+                <th class="th-sm">TeamLederId
+                </th>
+                <th class="th-sm">Navn
+                </th> 
+                <th class="th-sm">AvdelingsId
+                </th>
+                <th class="th-sm">Handlinger
+                </th>
+            </tr>
+        </thead>
+        @foreach (var item in _team)
+        {
+            // bind ansattnr to id for delete
+            <tbody>
+                <tr>
+                    <td>@item.TeamId</td>
+                    <td>@item.TeamLederId</td>
+                    <td>@item.Navn</td>
+                    <td>@item.AvdelingId</td>
+                    <td> <button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.TeamId);})">Endre</button>
+                        <button class="btn btn-danger" @onclick="@(() => {ModalDeleteShow(); DeletesItem(item.TeamId);})">Slett</button>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+    }
+
+    <!--Rediger Team Modal-->
+    @if (showModal)
+{
+    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Confirm action</h4>
+                    <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">TeamId</label>
+                            <input disabled type="number" class="form-control" @bind="team.TeamId" id="formGroupExampleInput" placeholder="TeamId">
+                        </div>
+                    </form>
+                    <div>
+                        <label for="formGroupExampleInput">Navn</label>
+                        <input type="text" class="form-control" @bind="team.Navn" id="formGroupExampleInput" placeholder="Navn">
+                    </div>
+                    <div>
+                        <label for="formGroupExampleInput">TeamLeder</label>
+                        <input type="text" class="form-control" @bind="team.TeamLederId" id="formGroupExampleInput" placeholder="TeamLeder">
+                    </div>
+                    <div>
+                        <label for="formGroupExampleInput">AvdelingsId</label>
+                        <input type="text"  class="form-control" @bind="team.AvdelingId" id="formGroupExampleInput" placeholder="AvdelingsId">
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
+                    <button type="button" class="btn btn-success" @onclick="@(()=>SaveItem(team.TeamId))">Oppdater</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    }
+
+
+    <!--Slett lag modal - Confirmation Page-->
+@if (ShowDeleteModal)
+{
+    @*Delete Modal *@
+    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Bekreft</h4>
+                    <button type="button" class="close" @onclick="@ModalDeleteCancel">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div></div>
+                    <div class="form-group">
+                        <h6>Bekfreft at du ønsker å slette denne brukeren</h6>
+                        <p>Dette kan ikke omgjøres</p>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn" @onclick="@ModalDeleteCancel">Avbryt</button>
+                    <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(team.TeamId))">Slett</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+
+
+    private Team[]? _team;
+    // Henter alle lagene
+    protected override async Task OnInitializedAsync() =>
+    _team = await Http.GetFromJsonAsync<Team[]>("/api/Team");
+
+
+    // Redigere Lag
+    // Modal for redigering av lag
+    // Modal for å redigere brukere
+
+    Team team = new Team();
+
+    bool showModal = false;
+
+    void ModalShow() => showModal = true;
+    void ModalCancel() => showModal = false;
+
+    private void EditItem(int id) => team = _team.Single(i => i.TeamId == id);
+
+
+    private async Task SaveItem(int id) =>
+    await Http.PutAsJsonAsync($"/api/Team/updateteam/{id}", team);
+
+
+    // Delete Seksjon
+    //Delete Modal
+
+
+
+    bool ShowDeleteModal = false;
+
+    void ModalDeleteShow() => ShowDeleteModal = true;
+    void ModalDeleteCancel() => ShowDeleteModal = false;
+
+    private void DeletesItem(int id) => team = _team.Single(i => i.TeamId == id);
+    // Delete section
+    private async Task DeleteItem(int id)
+    {
+        await Http.DeleteAsync($"/api/Team/{id}");
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
+}
+    </Authorized>
+    <NotAuthorized>
+        <h3>403 Ingen tilgang her</h3>
+    </NotAuthorized>
+</AuthorizeView>

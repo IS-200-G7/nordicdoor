@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 25.0.1703.5
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDSA_System.Server", "PDSA_System\Server\PDSA_System.Server.csproj", "{5BB5FB15-5F34-4A91-969D-D1B990830BB8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDSA_System.Server", "PDSA_System\Server\PDSA_System.Server.csproj", "{5BB5FB15-5F34-4A91-969D-D1B990830BB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDSA_System.Client", "PDSA_System\Client\PDSA_System.Client.csproj", "{49FB394D-6710-4F23-B32C-F86E519658F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDSA_System.Client", "PDSA_System\Client\PDSA_System.Client.csproj", "{49FB394D-6710-4F23-B32C-F86E519658F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDSA_System.Shared", "PDSA_System\Shared\PDSA_System.Shared.csproj", "{36A75BD0-507F-418C-8E14-0F29F692430F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDSA_System.Shared", "PDSA_System\Shared\PDSA_System.Shared.csproj", "{36A75BD0-507F-418C-8E14-0F29F692430F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

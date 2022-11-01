@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PDSA_System.Server.Models;
+using PDSA_System.Shared.Models;
 using Dapper;
 
 
@@ -87,7 +87,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
-        [HttpPut("/api/[Controller]/admin/UpdateBruker")]
+        [HttpPut("/api[Controller]/admin/UpdateBruker/{AnsattNr}")]
         public async Task<ActionResult<List<Bruker>>> UpdateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -101,10 +101,11 @@ namespace PDSA_System.Server.Controllers
         }
 
 
+
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api/[controller]/admin/DeleteBruker")]
+        [HttpDelete("/api[controller]/admin/DeleteBruker/{AnsattNr}")]
         public async Task<ActionResult<List<Bruker>>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
