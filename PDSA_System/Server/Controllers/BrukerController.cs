@@ -58,16 +58,16 @@ namespace PDSA_System.Server.Controllers
         * Sjekker om bruker har admin eller teamleder rolle, for å så legge til bruker i et Team
         */
         [HttpPost("/api/[controller]/addBrukerToTeam/")]
-        public async Task<ActionResult<List<Bruker>>> OppdaterTeam(int TeamId, int AnsattNr)
+        public async Task<ActionResult<bool>> OppdaterTeam(int TeamId, int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, AnsattNr) Values (@TeamId, @AnsattNr)",
+            var res = await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, AnsattNr) Values (@TeamId, @AnsattNr)",
                 new { TeamId = TeamId, AnsattNr = AnsattNr });
 
 
-            return Ok();
+            return Ok(res.Equals(1));
         }
 
 
@@ -75,47 +75,47 @@ namespace PDSA_System.Server.Controllers
             Create for en ny Bruker.
          */
         [HttpPost("/api/[controller]/createBruker/")]
-        public async Task<ActionResult<List<Bruker>>> CreateBruker(Bruker bruker)
+        public async Task<ActionResult<Bruker>> CreateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync(
+            var res = await conn.ExecuteAsync(
                 "INSERT INTO Bruker(AnsattNr, Fornavn, Etternavn, Email, PassordHash, Rolle, Opprettet, LederId) VALUES(@AnsattNr, @Fornavn, @Etternavn, @Email, @PassordHash, @Rolle, @Opprettet, @LederId)",
                 bruker);
 
-            return Ok(await GetBruker(bruker.AnsattNr));
+            return Ok(res.Equals(1));
         }
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
         [HttpPut("/api/[Controller]/admin/UpdateBruker")]
-        public async Task<ActionResult<List<Bruker>>> UpdateBruker(Bruker bruker)
+        public async Task<ActionResult<bool>> UpdateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync(
+             var res = await conn.ExecuteAsync(
                 "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, LederId = @LederId, Rolle = @Rolle WHERE AnsattNr = @AnsattNr",
                 bruker);
 
-            return Ok(bruker);
+            return Ok(res.Equals(1));
         }
 
 
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api/[controller]/admin/DeleteBruker/{AnsattNr}")]
-        public async Task<ActionResult<List<Bruker>>> DeleteBruker(int AnsattNr)
+        [HttpDelete("/api/[controller]/admin/DeleteBruker")]
+        public async Task<ActionResult<bool>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync(
+            var res = await conn.ExecuteAsync(
                 "DELETE FROM Bruker WHERE AnsattNr = @Id", new { id = AnsattNr });
 
-            return Ok(await GetAllBrukere());
+            return Ok(res.Equals(1));
         }
 
 
@@ -123,15 +123,15 @@ namespace PDSA_System.Server.Controllers
         Denne metoden oppdaterer en Bruker sin Rolle med AnsattNr som betingelse.
         */
         [HttpPut("/api/[controller]/admin/updateBrukerRolle")]
-        public async Task<ActionResult<List<Bruker>>> UpdateRolle(string rolle, int AnsattNr)
+        public async Task<ActionResult<bool>> UpdateRolle(string rolle, int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            await conn.ExecuteAsync(
+            var res = await conn.ExecuteAsync(
                 "UPDATE Bruker SET Rolle = @Rolle WHERE AnsattNr = @Id", new { Rolle = rolle, Id = AnsattNr });
 
-            return Ok(await GetAllBrukere());
+            return Ok(res.Equals(1));
         }
 
         [HttpPost("/api/[controller]/byttPassord/")]
