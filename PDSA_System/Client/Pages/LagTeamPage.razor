@@ -1,0 +1,52 @@
+@page "/LagTeam"
+@using PDSA_System.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+<Authorized>
+
+<h3>Opprett Team</h3>
+
+<form>
+  <div class="form-group" hidden>
+    <label for="formGroupExampleInput">TeamId</label>
+    <input type="number" @bind="_team.TeamId" class="form-control" id="formGroupExampleInput" placeholder="TeamId">
+  </div>
+        <div>
+    <label for="formGroupExampleInput">TeamLederId</label>
+    <input type="number" @bind="_team.TeamLederId" class="form-control" id="formGroupExampleInput" placeholder="TeamLederId">
+  </div> 
+  <div>
+     <label for="formGroupExampleInput">Navn</label>
+    <input type="text" @bind="_team.Navn" class="form-control" id="formGroupExampleInput" placeholder="Navn">
+  </div>
+  <div>
+     <label for="formGroupExampleInput">AvdelingsId</label>
+    <input type="number" @bind="_team.AvdelingId" class="form-control" id="formGroupExampleInput" placeholder="AvdelingsId">
+  </div>
+  </form>
+<button type="button" class="btn btn-success" @onclick="LagTeam">Opprett Lag</button>
+
+
+
+@code {
+
+        private Team _team = new Team();
+
+
+
+        private async Task LagTeam()
+        {
+            var LagBruker = new { Name = _team, IsComplete = false };
+            await Http.PostAsJsonAsync("/api/Team/OpprettTeam", _team);
+            NavigationManager.NavigateTo("/TeamAdminPage");
+        }
+
+    }
+
+     </Authorized>
+    <NotAuthorized>
+        <h3>403 Ingen tilgang her</h3>
+    </NotAuthorized>
+</AuthorizeView>

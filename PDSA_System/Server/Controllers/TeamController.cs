@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using PDSA_System.Server.Models;
+using PDSA_System.Shared.Models;
 using Dapper;
 
 namespace PDSA_System.Server.Controllers
 {
     [Route("/api/[controller]")]
+    [ApiController]
     public class TeamController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -48,13 +49,14 @@ namespace PDSA_System.Server.Controllers
         Denne Metoden lager en Tuppel/Team i DB.
         */
 
-        [HttpPost]
+        [HttpPost("/api/[controller]/OpprettTeam/")]
         // denne linjen sier at denne metoden skal kjøres når det kommer en POST request
         public async Task<ActionResult<bool>> CreateTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
-            var res = await conn.ExecuteAsync("INSERT INTO Team (Navn, AvdelingId) VALUES (@Navn, @AvdelingId)", team);
+
+            var res = await conn.ExecuteAsync("INSERT INTO Team(TeamLederId, Navn, AvdelingId) VALUES (@TeamLederId, @Navn, @AvdelingId)", team);
 
             // Await conn.ExecudeAsync betyr at vi venter på at denne linjen skal bli ferdig før vi fortsetter med neste linje.
 
@@ -70,8 +72,7 @@ namespace PDSA_System.Server.Controllers
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
-
-            await conn.ExecuteAsync("UPDATE Team SET Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId",
+            await conn.ExecuteAsync("UPDATE Team SET TeamLederId = @TeamLederId, Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId",
                 team);
 
 

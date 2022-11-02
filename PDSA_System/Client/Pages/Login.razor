@@ -2,6 +2,7 @@
 @using PDSA_System.Client.Models
 @inject HttpClient HttpClient
 @inject IJSRuntime JsRuntime
+@inject ILocalStorageService LocalStorage
 
 <h3>Login</h3>
 
@@ -31,7 +32,6 @@
     void FormSubmitted(EditContext editContext)
     {
         bool formIsValid = editContext.Validate();
-        Console.WriteLine(_data.Brukernavn + " " + _data.Passord + " " + formIsValid);
 
         HttpClient.PostAsJsonAsync("/auth/login", _data).ContinueWith(task =>
         {
@@ -40,7 +40,7 @@
                 Console.WriteLine("Success");
                 var token = task.Result.Content.ReadAsStringAsync().Result;
 
-                CreateCookie("authentication", token, 1);
+                LocalStorage.SetItemAsStringAsync("token", token);
             }
             else
             {

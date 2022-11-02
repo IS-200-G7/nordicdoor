@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PDSA_System.Shared.Models;
 using PDSA_System.Server.Models;
 using Dapper;
 
@@ -45,10 +46,12 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukere = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE AnsattNr = @id",
+            var bruker = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE AnsattNr = @id",
                 new { id = AnsattNr });
 
-            return Ok(brukere.First());
+            var valgtBruker = bruker.First();
+            valgtBruker.PassordHash = ""; //Gjør at passord ikke sendes og passordhash ikke blir vist i profilpage
+            return Ok(valgtBruker);
         }
 
         /**
@@ -83,7 +86,6 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(res.Equals(1));
         }
-
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
@@ -93,8 +95,8 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var res = await conn.ExecuteAsync(
-                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId WHERE AnsattNr = @AnsattNr",
+            await conn.ExecuteAsync(
+                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, LederId = @LederId, Rolle = @Rolle WHERE AnsattNr = @AnsattNr",
                 bruker);
 
             return Ok(res.Equals(1));

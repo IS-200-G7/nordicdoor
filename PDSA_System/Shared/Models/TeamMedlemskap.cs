@@ -3,7 +3,7 @@
 * Dette er en mange til mange kobling hvor en bruker kan være medlem av flere Teams.
 */
 
-namespace PDSA_System.Server.Models
+namespace PDSA_System.Shared.Models
 {
     public class TeamMedlemskap
     {
