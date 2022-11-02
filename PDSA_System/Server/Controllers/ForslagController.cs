@@ -4,6 +4,7 @@ using Dapper;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Pkcs;
 using PDSA_System.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PDSA_System.Server.Controllers;
 
