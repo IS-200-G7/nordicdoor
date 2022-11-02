@@ -49,25 +49,25 @@ INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
 VALUES (3, 3, 'test', 'testing testing', null);
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
-VALUES (3, 2, '"Test forslag"', '"testing testing"', null);
+VALUES (3, 2, 'Test forslag', 'testing testing', null);
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
-VALUES (5, 2, '"Test forslag"', '"testing testing"', null);
+VALUES (5, 2, 'Test forslag', 'testing testing', null);
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (4, 1, '"Test forslag"', '"testing testing"', null, "do");
+VALUES (4, 1, 'Test forslag', 'testing testing', null, "do");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (6, 1, '"Test forslag"', '"testing testing"', null, "act");
+VALUES (6, 1, 'Test forslag', 'testing testing', null, "act");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (4, 3, '"Test forslag"', '"testing testing"', null, "do");
+VALUES (4, 3, 'Test forslag', 'testing testing', null, "do");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (1, 2, '"Test forslag"', '"testing testing"', null, "do");
+VALUES (1, 2, 'Test forslag', 'testing testing', null, "do");
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
-VALUES (5, 2, '"Test forslag"', '"testing testing"', null, "act");
+VALUES (5, 2, 'Test forslag', 'testing testing', null, "act");
 
 -- TeamMedlemskap
 
