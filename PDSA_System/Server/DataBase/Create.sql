@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS TeamMedlemskap
     TeamId   INTEGER,
     AnsattNr INTEGER,
     CONSTRAINT PK_TeamMedlemskap PRIMARY KEY (TeamId, AnsattNr),
-    FOREIGN KEY (TeamId) REFERENCES Team (TeamId),
-    FOREIGN KEY (AnsattNr) REFERENCES Bruker (AnsattNr)
+    CONSTRAINT FK_TeamMedlemskap_Team FOREIGN KEY (TeamId) REFERENCES Team (TeamId) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_TeamMedlemskap_Bruker FOREIGN KEY (AnsattNr) REFERENCES Bruker (AnsattNr) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DESC TeamMedlemskap;
@@ -73,3 +73,5 @@ CREATE TABLE IF NOT EXISTS ForslagKobling
 );
 
 DESC ForslagKobling;
+
+SHOW TABLES;
