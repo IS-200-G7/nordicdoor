@@ -86,7 +86,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
-        [HttpPut("/api/[Controller]/admin/UpdateBruker/{AnsattNr}")]
+        [HttpPut("/api/[Controller]/admin/UpdateBruker")]
         public async Task<ActionResult<List<Bruker>>> UpdateBruker(Bruker bruker)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
