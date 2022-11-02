@@ -16,7 +16,7 @@ namespace PDSA_System.Shared.Models
 
         public byte[]? Bilde { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; set; } = "plan";
 
         public DateTime Opprettet { get; set; }
 

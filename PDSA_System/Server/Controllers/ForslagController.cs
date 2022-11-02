@@ -4,6 +4,7 @@ using Dapper;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Pkcs;
 using PDSA_System.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PDSA_System.Server.Controllers;
 
@@ -72,9 +73,12 @@ public class ForslagController : Controller
     * Hvis den skal testes i swagger fjern bilde stringen og kjør
      */
     [HttpPost("/api/[controller]/createforslag/")]
+    [Authorize]
     public async Task<ActionResult<bool>> CreateForslag(Forslag forslag)
     {
         //byte[] bilde = GetBilde("C:/Bjønn.jpeg");
+        var forfatterId = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
+        forslag.ForfatterId = int.Parse(forfatterId);
 
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
