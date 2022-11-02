@@ -47,7 +47,7 @@
                     <td>@item.Rolle</td>
                     <td> <button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
                         <button class="btn btn-danger" @onclick="@(() => { ModalShowd(); DeletesItem(item.AnsattNr);})">Slett</button>
-                        <button class=" btn btn-success" @onclick="@(() => { ModalShowPass();})">Endre passord</button>
+                                <button class=" btn btn-success" @onclick="@(() => {ModalShowPass(); PassordReset(item.AnsattNr);})">Endre passord</button>
                     </td>
                 </tr>
             </tbody>
@@ -162,7 +162,7 @@
                     <form>
                         <div class="form-group">
                             <label for="formGroupExampleInput">AnsattNr</label>
-                            <input type="number" class="form-control" @bind="byttpassord.BrukerId" id="formGroupExampleInput" placeholder="AnsattNr">
+                            <input disabled type="number" class="form-control" @bind="bruker.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr">
                         </div>
                     </form>
                     <div>
@@ -184,8 +184,8 @@
 
 @*<p> @passgen.GenererPassord(10)</p>*@
 
-@code {
-    // Koden under er for å vise alle ansatte i databasen(GET)
+        @code {
+            // Koden under er for å vise alle ansatte i databasen(GET)
     private Bruker[]? _bruker;
 
 
@@ -201,8 +201,8 @@
     void ModalCancel() => showModal = false;
     void ModalOk()
     {
-        Console.WriteLine("Modal ok");
-        showModal = false;
+            Console.WriteLine("Modal ok");
+            showModal = false;
     }
 
     // Modal For å slette en bruker
@@ -212,8 +212,8 @@
     void ModalCanceld() => showModald = false;
     void ModalOkd()
     {
-        Console.WriteLine("Modal ok");
-        showModal = false;
+            Console.WriteLine("Modal ok");
+            showModal = false;
     }
 
     // Modal for å endre passord
@@ -224,8 +224,8 @@
 
     void ModalPassOk()
     {
-        Console.WriteLine("Modal Ok ");
-        showModal = false;
+            Console.WriteLine("Modal Ok ");
+            showModal = false;
     }
 
     // Edit
@@ -242,25 +242,26 @@
     // Delete section
     private async Task DeleteItem(int id)
     {
-        await Http.DeleteAsync($"/apiBruker/admin/DeleteBruker/{id}");
+            await Http.DeleteAsync($"/apiBruker/admin/DeleteBruker/{id}");
 
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
     //NavigationManager.NavigateTo("/admin");
 
     //Reset Password
 
     private ByttPassord byttpassord = new ByttPassord();
-    
+
 
     // REse
-    
+
+    private void PassordReset(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
     private async Task ResetPassord()
     {
-        var resetPassord = new { Name = byttpassord, IsComplete = false };
+            byttpassord.BrukerId = bruker.AnsattNr;
+            var resetPassord = new { Name = byttpassord, IsComplete = false };
         await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-
+       // NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
  
