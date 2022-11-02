@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PDSA_System.Shared.Models;
+using PDSA_System.Server.Models;
 using Dapper;
 
 
@@ -40,15 +41,17 @@ namespace PDSA_System.Server.Controllers
          * Returnerer statuskode 200 dersom det ikke oppstår feil.
         */
         [HttpGet("/api/[controller]/{AnsattNr}")]
-        public async Task<ActionResult<List<Bruker>>> GetBruker(int AnsattNr)
+        public async Task<ActionResult<Bruker>> GetBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var brukere = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE AnsattNr = @id",
+            var bruker = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE AnsattNr = @id",
                 new { id = AnsattNr });
 
-            return Ok(brukere);
+            var valgtBruker = bruker.First();
+            valgtBruker.PassordHash = ""; //Gjør at passord ikke sendes og passordhash ikke blir vist i profilpage
+            return Ok(valgtBruker);
         }
 
         /**
