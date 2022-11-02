@@ -3,14 +3,14 @@ USE NordicDoor;
 
 CREATE TABLE IF NOT EXISTS Bruker
 (
-    AnsattNr    INTEGER      NOT NULL,
-    Fornavn     VARCHAR(50)  NOT NULL,
-    Etternavn   VARCHAR(50)  NOT NULL,
-    Email       VARCHAR(254) NOT NULL,
-    PassordHash VARCHAR(200) NOT NULL,
-    Opprettet   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    AnsattNr    INTEGER                 NOT NULL,
+    Fornavn     VARCHAR(50)             NOT NULL,
+    Etternavn   VARCHAR(50)             NOT NULL,
+    Email       VARCHAR(254)            NOT NULL,
+    PassordHash VARCHAR(200)            NOT NULL,
+    Opprettet   DATETIME                DEFAULT CURRENT_TIMESTAMP,
     Rolle       VARCHAR(50),
-    LederId     INTEGER  DEFAULT NULL,
+    LederId     INTEGER                 DEFAULT NULL,
     KEY LederId (LederId),
     FOREIGN KEY (LederId) REFERENCES Bruker (AnsattNr),
     CONSTRAINT PK_Bruker PRIMARY KEY (AnsattNr)
@@ -21,7 +21,7 @@ DESC Bruker;
 CREATE TABLE IF NOT EXISTS Team
 (
     TeamId      INTEGER NOT NULL AUTO_INCREMENT,
-    TeamLederId INTEGER NOT NULL,
+    TeamLederId INTEGER NOT NULL DEFAULT 0,
     Navn        VARCHAR(50),
     AvdelingId  INTEGER,
     CONSTRAINT FK_Team_Bruker FOREIGN KEY (TeamLederId) REFERENCES Bruker (AnsattNr) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS Forslag
     Emne          VARCHAR(150)              NOT NULL,
     Beskrivelse   VARCHAR(2000)             NOT NULL,
     Bilde         MEDIUMBLOB,
-    Status        VARCHAR(5) DEFAULT "plan" NOT NULL,
-    Opprettet     DATETIME   DEFAULT CURRENT_TIMESTAMP,
-    SistOppdatert DATETIME   DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+    Status        VARCHAR(5)                DEFAULT "plan" NOT NULL,
+    Opprettet     DATETIME                  DEFAULT CURRENT_TIMESTAMP,
+    SistOppdatert DATETIME                  DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
     Frist         DATETIME,
     Kategori      VARCHAR(150),
     CONSTRAINT PK_Forslag PRIMARY KEY (ForslagId),
