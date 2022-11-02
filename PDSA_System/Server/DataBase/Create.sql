@@ -16,16 +16,20 @@ CREATE TABLE IF NOT EXISTS Bruker
     CONSTRAINT PK_Bruker PRIMARY KEY (AnsattNr)
 );
 
+DESC Bruker;
+
 CREATE TABLE IF NOT EXISTS Team
 (
     TeamId      INTEGER NOT NULL AUTO_INCREMENT,
     TeamLederId INTEGER NOT NULL,
     Navn        VARCHAR(50),
     AvdelingId  INTEGER,
-    FOREIGN KEY (TeamLederId) REFERENCES Bruker (AnsattNr),
-    FOREIGN KEY (AvdelingId) REFERENCES Team (TeamId),
+    CONSTRAINT FK_Team_Bruker FOREIGN KEY (TeamLederId) REFERENCES Bruker (AnsattNr) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Team_Team FOREIGN KEY (AvdelingId) REFERENCES Team (TeamId) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT PK_Team PRIMARY KEY (TeamId)
 );
+
+DESC Team;
 
 CREATE TABLE IF NOT EXISTS Forslag
 (
@@ -41,9 +45,11 @@ CREATE TABLE IF NOT EXISTS Forslag
     Frist         DATETIME,
     Kategori      VARCHAR(150),
     CONSTRAINT PK_Forslag PRIMARY KEY (ForslagId),
-    FOREIGN KEY (ForfatterId) REFERENCES Bruker (AnsattNr),
-    FOREIGN KEY (TeamId) REFERENCES Team (TeamId)
+    CONSTRAINT FK_Forslag_Bruker FOREIGN KEY (ForfatterId) REFERENCES Bruker (AnsattNr) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Forlsag_Team FOREIGN KEY (TeamId) REFERENCES Team (TeamId) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+DESC Forslag;
 
 CREATE TABLE IF NOT EXISTS TeamMedlemskap
 (
@@ -54,11 +60,16 @@ CREATE TABLE IF NOT EXISTS TeamMedlemskap
     FOREIGN KEY (AnsattNr) REFERENCES Bruker (AnsattNr)
 );
 
+DESC TeamMedlemskap;
+
+
 CREATE TABLE IF NOT EXISTS ForslagKobling
 (
     AnsattNr  INTEGER NOT NULL,
     ForslagId INTEGER NOT NULL,
     CONSTRAINT PK_ForslagKobling PRIMARY KEY (AnsattNr, ForslagId),
     CONSTRAINT FK_ForslagKobling_Bruker FOREIGN KEY (AnsattNr) REFERENCES Bruker (AnsattNr) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (ForslagId) REFERENCES Forslag (ForslagId) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT FK_ForslagKobling_Forslag FOREIGN KEY (ForslagId) REFERENCES Forslag (ForslagId) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+DESC ForslagKobling;

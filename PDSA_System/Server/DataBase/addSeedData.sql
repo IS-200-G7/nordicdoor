@@ -24,8 +24,11 @@ INSERT INTO NordicDoor.Bruker (AnsattNr, Fornavn, Etternavn, Email, PassordHash,
 VALUES (6, 'Eirik', 'Bakkestad', 'eb@nordic.door',
         '2l0P/sn5eTgi8i5tJ5fOOXCzJEaU+wVtO+MODE3QlnQ=:H2g9Zs3JYAftr+3vVjV+edFrPO0kpV5OHgwuFToq71A=', 'ansatt', 5);
 
+SELECT * FROM Bruker;
+
 
 -- Team
+
 INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn)
 VALUES (1, 1, 'Produksjon');
 
@@ -38,8 +41,11 @@ VALUES (3, 3, 'fase2', 1);
 INSERT INTO NordicDoor.Team (TeamId, TeamLederId, Navn, AvdelingId)
 VALUES (4, 5, 'fase3', 1);
 
+SELECT * FROM Team;
+
 
 -- Forslag
+
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde)
 VALUES (1, 2, 'Fresing av hull til lås', 'Kan dere øke diameteren på hullene med 3mm?', null);
 
@@ -70,6 +76,7 @@ VALUES (1, 2, "Test forslag", "testing testing", null, "do");
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status)
 VALUES (5, 2, "Test forslag", "testing testing", null, "act");
 
+
 -- Forslag hvor jeg eksplisitt setter inn dato for opprettet for å teste statistikkController
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
@@ -83,6 +90,8 @@ VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP
 
 INSERT INTO NordicDoor.Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Bilde, Status, Opprettet)
 VALUES (4, 3, "måned", "måned testing", null, "act", ADDDATE(CURRENT_TIMESTAMP, INTERVAL -20 DAY));
+
+SELECT * FROM Forslag;
 
 -- TeamMedlemskap
 
@@ -110,6 +119,8 @@ INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
 VALUES (1, 5);
 INSERT INTO NordicDoor.TeamMedlemskap (TeamId, AnsattNr)
 VALUES (1, 6);
+
+SELECT * FROM TeamMedlemskap;
 
 
 -- ForslagKobling
@@ -145,3 +156,5 @@ INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
 VALUES (4, 13);
 INSERT INTO NordicDoor.ForslagKobling (AnsattNr, ForslagId)
 VALUES (4, 14);
+
+SELECT * FROM ForslagKobling;
