@@ -101,7 +101,7 @@ namespace PDSA_System.Server.Controllers
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(conneString).Connection;
             // denne linjen henter ut teammedlemskap
-            var brukere = await conn.QueryAsync<TeamMedlemskap[]>("SELECT * FROM TeamMedlemskap WHERE TeamId = @id",
+            var brukere = await conn.QueryAsync<TeamMedlemskap[]>("SELECT T.AnsattNr, B.Fornavn, B.Etternavn FROM TeamMedlemskap AS T, Bruker AS B WHERE T.AnsattNr = B.AnsattNr AND T.TeamId = @id",
                 new { id = TeamId });
 
             // denne returnerer en statuskode 200 og temedlemskapet som ble hentet fra databasen
