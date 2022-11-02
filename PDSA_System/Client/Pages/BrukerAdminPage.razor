@@ -261,7 +261,7 @@
             byttpassord.BrukerId = bruker.AnsattNr;
             var resetPassord = new { Name = byttpassord, IsComplete = false };
         await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
-       // NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
  
