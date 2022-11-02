@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using PDSA_System.Server.Models;
+using PDSA_System.Shared.Models;
 using Dapper;
 
 
@@ -83,7 +83,6 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(await GetBruker(bruker.AnsattNr));
         }
-
         /*
          Updater en Bruker --> ikke helt funksjonell enda.
          */
@@ -94,7 +93,7 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
 
             await conn.ExecuteAsync(
-                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, PassordHash = @PassordHash, LederId = @LederId WHERE AnsattNr = @AnsattNr",
+                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, LederId = @LederId, Rolle = @Rolle WHERE AnsattNr = @AnsattNr",
                 bruker);
 
             return Ok(bruker);
@@ -104,7 +103,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api/[controller]/admin/DeleteBruker")]
+        [HttpDelete("/api/[controller]/admin/DeleteBruker/{AnsattNr}")]
         public async Task<ActionResult<List<Bruker>>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
