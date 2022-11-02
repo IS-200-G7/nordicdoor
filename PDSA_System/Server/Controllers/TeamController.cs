@@ -66,7 +66,7 @@ namespace PDSA_System.Server.Controllers
         /* EditTeam
         * Denne metoden oppdaterer et Team.
         */
-        [HttpPut("/api/[controller]/updateteam/{TeamId}")]
+        [HttpPut("/api/[controller]/updateteam")]
         public async Task<ActionResult<List<Team>>> EditTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
