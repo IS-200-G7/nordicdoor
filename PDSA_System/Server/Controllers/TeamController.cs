@@ -97,16 +97,17 @@ namespace PDSA_System.Server.Controllers
          * Denne henter alle medlemmene tilknyttet et spesefikt team
          */
         [HttpGet("/api/[controller]/GetBrukere")]
-        public async Task<ActionResult<List<Team>>> GetUsersFromTeam(int TeamId)
+        public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeam(int TeamId)
         {
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(conneString).Connection;
             // denne linjen henter ut teammedlemskap
-            var brukere = await conn.QueryAsync<TeamMedlemskap[]>("SELECT T.AnsattNr, B.Fornavn, B.Etternavn FROM TeamMedlemskap AS T, Bruker AS B WHERE T.AnsattNr = B.AnsattNr AND T.TeamId = @id",
+            var medlemskap = await conn.QueryAsync<TeamMedlemskap>("SELECT * FROM TeamMedlemskap WHERE TeamId = @id",
                 new { id = TeamId });
 
             // denne returnerer en statuskode 200 og temedlemskapet som ble hentet fra databasen
-            return Ok(brukere);
+            //return Ok(brukere);
+            return Ok(medlemskap);
         }
 
 
