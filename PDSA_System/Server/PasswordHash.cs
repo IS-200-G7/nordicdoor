@@ -22,8 +22,8 @@ public class PasswordHash
 
         argon2.Salt = salt;
         argon2.DegreeOfParallelism = 8; // four cores
-        argon2.Iterations = 4;
-        argon2.MemorySize = 1024 * 1024; // 1 GB
+        argon2.Iterations = 6;
+        argon2.MemorySize = 256 * 1024; // 1 GB
 
         return argon2.GetBytes(32);
     }
