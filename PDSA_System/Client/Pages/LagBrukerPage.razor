@@ -63,9 +63,7 @@
     private async Task LagBruker()
     {
         byttpassord.BrukerId = _bruker.AnsattNr;
-        var LagBruker = new { Name = _bruker, IsComplete = false };
         await Http.PostAsJsonAsync("/api/Bruker/createBruker", _bruker);
-         var resetPassord = new { Name = byttpassord, IsComplete = false };
         await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
         NavigationManager.NavigateTo("/BrukerAdminPage");
     }
