@@ -40,7 +40,7 @@
         {
             var LagBruker = new { Name = _team, IsComplete = false };
             await Http.PostAsJsonAsync("/api/Team/OpprettTeam", _team);
-            NavigationManager.NavigateTo("/TeamAdminPage");
+            NavigationManager.NavigateTo("/TeamAdmin");
         }
 
     }
