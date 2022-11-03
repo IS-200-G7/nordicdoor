@@ -19,7 +19,6 @@ public class ForslagController : Controller
         this._configuration = configuration;
     }
 
-
     /**
      * Henter alle Forslag fra databasen.
      * Returnerer statuskode 200 dersom det ikke oppstår feil.
@@ -40,7 +39,7 @@ public class ForslagController : Controller
      * Returnerer statuskode 200 dersom det ikke oppstår feil.
      */
     [HttpGet("/api/[controller]/{forslagId}")]
-    public async Task<ActionResult<List<Forslag>>> GetForslag(int forslagId)
+    public async Task<ActionResult<Forslag>> GetForslag(int forslagId)
     {
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
@@ -48,7 +47,7 @@ public class ForslagController : Controller
         var forslag = await conn.QueryAsync<Forslag>("SELECT * FROM Forslag WHERE ForslagId = @id",
             new { id = forslagId });
 
-        return Ok(forslag);
+        return Ok(forslag.First());
     }
 
     /**
@@ -75,7 +74,7 @@ public class ForslagController : Controller
      */
     [HttpPost("/api/[controller]/createforslag/")]
     [Authorize]
-    public async Task<ActionResult<List<Forslag>>> CreateForslag(Forslag forslag)
+    public async Task<ActionResult<bool>> CreateForslag(Forslag forslag)
     {
         //byte[] bilde = GetBilde("C:/Bjønn.jpeg");
         var forfatterId = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
@@ -84,11 +83,11 @@ public class ForslagController : Controller
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
-        await conn.ExecuteAsync(
+        var res = await conn.ExecuteAsync(
             "INSERT INTO Forslag (ForfatterId, TeamId, Emne, Beskrivelse, Kategori) VALUES (@ForfatterId, @TeamId, @Emne, @Beskrivelse, @Kategori)",
             forslag);
 
-        return Ok(await GetAllForslag());
+        return Ok(res.Equals(1));
     }
 
     /**
@@ -96,16 +95,16 @@ public class ForslagController : Controller
      * Returnerer statuskode 200 dersom det ikke oppstår feil.
      */
     [HttpPut("/api/[controller]/updateforslag/{forslagId}")]
-    public async Task<ActionResult<List<Forslag>>> UpdateForslag(Forslag forslag)
+    public async Task<ActionResult<bool>> UpdateForslag(Forslag forslag)
     {
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
-        await conn.ExecuteAsync(
+        var res = await conn.ExecuteAsync(
             "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagId = @ForslagId",
             forslag);
 
-        return Ok(forslag);
+        return Ok(res.Equals(1));
     }
 
     /**
@@ -113,19 +112,19 @@ public class ForslagController : Controller
      * Returnerer statuskode 200 dersom det ikke oppstår feil
      */
     [HttpDelete("/api/[controller]/deleteforslag/{forslagId}")]
-    public async Task<ActionResult<List<Forslag>>> DeleteForslag(int forslagId)
+    public async Task<ActionResult<bool>> DeleteForslag(int forslagId)
     {
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
-        await conn.ExecuteAsync("DELETE FROM Forslag WHERE ForslagId = @id", new { id = forslagId });
+        var res = await conn.ExecuteAsync("DELETE FROM Forslag WHERE ForslagId = @id", new { id = forslagId });
 
-        return Ok(await GetAllForslag());
+        return Ok(res.Equals(1));
     }
 
     // status controller
     [HttpPost("/api/[controller]/setstatus/")]
-    public async Task<ActionResult<List<Forslag>>> SetStatus([FromQuery] int ForslagId, [FromQuery] string Status)
+    public async Task<ActionResult<bool>> SetStatus([FromQuery] int ForslagId, [FromQuery] string Status)
     {
         // Hente til connection string fra appsettings.json og åpne en connection til database
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -144,7 +143,7 @@ public class ForslagController : Controller
         // Prøv skrive statusen inn i databasen
         try
         {
-            await conn.QueryAsync<int>("UPDATE Forslag SET Status = @Status WHERE ForslagId = @ForslagId",
+            await conn.QueryAsync("UPDATE Forslag SET Status = @Status WHERE ForslagId = @ForslagId",
                 new { ForslagId = ForslagId, Status = Status });
         }
         catch (Exception e)
@@ -153,7 +152,7 @@ public class ForslagController : Controller
             return StatusCode(500, "En feil har skjedd");
         }
 
-        return Ok();
+        return Ok(); // TODO: Burde kanskje returnert noe?
     }
 
     /**
