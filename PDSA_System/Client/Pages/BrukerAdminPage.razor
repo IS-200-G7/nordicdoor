@@ -4,6 +4,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+
 <AuthorizeView>
 <Authorized> 
 <h3>Admin</h3>
@@ -12,7 +13,7 @@
 
 
   @*Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST)*@
-<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBrukerPage"))">Legg til bruker</button> 
+<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBruker"))">Legg til bruker</button> 
 <br />
 <br />
 @if (_bruker == null)
@@ -236,13 +237,13 @@
 
 
     private async Task SaveItem(int id) =>
-    await Http.PutAsJsonAsync($"/apiBruker/admin/UpdateBruker/{id}", bruker);
+        await Http.PutAsJsonAsync($"/api/bruker/admin/UpdateBruker", bruker);
 
     private void DeletesItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
     // Delete section
     private async Task DeleteItem(int id)
     {
-            await Http.DeleteAsync($"/apiBruker/admin/DeleteBruker/{id}");
+            await Http.DeleteAsync($"/api/Bruker/admin/DeleteBruker/{id}");
 
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
