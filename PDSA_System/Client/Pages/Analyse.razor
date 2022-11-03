@@ -1,0 +1,323 @@
+@page "/Analyse"
+@using PDSA_System.Client.Models
+@inject HttpClient HttpClient
+
+
+<h1> Analysee </h1>
+
+<hr />
+
+<!-------------------- Bruker ------------------->
+
+<h5>Bruker</h5>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text" id="btnGroupAddon">Innput</div>
+        </div>
+        <input type="number" class="form-control" placeholder="AnsattNr" aria-label="AnsattNr" aria-describedby="btnGroupAddon" @bind-value="@_brukerQuery.ForfatterId">
+        <input type="text" class="form-control" placeholder="Status" aria-label="Status" aria-describedby="btnGroupAddon" @bind-value="@_brukerQuery.Status">
+    </div>
+    <br />
+<button type="submit" class="btn btn-primary mb-2" id="bruker" @onclick="@BrukerSubmit"> Se Data </button>
+
+<br />
+
+<!-------------------- Lag ------------------->
+
+<h5>Lag</h5>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text" id="btnGroupAddon">Innput</div>
+        </div>
+        <input type="text" class="form-control" placeholder="TeamId" aria-label="TeamId" aria-describedby="btnGroupAddon" @bind-value="@_teamQuery.TeamId">
+        <input type="text" class="form-control" placeholder="Status" aria-label="Status" aria-describedby="btnGroupAddon" @bind-value="@_teamQuery.Status">
+    </div>
+    <br />
+<button type="submit" class="btn btn-primary mb-2" id="lag" @onclick="@TeamSubmit"> Se Data </button>
+
+<br />
+
+<!-------------------- Brukerdefinert Tidsperiode ------------------->
+
+<h5>Brukerdefinert Tidsperiode</h5>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <div class="input-group-text" id="btnGroupAddon">Innput</div>
+        </div>
+        <input type="text" class="form-control" placeholder="AnsattNr" aria-label="AnsattNr" aria-describedby="btnGroupAddon" @bind-value="@_tidQuery.AnsattNr">
+        <input type="text" class="form-control" placeholder="TeamId" aria-label="TeamId" aria-describedby="btnGroupAddon" @bind-value="@_tidQuery.TeamId">
+        <input type="text" class="form-control" placeholder="Dato fra" aria-label="Dato_fra" aria-describedby="btnGroupAddon" @bind-value="@_tidQuery.DatoFra">
+        <input type="text" class="form-control" placeholder="Dato til" aria-label="Dato_til" aria-describedby="btnGroupAddon" @bind-value="@_tidQuery.DatoTil">
+    </div>
+    <br />
+<button type="submit" class="btn btn-primary mb-2" id="brukerdefinert-tidsperiode" @onclick="@BrukerDefinertTidSubmit"> Se Data </button>
+
+
+
+<hr />
+
+<!-- Visuel fremvisning av Statistikk -->
+
+@if (_brukerStatistikk != null)
+{
+    <table class="table table-hover" id="bruker">
+
+        @if (_brukerStatistikk.First().Status != null)
+        {
+            <thead>
+                <tr>
+                    <th scope="col">ForfatterId</th>
+                    <th scope="col">TeamId</th>
+                    <th scope="col">Navn</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Antall</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in _brukerStatistikk)
+                {
+                    <tr>
+                        <td>@row.ForfatterId</td>
+                        <td>@row.TeamId</td>
+                        <td>@row.Fornavn @row.Etternavn</td>
+                        <td>@row.Status</td>
+                        <td>@row.Count</td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <thead>
+                <tr>
+                    <th scope="col">ForfatterId</th>
+                    <th scope="col">TeamId</th>
+                    <th scope="col">Navn</th>
+                    <th scope="col">Antall</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in _brukerStatistikk)
+                {
+                    <tr>
+                        <td>@row.ForfatterId</td>
+                        <td>@row.TeamId</td>
+                        <td>@row.Fornavn @row.Etternavn</td>
+                        <td>@row.Count</td>
+                    </tr>
+                }
+            </tbody>
+        }
+    </table>
+}
+
+@if (_teamStatistikk != null)
+{
+    @if (_teamStatistikk.First().Status != null)
+    {
+        <table class="table table-hover" id="team">
+            <thead>
+                <tr>
+                    <th scope="col">TeamId</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Antall</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in _teamStatistikk)
+                {
+                    <tr>
+                        <td>@row.TeamId</td>
+                        <td>@row.Status</td>
+                        <td>@row.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <table class="table table-hover" id="team">
+            <thead>
+                <tr>
+                    <th scope="col">TeamId</th>
+                    <th scope="col">Antall</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in _teamStatistikk)
+                {
+                    <tr>
+                        <td>@row.TeamId</td>
+                        <td>@row.Count</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if(_tidStatistikk != null && _tidQuery.DatoFra != DateTime.MinValue && _tidQuery.DatoTil != DateTime.MinValue) {
+
+        @if (_tidQuery.AnsattNr == 0 && _tidQuery.TeamId == 0)
+        {
+            <table class = "table table-hover" id="tid">
+                <thead>
+                    <th>Totalt antall forslag mellom @_tidQuery.DatoFra og @_tidQuery.DatoTil.</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @_tidStatistikk.Count
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+
+        @if(_tidQuery.AnsattNr != 0) {
+            <table class = "table table-hover" id="tid">
+                <thead>
+                    <th> AnsattNr: @_tidQuery.AnsattNr Antall forslag mellom @_tidQuery.DatoFra og @_tidQuery.DatoTil.</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @_tidStatistikk.Count
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+         @if(_tidQuery.TeamId != 0) {
+            <table class = "table table-hover" id="tid">
+                <thead>
+                    <th> TeamId: @_tidQuery.AnsattNr Antall forslag mellom @_tidQuery.DatoFra og @_tidQuery.DatoTil.</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @_tidStatistikk.Count
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+    }
+
+}
+
+
+@code {
+
+    private BrukerDefinertTidStatistikk? _tidQuery = new BrukerDefinertTidStatistikk();
+
+    private BrukerStatistikk _brukerQuery = new BrukerStatistikk();
+
+    private TeamStatistikk _teamQuery = new TeamStatistikk();
+
+
+    private BrukerDefinertTidStatistikk? _tidStatistikk;
+
+    private BrukerStatistikk[]? _brukerStatistikk;
+
+    private TeamStatistikk[]? _teamStatistikk;
+
+    // BRUKER
+
+    private async Task GetBrukerForslagStatistikk(int AnsattNr) =>
+        _brukerStatistikk = await HttpClient.GetFromJsonAsync<BrukerStatistikk[]>($"/api/Statistikk/{AnsattNr}");
+
+    private async Task GetBrukerForslagStatusStatistikk(int AnsattNr, string Status) =>
+        _brukerStatistikk = await HttpClient.GetFromJsonAsync<BrukerStatistikk[]>($"/api/Statistikk/{AnsattNr}/{Status}");
+
+    private async Task GetBrukerUkentligAktivitet(int AnsattNr) =>
+        _brukerStatistikk = await HttpClient.GetFromJsonAsync<BrukerStatistikk[]>($"/api/Statistikk/Bruker/{AnsattNr}/Uke");
+
+    private async Task GetBrukerMåndtligAktivitet(int AnsattNr) =>
+        _brukerStatistikk = await HttpClient.GetFromJsonAsync<BrukerStatistikk[]>($"/api/Statistikk/Bruker/{AnsattNr}/Måned");
+
+    // BrukerSubmit()
+    // Metode som velger hvilken GET-metode som skal kalle på db ift. bruekrdefinert input.
+
+    private async void BrukerSubmit()
+    {
+        if (_brukerQuery.Status != null)
+        {
+            await GetBrukerForslagStatusStatistikk(_brukerQuery.ForfatterId, _brukerQuery.Status);
+        }
+        else { await GetBrukerForslagStatistikk(_brukerQuery.ForfatterId); }
+    }
+
+    // LAG
+
+    private async Task GetTeamForslagStatistikk(int TeamId) =>
+        _teamStatistikk = await HttpClient.GetFromJsonAsync<TeamStatistikk[]>($"/api/Statistikk/Team/{TeamId}");
+
+    private async Task GetTeamForslagStatusStatistikk(int TeamId, string Status) =>
+        _teamStatistikk = await HttpClient.GetFromJsonAsync<TeamStatistikk[]>($"/api/Statistikk/Team/{TeamId}/{Status}");
+
+    private async Task GetTeamsUkentligAktivitet() =>
+    _teamStatistikk = await HttpClient.GetFromJsonAsync<TeamStatistikk[]>("/api/Statistikk/Teams/Uke");
+
+    private async Task GetTeamUkentligAktivitet(int TeamId) =>
+    _teamStatistikk = await HttpClient.GetFromJsonAsync<TeamStatistikk[]>($"/api/Statistikk/Team/{TeamId}/Uke");
+
+    private async Task GetTeamsMåndtligAktiitet() =>
+        _teamStatistikk = await HttpClient.GetFromJsonAsync<TeamStatistikk[]>("/api/[controller]/Teams/Måned");
+
+    private async Task GetTeamMåndtligAktivitet(int TeamId) =>
+        _teamStatistikk = await HttpClient.GetFromJsonAsync<TeamStatistikk[]>($"/api/Statistikk/Team/{TeamId}/Måned");
+
+    // TeamSubmit()
+    // Metode som velger hvilken GET-metode som skal kalle på db ift. bruekrdefinert input.
+
+    private async void TeamSubmit()
+    {
+        if (_teamQuery.Status != null && _teamQuery.TeamId != 0)
+        {
+            await GetTeamForslagStatusStatistikk(_teamQuery.TeamId, _teamQuery.Status);
+        }
+        else { await GetTeamForslagStatistikk(_teamQuery.TeamId); }
+    }
+
+
+    // BRUKERDEFINERT TIDSPERIODE
+
+    private async Task GetBrukerStatistikkBetween(DateTime datoFra, DateTime datoTil, int ForfatterId) =>
+        _tidStatistikk= await HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk>($"/api/Statistikk/Bruker/{ForfatterId}/Between");
+
+    private async Task GetTeamStatistikkBetween(DateTime datoFra, DateTime datoTil, int TeamId) =>
+        _tidStatistikk = await HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk>($"/api/Statistikk/Team/{TeamId}/Between");
+
+    private async Task GetStatistikkBetween(DateTime datoFra, DateTime datoTil) =>
+        _tidStatistikk = await HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk>("/api/Statistikk/Between");
+
+    // BrukerDefinertTidSubmit()
+    // Metode som velger hvilken GET-metode som skal kalle på db ift. bruekrdefinert input.
+
+    private async void BrukerDefinertTidSubmit()
+    {
+        if (_tidQuery.DatoFra != DateTime.MinValue && _tidQuery.DatoTil != DateTime.MinValue)
+        {
+            if (_tidQuery.AnsattNr != 0)
+            {
+                await GetBrukerStatistikkBetween(_tidQuery.DatoFra, _tidQuery.DatoTil, _tidQuery.AnsattNr);
+            }
+            if (_tidQuery.TeamId != 0)
+            {
+                await GetBrukerStatistikkBetween(_tidQuery.DatoFra, _tidQuery.DatoTil, _tidQuery.TeamId);
+            }
+
+            else
+                {
+                    await GetStatistikkBetween(_tidQuery.DatoFra, _tidQuery.DatoTil);
+                }
+        }
+    }
+}
+
+
+
+
+
+
