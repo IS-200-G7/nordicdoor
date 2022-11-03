@@ -4,6 +4,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+
 <AuthorizeView>
 <Authorized> 
 <h3>Admin</h3>
@@ -236,13 +237,13 @@
 
 
     private async Task SaveItem(int id) =>
-    await Http.PutAsJsonAsync($"/apiBruker/admin/UpdateBruker/{id}", bruker);
+        await Http.PutAsJsonAsync($"/api/bruker/admin/UpdateBruker", bruker);
 
     private void DeletesItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
     // Delete section
     private async Task DeleteItem(int id)
     {
-            await Http.DeleteAsync($"/apiBruker/admin/DeleteBruker/{id}");
+            await Http.DeleteAsync($"/api/Bruker/admin/DeleteBruker/{id}");
 
             NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
