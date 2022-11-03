@@ -3,6 +3,7 @@
 @inject HttpClient HttpClient
 @inject IJSRuntime JsRuntime
 @inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
 <h3>Login</h3>
 
@@ -41,6 +42,7 @@
                 var token = task.Result.Content.ReadAsStringAsync().Result;
 
                 LocalStorage.SetItemAsStringAsync("token", token);
+                NavigationManager.NavigateTo("/", true);
             }
             else
             {
