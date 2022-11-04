@@ -9,6 +9,13 @@
 
 <EditForm Model=@_data OnSubmit=@FormSubmitted>
     <DataAnnotationsValidator/>
+    @if (showError)
+    {
+        <div class="alert alert-danger" role="alert">
+            Feil epostadresse eller passord
+        </div>
+    }
+
     <!--<TextInput BindValue="@_data.Brukernavn" id="usernameInput" name="usernameInput" label="Epostadresse" type="text"/>-->
     <label for="epostInput">Epostadresse: </label>
     <input type="text" class="form-control" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="Epostadresse"/>
@@ -24,6 +31,7 @@
 
 @code {
     LoginData _data = new LoginData();
+    bool showError = false;
 
     private async void CreateCookie(string name, string value, int days)
     {
@@ -33,6 +41,7 @@
     void FormSubmitted(EditContext editContext)
     {
         bool formIsValid = editContext.Validate();
+        showError = false;
 
         HttpClient.PostAsJsonAsync("/auth/login", _data).ContinueWith(task =>
         {
@@ -46,6 +55,8 @@
             }
             else
             {
+                showError = true;
+                StateHasChanged();
                 Console.WriteLine("Failed");
             }
         });

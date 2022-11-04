@@ -235,12 +235,9 @@
 
 	protected async Task showForslagInfo(int forslagId){
 		showingForslagInfo = true;
-		var chosenForslagList = await Http.GetFromJsonAsync<Forslag[]>($"/api/Forslag/{forslagId}");
-		chosenForslag = chosenForslagList.First();
-		Console.WriteLine(chosenForslag.Emne);
+		chosenForslag = await Http.GetFromJsonAsync<Forslag>($"/api/Forslag/{forslagId}");	
 	}
 
-	
 	private Forslag[]? _forslag;
 	private Forslag forslag = new Forslag();
 
