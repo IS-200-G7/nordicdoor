@@ -9,6 +9,7 @@ using PDSA_System.Server.Models;
 namespace PDSA_System.Server.Controllers
 {
     [Route("/api/[controller]")]
+    [ApiController]
     public class StatistikkController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -206,7 +207,7 @@ namespace PDSA_System.Server.Controllers
         * Henter alle forslagene til et spesifikk Team innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
         */
         [HttpGet("/api/[controller]/Team/{TeamId}/Between")]
-        public async Task<ActionResult<Statistikk>> GetTeamStatistikkBetween(DateTime time01, DateTime time02, int TeamId)
+        public async Task<ActionResult<List<Statistikk>>> GetTeamStatistikkBetween(DateTime time01, DateTime time02, int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
@@ -225,7 +226,7 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk Bruker innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
          */
         [HttpGet("/api/[controller]/Bruker/{ForfatterId}/Between")]
-        public async Task<ActionResult<Statistikk>> GetBrukerStatistikkBetween(DateTime time01, DateTime time02, int ForfatterId)
+        public async Task<ActionResult<List<Statistikk>>> GetBrukerStatistikkBetween(DateTime time01, DateTime time02, int ForfatterId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
@@ -242,8 +243,8 @@ namespace PDSA_System.Server.Controllers
         * 
         * Henter alle forslagene innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
         */
-        [HttpGet("/api/[controller]/Between")]
-        public async Task<ActionResult<Statistikk>> GetStatistikkBetween(DateTime time01, DateTime time02)
+        [HttpGet("/api/[controller]/Between/{time01}/{time02}")]
+        public async Task<ActionResult<List<Statistikk>>> GetStatistikkBetween(DateTime time01, DateTime time02)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
