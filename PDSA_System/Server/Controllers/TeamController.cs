@@ -56,7 +56,8 @@ namespace PDSA_System.Server.Controllers
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var res = await conn.ExecuteAsync("INSERT INTO Team(TeamLederId, Navn, AvdelingId) VALUES (@TeamLederId, @Navn, @AvdelingId)", team);
+            var res = await conn.ExecuteAsync(
+                "INSERT INTO Team(TeamLederId, Navn, AvdelingId) VALUES (@TeamLederId, @Navn, @AvdelingId)", team);
 
             // Await conn.ExecudeAsync betyr at vi venter på at denne linjen skal bli ferdig før vi fortsetter med neste linje.
 
@@ -72,7 +73,8 @@ namespace PDSA_System.Server.Controllers
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
-            await conn.ExecuteAsync("UPDATE Team SET TeamLederId = @TeamLederId, Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId",
+            await conn.ExecuteAsync(
+                "UPDATE Team SET TeamLederId = @TeamLederId, Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId",
                 team);
 
 
@@ -105,15 +107,14 @@ namespace PDSA_System.Server.Controllers
             var medlemskap = await conn.QueryAsync<TeamMedlemskap>("SELECT * FROM TeamMedlemskap WHERE TeamId = @id",
                 new { id = TeamId });
 
-            // denne returnerer en statuskode 200 og temedlemskapet som ble hentet fra databasen
+            // denne returnerer en statuskode 200 og teamdlemskapet som ble hentet fra databasen
             //return Ok(brukere);
             return Ok(medlemskap);
         }
 
-
-        /* DeleteBrukere
-         * Denne sletter brukere fra et team ved å slette deres teamedlemskap
-        */
+    /* DeleteBrukere
+     * Denne sletter brukere fra et team ved å slette deres teamedlemskap
+    */
         [HttpDelete("/api/[controller]/DeleteBrukere")]
         public async Task<ActionResult<List<Team>>> DeleteUsersFromTeam(int AnsattNr, int TeamId)
         {

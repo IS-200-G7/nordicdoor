@@ -2,8 +2,8 @@
 @using PDSA_System.Shared.Models
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
-<AuthorizeView>
-	<Authorized>
+@*<AuthorizeView>
+	<Authorized>*@
         <h3>TeamAdministration</h3>
 
         @if (_teamMember == null)
@@ -34,7 +34,7 @@
                     <td>@item.Rolle</td>*@
                     <td>@item.AnsattNr</td>
                     <td>@item.TeamId</td>
-                    <td><button type="button" class="btn btn-outline-danger" role="button" @onclick="(() => { ModalShowDelete(); DeleteItem(item.AnsattNr + item.TeamId);})">Slett</button></td>
+                    <td><button type="button" class="btn btn-outline-danger" role="button" @onclick="(() => { ModalShowDelete(); DeleteItem(item.AnsattNr , item.TeamId);})">Slett</button></td>
                 </tr>
                 </tbody>
                 @*role="button" er for å støtte assisterende teknologi som skjermleser*@
@@ -104,18 +104,18 @@
                          <!-- Modal footer -->
                         <div class="modal-footer">
                             <button type="button" class="btn" @onclick="@ModalCancelDelete">Avbryt</button>
-                            <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(_teamMedlemskap.AnsattNr +_teamMedlemskap.TeamId))">Slett</button>
+                            <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(_teamMedlemskap.AnsattNr ,_teamMedlemskap.TeamId))">Slett</button>
                     </div>
                         </div>
                         </div>
                         </div>
 
          }
-    	</Authorized>
+    	@*</Authorized>
     	<NotAuthorized>
     		<p>Logg inn for å få tilgang</p>
     	</NotAuthorized>
-    </AuthorizeView>
+    </AuthorizeView>*@
 
 @code
 {
@@ -157,9 +157,9 @@
 
     //private void DeletesItem(int id, int teamId) => _teamMedlemskap = _teamMember.Single(i => i.TeamId == id);
 
-    private async Task DeleteItem()
+    private async Task DeleteItem(int AnsattNr, int TeamId)
     {
-        await Http.DeleteAsync($"/api/Team/DeleteBrukere",_teamMedlemskap);
+        await Http.DeleteAsync($"/api/Team/DeleteBrukere?AnsattNr={AnsattNr}&TeamId={TeamId}");
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
