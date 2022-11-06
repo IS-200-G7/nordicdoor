@@ -106,7 +106,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api/[controller]/admin/DeleteBruker")]
+        [HttpDelete("/api/[controller]/admin/DeleteBruker/{AnsattNr}")]
         public async Task<ActionResult<bool>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");

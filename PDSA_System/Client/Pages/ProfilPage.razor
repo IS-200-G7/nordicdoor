@@ -6,14 +6,6 @@
 
 <div class="content">
     <h1>Profile</h1>
-
-    
-    <!--Knapp for å sende bruker til opprettBruker side, fungerer ikke enda da Admin commit må på plass-->
-    <p>Hvis du ikke har lagd bruker, vennligst legg til bruker for å endre profil informasjon</p>
-    <button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBrukerPage"))">Legg til bruker</button>
-    <br />
-    <br />
-
     <hr />
     @if (_bruker != null)
     {
