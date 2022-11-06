@@ -2,9 +2,11 @@
 @using PDSA_System.Shared.Models
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
 @*<AuthorizeView>
 	<Authorized>*@
-        <h3>TeamAdministration</h3>
+        <!--suppress ALL -->
+<h3>TeamAdministration</h3>
 
         @if (_teamMember == null)
         {
@@ -19,6 +21,12 @@
                     </th>
                     <th class="th-sm">TeamID
                     </th>
+                    <th class="th-sm">Teamnavn
+                    </th>
+                    <th class="th-sm">Navn
+                    </th>
+                    <th class="th-sm">E-post
+                    </th>
                     <th class="th-sm">Handlinger
                     </th>
                 </tr>
@@ -28,12 +36,11 @@
             {
                 <tbody>
                 <tr>
-                    @*<td>@item.AnsattNr</td>
+                    <td>@item.AnsattNr</td>
+                    <td>@item.TeamId </td>
+                    <td>@item.Navn</td>
                     <td>@item.Fornavn @item.Etternavn</td>
                     <td>@item.Email</td>
-                    <td>@item.Rolle</td>*@
-                    <td>@item.AnsattNr</td>
-                    <td>@item.TeamId</td>
                     <td><button type="button" class="btn btn-outline-danger" role="button" @onclick="(() => { ModalShowDelete(); DeleteItem(item.AnsattNr , item.TeamId);})">Slett</button></td>
                 </tr>
                 </tbody>
@@ -95,7 +102,7 @@
                     <div class="modal-body">
                             <div></div>
                                <div class="form-group">
-                             <h6>Bekreft at du ønsker å slette denne brukeren</h6>
+                             <h6>Bekreft at du ønsker å fjerne denne brukeren</h6>
                              <p>Dette kan ikke omgjøres</p>
                              <div>
                             </div>
@@ -119,20 +126,29 @@
 
 @code
 {
-
+    /*Viser team basert på autorisasjon av bruker som er pålogget. Gjenstår noe arbeid med dette.
+     Teams settes statisk i Login.razor foreløpig*/
     private TeamMedlemskap[]? _teamMember;
 
-    protected override async Task OnInitializedAsync() =>
-        _teamMember = await Http.GetFromJsonAsync<TeamMedlemskap[]>("/api/Team/GetBrukere?TeamId=1");
+    private dynamic SessionteamId =0;
 
+    protected override async Task OnInitializedAsync() {
 
+        if(await LocalStorage.ContainKeyAsync("teamId"))
+        {
+            SessionteamId = await LocalStorage.GetItemAsync<int>("teamId");
+        }
+
+        _teamMember = await Http.GetFromJsonAsync<TeamMedlemskap[]>($"/api/Team/GetBrukereDetail?TeamId={@SessionteamId}");
+    }
+    //Constraint feil. Må ses på.
     private TeamMedlemskap _teamMedlemskap = new TeamMedlemskap();
 
     private async Task AddBrukerToTeam()
     {
 
         using var response = await Http.PostAsJsonAsync($"/api/Bruker/addBrukerToTeam", _teamMedlemskap);
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: false);
     }
 
 
@@ -155,17 +171,10 @@
     void ModalShowDelete() => showModalDelete = true;
     void ModalCancelDelete() => showModalDelete = false;
 
-    //private void DeletesItem(int id, int teamId) => _teamMedlemskap = _teamMember.Single(i => i.TeamId == id);
 
     private async Task DeleteItem(int AnsattNr, int TeamId)
     {
         await Http.DeleteAsync($"/api/Team/DeleteBrukere?AnsattNr={AnsattNr}&TeamId={TeamId}");
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
-
-    @*{
-        Console.WriteLine("Modal ok");
-        showModal = false;
-
-    }*@
 }
