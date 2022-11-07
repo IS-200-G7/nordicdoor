@@ -72,8 +72,7 @@ namespace PDSA_System.Server.Controllers
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
-            await conn.ExecuteAsync("UPDATE Team SET TeamLederId = @TeamLederId, Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId",
-                team);
+            await conn.ExecuteAsync("UPDATE Team SET TeamLederId = @TeamLederId, Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId", team);
 
 
             return Ok(await GetTeam(team.TeamId));
@@ -105,11 +104,30 @@ namespace PDSA_System.Server.Controllers
             var medlemskap = await conn.QueryAsync<TeamMedlemskap>("SELECT * FROM TeamMedlemskap WHERE TeamId = @id",
                 new { id = TeamId });
 
-            // denne returnerer en statuskode 200 og temedlemskapet som ble hentet fra databasen
+            // denne returnerer en statuskode 200 og teamedlemskapet som ble hentet fra databasen
             //return Ok(brukere);
             return Ok(medlemskap);
         }
 
+        /* GetBrukereDetail
+         *Henter brukere tilknyttet et spesifikt team, og bruker SQL Join for å vise data fra andre tabeller
+         */
+        [HttpGet("/api/[controller]/GetBrukereDetail")]
+        public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeamDetail(int TeamId)
+        {
+            var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            using var conn = new DbHelper(conneString).Connection;
+            // denne linjen henter ut teammedlemskap
+            string query = @"SELECT  t.teamId,t.Navn ,tm.AnsattNr,b.Fornavn, b.Etternavn, b.Email FROM TeamMedlemskap tm
+            INNER JOIN Bruker b  ON tm.AnsattNr=b.AnsattNr
+            JOIN Team t ON t.teamId=tm.teamid
+            WHERE tm.teamid  =@id";
+            var medlemskap = await conn.QueryAsync<TeamMedlemskap>(query,
+                new { id = TeamId });
+            // denne returnerer en statuskode 200 og teamedlemskapet som ble hentet fra databasen
+            //return Ok(brukere);
+            return Ok(medlemskap);
+        }
 
         /* DeleteBrukere
          * Denne sletter brukere fra et team ved å slette deres teamedlemskap

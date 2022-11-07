@@ -51,6 +51,9 @@
                 var token = task.Result.Content.ReadAsStringAsync().Result;
 
                 LocalStorage.SetItemAsStringAsync("token", token);
+                //Linje nedenfor brukes av TeamlederPage. Må endres manuelt foreløpig. Teams må inn i local storage.
+                //Endre string data for å endre team.
+                LocalStorage.SetItemAsStringAsync("teamId", "4");
                 NavigationManager.NavigateTo("/", true);
             }
             else

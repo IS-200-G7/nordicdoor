@@ -1,0 +1,179 @@
+@page "/Teamleder"
+@using PDSA_System.Shared.Models
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject ILocalStorageService LocalStorage
+<AuthorizeView Roles="teamleder">
+	<Authorized>
+
+<h3>TeamAdministration</h3>
+
+        @if (_teamMember == null)
+        {
+            <p>Ingen brukere funnet.</p>
+        }
+        else
+        {
+            <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th class="th-sm">AnsattNr
+                    </th>
+                    <th class="th-sm">TeamID
+                    </th>
+                    <th class="th-sm">Teamnavn
+                    </th>
+                    <th class="th-sm">Navn
+                    </th>
+                    <th class="th-sm">E-post
+                    </th>
+                    <th class="th-sm">Handlinger
+                    </th>
+                </tr>
+                </thead>
+                @*Issue: Hva gjøres dersom en leder er medlem i flere team? Typisk avdelingsleder*@
+            @foreach (var item in _teamMember)
+            {
+                <tbody>
+                <tr>
+                    <td>@item.AnsattNr</td>
+                    <td>@item.TeamId </td>
+                    <td>@item.Navn</td>
+                    <td>@item.Fornavn @item.Etternavn</td>
+                    <td>@item.Email</td>
+                    <td><button type="button" class="btn btn-outline-danger" role="button" @onclick="(() => { ModalShowDelete(); DeleteItem(item.AnsattNr , item.TeamId);})">Slett</button></td>
+                </tr>
+                </tbody>
+                @*role="button" er for å støtte assisterende teknologi som skjermleser*@
+            }
+            </table>
+        }
+
+        <button type="button" class="btn btn-primary" role="button" @onclick="(() => { ModalShow();})">Legg til bruker i team</button>
+
+        @if (showModal)
+        {
+            <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">AnsattNr og TeamId</h4>
+                            <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <div>
+                                <label for="formGroupExampleInput">AnsattNr</label>
+                                <input type="number" class="form-control" @bind="_teamMedlemskap.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr"/>
+                            </div>
+                            <div>
+                                <label for="formGroupExampleInput">TeamId</label>
+                                <input type="number" class="form-control" @bind="_teamMedlemskap.TeamId" id="formGroupExampleInput" placeholder="TeamId"/>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn" @onclick="AddBrukerToTeam">Legg til i team</button>
+                            <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (showModalDelete)
+        {
+            @*Delete Modal *@
+        <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title">Bekreft</h4>
+                            <button type="button" class="close" @onclick="@ModalCancelDelete">&times;</button>
+                        </div>
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                            <div></div>
+                               <div class="form-group">
+                             <h6>Bekreft at du ønsker å fjerne denne brukeren</h6>
+                             <p>Dette kan ikke omgjøres</p>
+                             <div>
+                            </div>
+                    </div>
+                        </div>
+                         <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn" @onclick="@ModalCancelDelete">Avbryt</button>
+                            <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(_teamMedlemskap.AnsattNr ,_teamMedlemskap.TeamId))">Slett</button>
+                    </div>
+                        </div>
+                        </div>
+                        </div>
+
+         }
+    	</Authorized>
+    	<NotAuthorized>
+    		<p>Logg inn for å få tilgang</p>
+    	</NotAuthorized>
+    </AuthorizeView>
+
+@code
+{
+    /*Viser team basert på autorisasjon av bruker som er pålogget. Gjenstår noe arbeid med dette.
+     Teams settes statisk i Login.razor foreløpig*/
+    private TeamMedlemskap[]? _teamMember;
+
+    private dynamic SessionteamId =0;
+
+    protected override async Task OnInitializedAsync() {
+
+        if(await LocalStorage.ContainKeyAsync("teamId"))
+        {
+            SessionteamId = await LocalStorage.GetItemAsync<int>("teamId");
+        }
+
+        _teamMember = await Http.GetFromJsonAsync<TeamMedlemskap[]>($"/api/Team/GetBrukereDetail?TeamId={@SessionteamId}");
+    }
+
+    private TeamMedlemskap _teamMedlemskap = new TeamMedlemskap();
+
+    private async Task AddBrukerToTeam()
+    {
+
+        using var response = await Http.PostAsJsonAsync($"/api/Bruker/addBrukerToTeam", _teamMedlemskap);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
+
+
+    // Modal
+    bool showModal = false;
+
+    void ModalShow() => showModal = true;
+    void ModalCancel() => showModal = false;
+
+    void ModalOk()
+    {
+        Console.WriteLine("Modal ok");
+        showModal = false;
+    }
+
+    //Modal delete
+    bool showModalDelete = false;
+
+    void ModalShowDelete() => showModalDelete = true;
+    void ModalCancelDelete() => showModalDelete = false;
+
+
+    private async Task DeleteItem(int AnsattNr, int TeamId)
+    {
+        await Http.DeleteAsync($"/api/Team/DeleteBrukere?AnsattNr={AnsattNr}&TeamId={TeamId}");
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+}
