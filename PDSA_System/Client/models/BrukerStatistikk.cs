@@ -9,6 +9,15 @@ namespace PDSA_System.Client.Models
         public string? Etternavn { get; set; }
         public string? Status { get; set; }
         public int Count { get; set; }
+
+        public void Reset(){
+            this.ForfatterId = 0;
+            this.TeamId = 0;
+            this.Fornavn = null;
+            this.Etternavn = null;
+            this.Status = null;
+            this.Count = 0;
+        }
     }
 }
 

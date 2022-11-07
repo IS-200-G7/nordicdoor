@@ -13,6 +13,14 @@ namespace PDSA_System.Client.Models
 
         public int Count { get; set; }
 
+        public void Reset(){
+            this.AnsattNr = 0;
+            this.TeamId = 0;
+            this.DatoFra = DateTime.Today;
+            this.DatoTil = DateTime.Today;
+            this.Count = 0;
+
+        }
     }
 }
 

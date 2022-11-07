@@ -3,10 +3,10 @@
 @inject HttpClient HttpClient
 
 
-<h1> Analysee </h1>
+<h1> Analyse </h1>
 <div class="btn-group" role="group">
-    <button type="button" class="btn btn-warning" onclick="@togglePeriod.toggleUke">Uke @togglePeriod.Uke</button>
-    <button type="button" class="btn btn-warning" onclick="@togglePeriod.toggleMåned">Måned @togglePeriod.Måned</button>
+    <button type="button" class="btn btn-warning" onmousedown="@togglePeriod.toggleUke"> Uke @togglePeriod.Uke</button>
+    <button type="button" class="btn btn-warning" onmousedown="@togglePeriod.toggleMåned"> Måned @togglePeriod.Måned</button>
 </div>
 <hr />
 
@@ -70,6 +70,8 @@
 <hr />
 
 <!-- Visuel fremvisning av Statistikk -->
+
+<h2>Resultat</h2>
 
 @if (_brukerStatistikk != null)
 {
@@ -181,7 +183,8 @@
     {
         <table class="table table-hover" id="tid">
     <thead>
-        <th>Totalt antall forslag mellom @_tidQuery.DatoFra og @_tidQuery.DatoTil</th>
+        <th>Totalt antall forslag mellom @_tidQuery.DatoFra.Day . @_tidQuery.DatoFra.Month . @_tidQuery.DatoFra.Year and
+            @_tidQuery.DatoTil.Day . @_tidQuery.DatoTil.Month . @_tidQuery.DatoTil.Year</th>
     </thead>
     <tbody>
         <tr>
@@ -197,7 +200,8 @@
     {
         <table class="table table-hover" id="tid">
     <thead>
-        <th> AnsattNr: @_tidQuery.AnsattNr Antall forslag mellom @_tidQuery.DatoFra og @_tidQuery.DatoTil</th>
+        <th> AnsattNr - @_tidQuery.AnsattNr: Antall forslag mellom @_tidQuery.DatoFra.Day . @_tidQuery.DatoFra.Month .
+            @_tidQuery.DatoFra.Year and @_tidQuery.DatoTil.Day . @_tidQuery.DatoTil.Month . @_tidQuery.DatoTil.Year</th>
     </thead>
     <tbody>
         <tr>
@@ -212,7 +216,8 @@
     {
         <table class="table table-hover" id="tid">
     <thead>
-        <th> TeamId: @_tidQuery.TeamId Antall forslag mellom @_tidQuery.DatoFra og @_tidQuery.DatoTil</th>
+        <th> TeamId - @_tidQuery.TeamId: Antall forslag mellom @_tidQuery.DatoFra.Day . @_tidQuery.DatoFra.Month .
+            @_tidQuery.DatoFra.Year and @_tidQuery.DatoTil.Day . @_tidQuery.DatoTil.Month . @_tidQuery.DatoTil.Year</th>
     </thead>
     <tbody>
         <tr>
@@ -243,6 +248,7 @@
 
     private TogglePeriod togglePeriod = new TogglePeriod();
 
+
     // BRUKER
 
     private async Task GetBrukerForslagStatistikk(int AnsattNr) =>
@@ -262,7 +268,7 @@
 
     private async void BrukerSubmit()
     {
-        if (_brukerQuery.Status != null)
+        if (_brukerQuery.Status != null && _brukerQuery.ForfatterId != 0)
         {
             await GetBrukerForslagStatusStatistikk(_brukerQuery.ForfatterId, _brukerQuery.Status);
             return;
@@ -275,7 +281,7 @@
         }
         if (togglePeriod.Måned != false)
         {
-            await GetBrukerMåndtligAktivitet(_brukerQuery.TeamId);
+            await GetBrukerMåndtligAktivitet(_brukerQuery.ForfatterId);
             return;
         }
         else { await GetBrukerForslagStatistikk(_brukerQuery.ForfatterId); }
@@ -340,17 +346,33 @@
 
     // BRUKERDEFINERT TIDSPERIODE
 
-    private async Task GetBrukerStatistikkBetween(DateTime datoFra, DateTime datoTil, int ForfatterId) =>
-    _tidStatistikk = await
-    HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk[]>($"/api/Statistikk/Bruker/{ForfatterId}/Between");
+    private async Task GetBrukerStatistikkBetween(DateTime timeX, DateTime timeY, int ForfatterId)
+    {
 
-    private async Task GetTeamStatistikkBetween(DateTime datoFra, DateTime datoTil, int TeamId) =>
-    _tidStatistikk = await
-    HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk[]>($"/api/Statistikk/Team/{TeamId}/Between");
+        string time01 = timeX.ToString("yyyy-MM-dd");
+        string time02 = timeY.ToString("yyyy-MM-dd");
 
-    private async Task GetStatistikkBetween(DateTime time01, DateTime time02) =>
-    _tidStatistikk = await
-    HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk[]>($"/api/Statistikk/Between/{time01}/{time02}");
+        _tidStatistikk = await
+        HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk[]>($"/api/Statistikk/Bruker/{ForfatterId}/Between/{time01}/{time02}");
+    }
+
+    private async Task GetTeamStatistikkBetween(DateTime timeX, DateTime timeY, int TeamId)
+    {
+        string time01 = timeX.ToString("yyyy-MM-dd");
+        string time02 = timeY.ToString("yyyy-MM-dd");
+
+        _tidStatistikk = await
+        HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk[]>($"/api/Statistikk/Team/{TeamId}/Between/{time01}/{time02}");
+    }
+
+    private async Task GetStatistikkBetween(DateTime timeX, DateTime timeY)
+    {
+        string time01 = timeX.ToString("yyyy-MM-dd");
+        string time02 = timeY.ToString("yyyy-MM-dd");
+
+        _tidStatistikk = await
+        HttpClient.GetFromJsonAsync<BrukerDefinertTidStatistikk[]>($"/api/Statistikk/Between/{time01}/{time02}");
+    }
 
     // BrukerDefinertTidSubmit()
     // Metode som velger hvilken GET-metode som skal kalle på db ift. bruekrdefinert input.
@@ -358,35 +380,42 @@
     {
         if (_tidQuery.DatoFra != _tidQuery.DatoTil)
         {
-            @* Console.WriteLine(_tidQuery.DatoFra);
-                string dateFromAsString = _tidQuery.DatoFra.ToString("yyyy-MM-dd hh:mm:ss");
-                Console.WriteLine(dateFromAsString);
-                DateTime dt1 = Convert.ToDateTime(dateFromAsString);
+            if (_tidQuery.AnsattNr > 0 && _tidQuery.TeamId > 0)
+            {
+                Console.WriteLine("Du kan ikke velge AnsattNr og TeamId. Om du setter begge som 0 henter den alle forslag innenfor tidsperioden.");
+                return;
+            }
 
-                //DateTime dt1 = DateTime.ParseExact(dateFromAsString, "yyyy-MM-dd", null);
-                Console.WriteLine(dt1);
-
-                string dateToAsString = _tidQuery.DatoTil.ToString();
-                //DateTime dateToCorrectformat = Convert.ToDateTime(dateToAsString);
-                DateTime dt2 = DateTime.ParseExact(dateToAsString, "yyyy-MM-dd", null);
-
-                Console.WriteLine(dateFromAsString);
-                Console.WriteLine(dt1);
-                Console.WriteLine("new date");
-                Console.WriteLine(dateToAsString);
-                Console.WriteLine(dt2); *@
-            if (_tidQuery.AnsattNr != 0)
+            if (_tidQuery.AnsattNr > 0)
             {
                 await GetBrukerStatistikkBetween(_tidQuery.DatoFra, _tidQuery.DatoTil, _tidQuery.AnsattNr);
+                Console.WriteLine("A " + _tidQuery.AnsattNr);
+                Console.WriteLine("T " + _tidQuery.TeamId);
+                Console.WriteLine("DF " + _tidQuery.DatoFra);
+                Console.WriteLine("DT " + _tidQuery.DatoTil);
+                Console.WriteLine("C " + _tidStatistikk.First().Count);
+                return;
             }
-            if (_tidQuery.TeamId != 0)
+            if (_tidQuery.TeamId > 0)
             {
                 await GetTeamStatistikkBetween(_tidQuery.DatoFra, _tidQuery.DatoTil, _tidQuery.TeamId);
+                Console.WriteLine("A " + _tidQuery.AnsattNr);
+                Console.WriteLine("T " + _tidQuery.TeamId);
+                Console.WriteLine("DF " + _tidQuery.DatoFra);
+                Console.WriteLine("DT " + _tidQuery.DatoTil);
+                Console.WriteLine("C " + _tidStatistikk.First().Count);
+                return;
             }
 
             else
             {
                 await GetStatistikkBetween(_tidQuery.DatoFra, _tidQuery.DatoTil);
+                Console.WriteLine("A " + _tidQuery.AnsattNr);
+                Console.WriteLine("T " + _tidQuery.TeamId);
+                Console.WriteLine("DF " + _tidQuery.DatoFra);
+                Console.WriteLine("DT " + _tidQuery.DatoTil);
+                Console.WriteLine("C " + _tidStatistikk.First().Count);
+                return;
             }
         }
     }
