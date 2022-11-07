@@ -14,8 +14,8 @@ namespace PDSA_System.Shared.Models
         public string Emne { get; set; } = "";
 
         public string Beskrivelse { get; set; } = "";
-
-        public byte[]? Bilde { get; set; }
+        
+        public Object? Bilde { get; set; }
 
         public string Status { get; set; } = "plan";
 
