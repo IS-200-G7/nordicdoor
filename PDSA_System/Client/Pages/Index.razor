@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 
 <PageTitle>Index</PageTitle>
 
@@ -7,12 +7,12 @@
 Welcome to your new app.
 
 <AuthorizeView>
-    <Authorized>
-        <p>Hei, @context.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "fornavn")?.Value</p>
-    </Authorized>
-    <NotAuthorized>
-    <p>Hei, uautorisert bruker</p>
-    </NotAuthorized>
+	<Authorized>
+		<p>Hei, @context.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "fornavn")?.Value</p>
+	</Authorized>
+	<NotAuthorized>
+		<p>Hei, uautorisert bruker</p>
+	</NotAuthorized>
 </AuthorizeView>
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+<SurveyPrompt Title="How is Blazor working for you?" />

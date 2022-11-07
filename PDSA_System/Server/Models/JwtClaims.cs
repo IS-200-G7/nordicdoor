@@ -33,9 +33,9 @@ public class JwtClaims
             new Claim("etternavn", Etternavn),
             new Claim("epost", Epost),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, Rolle), 
+            new Claim(ClaimTypes.Role, Rolle),
             new Claim("brukerId", AnsattNr)
-    
+
         };
 
         // Hente og generere nøkler for autentisering

@@ -5,7 +5,7 @@ namespace PDSA_System.Server.Models
     {
         public int ForfatterId { get; set; }
 
-        public int TeamId  { get; set; }
+        public int TeamId { get; set; }
 
         public string Fornavn { get; set; }
 

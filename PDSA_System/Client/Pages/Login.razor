@@ -8,58 +8,58 @@
 <h3>Login</h3>
 
 <EditForm Model=@_data OnSubmit=@FormSubmitted>
-    <DataAnnotationsValidator/>
-    @if (showError)
-    {
-        <div class="alert alert-danger" role="alert">
-            Feil epostadresse eller passord
-        </div>
-    }
+	<DataAnnotationsValidator />
+	@if (showError)
+	{
+		<div class="alert alert-danger" role="alert">
+			Feil epostadresse eller passord
+		</div>
+	}
 
-    <!--<TextInput BindValue="@_data.Brukernavn" id="usernameInput" name="usernameInput" label="Epostadresse" type="text"/>-->
-    <label for="epostInput">Epostadresse: </label>
-    <input type="text" class="form-control" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="Epostadresse"/>
+	<!--<TextInput BindValue="@_data.Brukernavn" id="usernameInput" name="usernameInput" label="Epostadresse" type="text"/>-->
+	<label for="epostInput">Epostadresse: </label>
+	<input type="text" class="form-control" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="Epostadresse" />
 
-    <!--<TextInput BindValue="@_data.Passord" id="passwordInput" name="passwordInput" label="Passord" type="password"/>-->
-    <label for="passwordInput">Passord: </label>
-    <input type="password" name="passwordInput" id="passwordInput" @bind-value="@_data.Passord" class="form-control" placeholder="Passord"/>
+	<!--<TextInput BindValue="@_data.Passord" id="passwordInput" name="passwordInput" label="Passord" type="password"/>-->
+	<label for="passwordInput">Passord: </label>
+	<input type="password" name="passwordInput" id="passwordInput" @bind-value="@_data.Passord" class="form-control" placeholder="Passord" />
 
 
-    <SubmitInput/>
+	<SubmitInput />
 
 </EditForm>
 
 @code {
-    LoginData _data = new LoginData();
-    bool showError = false;
+	LoginData _data = new LoginData();
+	bool showError = false;
 
-    private async void CreateCookie(string name, string value, int days)
-    {
-        var test = await JsRuntime.InvokeAsync<string>("methods.CreateCookie", name, value, days);
-    }
+	private async void CreateCookie(string name, string value, int days)
+	{
+		var test = await JsRuntime.InvokeAsync<string>("methods.CreateCookie", name, value, days);
+	}
 
-    void FormSubmitted(EditContext editContext)
-    {
-        bool formIsValid = editContext.Validate();
-        showError = false;
+	void FormSubmitted(EditContext editContext)
+	{
+		bool formIsValid = editContext.Validate();
+		showError = false;
 
-        HttpClient.PostAsJsonAsync("/auth/login", _data).ContinueWith(task =>
-        {
-            if (task.Result.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Success");
-                var token = task.Result.Content.ReadAsStringAsync().Result;
+		HttpClient.PostAsJsonAsync("/auth/login", _data).ContinueWith(task =>
+		{
+			if (task.Result.IsSuccessStatusCode)
+			{
+				Console.WriteLine("Success");
+				var token = task.Result.Content.ReadAsStringAsync().Result;
 
-                LocalStorage.SetItemAsStringAsync("token", token);
-                NavigationManager.NavigateTo("/", true);
-            }
-            else
-            {
-                showError = true;
-                StateHasChanged();
-                Console.WriteLine("Failed");
-            }
-        });
-    }
+				LocalStorage.SetItemAsStringAsync("token", token);
+				NavigationManager.NavigateTo("/", true);
+			}
+			else
+			{
+				showError = true;
+				StateHasChanged();
+				Console.WriteLine("Failed");
+			}
+		});
+	}
 
 }
