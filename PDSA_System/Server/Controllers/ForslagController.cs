@@ -101,7 +101,7 @@ public class ForslagController : Controller
         using var conn = new DbHelper(connString).Connection;
 
         var res = await conn.ExecuteAsync(
-            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagId = @ForslagId",
+            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori, Status = @Status WHERE ForslagId = @ForslagId",
             forslag);
 
         return Ok(res.Equals(1));
@@ -155,20 +155,4 @@ public class ForslagController : Controller
         return Ok(); // TODO: Burde kanskje returnert noe?
     }
 
-    /**
-     * Funksjon for omgjøre bilde til byte.
-     * Vet ikke om denne fungerer helt optimalt
-     */
-    public static byte[] GetBilde(string filepath)
-    {
-        FileStream fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
-        BinaryReader br = new BinaryReader(fs);
-
-        byte[] bilde = br.ReadBytes((int)fs.Length);
-
-        br.Close();
-        fs.Close();
-
-        return bilde;
-    }
 }
