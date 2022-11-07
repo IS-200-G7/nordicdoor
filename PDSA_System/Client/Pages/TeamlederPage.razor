@@ -3,9 +3,9 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject ILocalStorageService LocalStorage
-@*<AuthorizeView>
-	<Authorized>*@
-        <!--suppress ALL -->
+<AuthorizeView>
+	<Authorized>
+
 <h3>TeamAdministration</h3>
 
         @if (_teamMember == null)
@@ -65,7 +65,6 @@
 
                         <!-- Modal body -->
                         <div class="modal-body">
-                            <p>This is the modal content!</p>
                             <div>
                                 <label for="formGroupExampleInput">AnsattNr</label>
                                 <input type="number" class="form-control" @bind="_teamMedlemskap.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr"/>
@@ -118,11 +117,11 @@
                         </div>
 
          }
-    	@*</Authorized>
+    	</Authorized>
     	<NotAuthorized>
     		<p>Logg inn for å få tilgang</p>
     	</NotAuthorized>
-    </AuthorizeView>*@
+    </AuthorizeView>
 
 @code
 {
@@ -141,7 +140,7 @@
 
         _teamMember = await Http.GetFromJsonAsync<TeamMedlemskap[]>($"/api/Team/GetBrukereDetail?TeamId={@SessionteamId}");
     }
-    //Constraint feil. Må ses på.
+
     private TeamMedlemskap _teamMedlemskap = new TeamMedlemskap();
 
     private async Task AddBrukerToTeam()
