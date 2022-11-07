@@ -33,8 +33,9 @@ public class JwtClaims
             new Claim("etternavn", Etternavn),
             new Claim("epost", Epost),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim("rolle", Rolle),
+            new Claim(ClaimTypes.Role, Rolle), 
             new Claim("brukerId", AnsattNr)
+    
         };
 
         // Hente og generere nøkler for autentisering
@@ -70,9 +71,6 @@ public class JwtClaims
         var etternavn = tokenS.Claims.First(claim => claim.Type == "etternavn").Value;
         var rolle = tokenS.Claims.First(claim => claim.Type == "rolle").Value;
         var ansattNr = tokenS.Claims.First(claim => claim.Type == "brukerId").Value;
-
-        // Exp er ikke nødvendig å hente ut, da den ikke brukes i applikasjonen, bør implementeres senere
-        //var exp = tokenS.Claims.First(claim => claim.Type == "exp").Value;
 
         return new JwtClaims(epost, fornavn, etternavn, rolle, ansattNr, null);
     }

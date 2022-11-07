@@ -1,17 +1,43 @@
-﻿@inherits LayoutComponentBase
+@inherits LayoutComponentBase
+@inject ILocalStorageService LocalStorage
+@inject NavigationManager NavigationManager
 
 <div class="page">
-    <div class="sidebar">
+    <div style="background-image:none;background-color:#4a6314;" class="sidebar">
         <NavMenu/>
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+        <AuthorizeView>
+            <Authorized>
+                <div class="top-row px-4">
+                    <p>Hei, @context.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "fornavn")?.Value</p>
+                    <a href="#" @onclick="Logout">Logg ut</a>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="top-row px-4">
+                    <a @onclick="Login">Logg inn</a>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
 
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+@code
+{
+    private void Logout()
+    {
+        LocalStorage.RemoveItemAsync("token");
+        NavigationManager.NavigateTo("index");
+    }
+
+    private void Login()
+    {
+        NavigationManager.NavigateTo("login");
+    }
+}

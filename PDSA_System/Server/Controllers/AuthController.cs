@@ -59,7 +59,7 @@ public class AuthController : ControllerBase
         // Send token om passordet er riktig
         if (valid)
         {
-            JwtClaims claims = new JwtClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, "Bruker",
+            JwtClaims claims = new JwtClaims(bruker.Email, bruker.Fornavn, bruker.Etternavn, bruker.Rolle,
                 bruker.AnsattNr.ToString(), _configuration.GetValue<string>("JwtSettings:Secret"));
 
             var token = claims.GenerateToken();
