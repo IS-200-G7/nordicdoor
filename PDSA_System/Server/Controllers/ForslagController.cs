@@ -100,7 +100,7 @@ public class ForslagController : Controller
         using var conn = new DbHelper(connString).Connection;
 
         var res = await conn.ExecuteAsync(
-            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori WHERE ForslagId = @ForslagId",
+            "UPDATE Forslag SET ForfatterId = @ForfatterId, TeamId = @TeamId, Emne = @Emne, Beskrivelse = @Beskrivelse, Bilde = @Bilde, Kategori = @Kategori, Status = @Status WHERE ForslagId = @ForslagId",
             forslag);
 
         return Ok(res.Equals(1));

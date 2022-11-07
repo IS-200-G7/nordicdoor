@@ -3,9 +3,6 @@ using PDSA_System.Shared.Models;
 using PDSA_System.Server.Models;
 using Dapper;
 
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace PDSA_System.Server.Controllers
 {
     [Route("/api/[controller]")]
@@ -106,7 +103,7 @@ namespace PDSA_System.Server.Controllers
         /*
          Deleter brukere etter AnsattNr
          */
-        [HttpDelete("/api/[controller]/admin/DeleteBruker")]
+        [HttpDelete("/api/[controller]/admin/DeleteBruker/{AnsattNr}")]
         public async Task<ActionResult<bool>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");

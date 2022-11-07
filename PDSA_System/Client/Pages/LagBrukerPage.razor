@@ -65,7 +65,7 @@
         byttpassord.BrukerId = _bruker.AnsattNr;
         await Http.PostAsJsonAsync("/api/Bruker/createBruker", _bruker);
         await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
-        NavigationManager.NavigateTo("/BrukerAdminPage");
+        NavigationManager.NavigateTo("/BrukerAdmin");
     }
 
 
