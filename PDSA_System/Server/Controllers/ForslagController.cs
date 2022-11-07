@@ -76,7 +76,6 @@ public class ForslagController : Controller
     [Authorize]
     public async Task<ActionResult<bool>> CreateForslag(Forslag forslag)
     {
-        //byte[] bilde = GetBilde("C:/Bjønn.jpeg");
         var forfatterId = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
         forslag.ForfatterId = int.Parse(forfatterId);
 
@@ -153,22 +152,5 @@ public class ForslagController : Controller
         }
 
         return Ok(); // TODO: Burde kanskje returnert noe?
-    }
-
-    /**
-     * Funksjon for omgjøre bilde til byte.
-     * Vet ikke om denne fungerer helt optimalt
-     */
-    public static byte[] GetBilde(string filepath)
-    {
-        FileStream fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
-        BinaryReader br = new BinaryReader(fs);
-
-        byte[] bilde = br.ReadBytes((int)fs.Length);
-
-        br.Close();
-        fs.Close();
-
-        return bilde;
     }
 }
