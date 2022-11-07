@@ -155,20 +155,4 @@ public class ForslagController : Controller
         return Ok(); // TODO: Burde kanskje returnert noe?
     }
 
-    /**
-     * Funksjon for omgjøre bilde til byte.
-     * Vet ikke om denne fungerer helt optimalt
-     */
-    public static byte[] GetBilde(string filepath)
-    {
-        FileStream fs = new FileStream(filepath, FileMode.Open, FileAccess.Read);
-        BinaryReader br = new BinaryReader(fs);
-
-        byte[] bilde = br.ReadBytes((int)fs.Length);
-
-        br.Close();
-        fs.Close();
-
-        return bilde;
-    }
 }

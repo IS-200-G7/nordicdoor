@@ -3,9 +3,6 @@ using PDSA_System.Shared.Models;
 using PDSA_System.Server.Models;
 using Dapper;
 
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace PDSA_System.Server.Controllers
 {
     [Route("/api/[controller]")]

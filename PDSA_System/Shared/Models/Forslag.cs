@@ -26,7 +26,5 @@ namespace PDSA_System.Shared.Models
         public DateTime Frist { get; set; }
 
         public string Kategori { get; set; } = "";
-        // Kategori er egentlig en definert liste.
-        // Kan sette deafultverdi for en av de f.eks.
     }
 }

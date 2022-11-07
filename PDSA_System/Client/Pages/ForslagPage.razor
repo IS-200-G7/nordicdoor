@@ -314,6 +314,7 @@
 	private Bruker bruker = new Bruker();
 	bool showingForslagInfo = false;
 	void closeForslagInfo() => showingForslagInfo = false;
+
 	protected async Task showForslagInfo(int forslagId)
 	{
 		showingForslagInfo = true;
@@ -323,6 +324,7 @@
 
 	// Lag et nytt forslag
 	private Forslag forslag = new Forslag();
+
 	private async Task CreateForslag()
 	{		
 		await Http.PostAsJsonAsync($"/api/Forslag/createforslag", forslag);

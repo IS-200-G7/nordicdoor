@@ -84,8 +84,8 @@
         Console.WriteLine("Modal ok");
         showModal = false;
     }
-    
-    //TODO: Endre UpdateBruker til å ikke ha list
+
+    //Lagrer endringer gjort av bruker
     private async Task SaveItem() =>
     await Http.PutAsJsonAsync($"/api/Bruker/admin/UpdateBruker", _bruker); 
 
