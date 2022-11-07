@@ -148,7 +148,7 @@
     {
 
         using var response = await Http.PostAsJsonAsync($"/api/Bruker/addBrukerToTeam", _teamMedlemskap);
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: false);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
 
