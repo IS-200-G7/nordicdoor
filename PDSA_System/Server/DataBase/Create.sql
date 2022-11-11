@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS Forslag
     Kategori      VARCHAR(150),
     CONSTRAINT PK_Forslag PRIMARY KEY (ForslagId),
     CONSTRAINT FK_Forslag_Bruker FOREIGN KEY (ForfatterId) REFERENCES Bruker (AnsattNr) ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT FK_Forlsag_Team FOREIGN KEY (TeamId) REFERENCES Team (TeamId) ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT FK_Forlsag_Team FOREIGN KEY (TeamId) REFERENCES Team (TeamId) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT Status_Check CHECK ( Status IN ('plan','do', 'study', 'act') )
 );
 
 DESC Forslag;
