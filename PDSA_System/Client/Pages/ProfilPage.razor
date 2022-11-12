@@ -4,90 +4,98 @@
 @inject NavigationManager NavigationManager;
 @inject AuthenticationStateProvider GetAuthenticationStateAsync;
 
-<div class="content">
-    <h1>Profile</h1>
-    <hr />
-    @if (_bruker != null)
-    {
-        <div class="form-group">
-            <form>
-                
-            <div class="form-group">
-                <label for="fornavn">Fornavn</label>
-                <input type="text" class="form-control" id="fornavn" name="fornavn" @bind="@_bruker.Fornavn" placeholder="Fornavn" />
-            </div>
-            
-            <div class="form-group">
-                <label for="etternavn">Etternavn</label>
-                <input type="text" class="form-control" id="etternavn" name="etternavn" @bind="@_bruker.Etternavn" placeholder="Etternavn" />
-            </div>
-            
-            <div class="form-group">
-                <label for="epost">Epost</label>
-                <input type="text" class="form-control" id="epost" name="epost" @bind="@_bruker.Email" placeholder="Epost" />
-            </div>
-            
-            <br />
+<AuthorizeView>
+	<Authorized>
+		<div class="content">
+			<h1>Profile</h1>
+			<hr />
+			@if (_bruker != null)
+			{
+				<div class="form-group">
+					<form>
 
-            <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
-            <button type="button" class="btn btn-success" @onclick="@ModalShow">Oppdater</button>
+						<div class="form-group">
+							<label for="fornavn">Fornavn</label>
+							<input type="text" class="form-control" id="fornavn" name="fornavn" @bind="@_bruker.Fornavn" placeholder="Fornavn" />
+						</div>
 
-            </form>
-        </div>
-    }
-</div>
+						<div class="form-group">
+							<label for="etternavn">Etternavn</label>
+							<input type="text" class="form-control" id="etternavn" name="etternavn" @bind="@_bruker.Etternavn" placeholder="Etternavn" />
+						</div>
 
-@if (showModal)
-{
-    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
+						<div class="form-group">
+							<label for="epost">Epost</label>
+							<input type="text" class="form-control" id="epost" name="epost" @bind="@_bruker.Email" placeholder="Epost" />
+						</div>
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Endring av profilinformasjon</h4>
-                    <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
-                </div>
-                
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <p>Du endrer nå din profilinformasjon, er du sikker du vil oppdatere?</p>
-                    <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
-                    <button type="button" class="btn btn-success" @onclick="@SaveItem">Oppdater</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
+						<br />
 
-        
+						<button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
+						<button type="button" class="btn btn-success" @onclick="@ModalShow">Oppdater</button>
+
+					</form>
+				</div>
+			}
+		</div>
+
+		@if (showModal)
+		{
+			<div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">Endring av profilinformasjon</h4>
+							<button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+						</div>
+
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<p>Du endrer nå din profilinformasjon, er du sikker du vil oppdatere?</p>
+							<button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
+							<button type="button" class="btn btn-success" @onclick="@SaveItem">Oppdater</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+
+	</Authorized>
+	<NotAuthorized>
+		<div class="alert alert-danger" role="alert">
+			Du må logge inn for å få tilgang. <b><a href="/Login">Gå til logg inn siden</a></b>
+		</div>
+	</NotAuthorized>
+</AuthorizeView>
 @code {
 
-    //GET-metode for å hente den spesifik brukeren i db.
-    private Bruker? _bruker;
-    private AuthenticationState authState;
+	//GET-metode for å hente den spesifik brukeren i db.
+	private Bruker? _bruker;
+	private AuthenticationState authState;
 
-    protected override async Task OnInitializedAsync()
-    {
-        authState = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
-        var AnsattNr = authState.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
-        _bruker = await Http.GetFromJsonAsync<Bruker>($"/api/Bruker/{int.Parse(AnsattNr)}");
-        
-    }
-    // Modal
-    bool showModal = false;
+	protected override async Task OnInitializedAsync()
+	{
+		authState = await GetAuthenticationStateAsync.GetAuthenticationStateAsync();
+		var AnsattNr = authState.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
+		_bruker = await Http.GetFromJsonAsync<Bruker>($"/api/Bruker/{int.Parse(AnsattNr)}");
 
-    void ModalShow() => showModal = true;
-    void ModalCancel() => showModal = false;
-    void ModalOk()
-    {
-        Console.WriteLine("Modal ok");
-        showModal = false;
-    }
+	}
+	// Modal
+	bool showModal = false;
 
-    //Lagrer endringer gjort av bruker
-    private async Task SaveItem() =>
-    await Http.PutAsJsonAsync($"/api/Bruker/admin/UpdateBruker", _bruker); 
+	void ModalShow() => showModal = true;
+	void ModalCancel() => showModal = false;
+	void ModalOk()
+	{
+		Console.WriteLine("Modal ok");
+		showModal = false;
+	}
+
+	//Lagrer endringer gjort av bruker
+	private async Task SaveItem() =>
+	await Http.PutAsJsonAsync($"/api/Bruker/admin/UpdateBruker", _bruker);
 
 
 }
