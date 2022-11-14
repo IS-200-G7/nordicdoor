@@ -1,3 +1,5 @@
+@inject NavigationManager MyNavigationManager
+
 <div class="top-row ps-3 navbar navbar-dark">
 	<div class="container-fluid">
 		<img src="nordic-door.jpg" width="125" height="20" alt="Nordicdoor">
@@ -7,7 +9,7 @@
 	</div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div id="navmenu" class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 	<nav class="flex-column">
 		<div class="nav-item px-3">
 			<AuthorizeView>
@@ -56,5 +58,4 @@
 	{
 		collapseNavMenu = !collapseNavMenu;
 	}
-
 }
