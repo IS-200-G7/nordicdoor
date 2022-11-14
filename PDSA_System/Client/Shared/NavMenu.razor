@@ -1,33 +1,50 @@
+@inject NavigationManager MyNavigationManager
+
 <div class="top-row ps-3 navbar navbar-dark">
 	<div class="container-fluid">
-            <img src="nordic-door.jpg" width="125" height="20" alt="Nordicdoor">
+		<img src="nordic-door.jpg" width="125" height="20" alt="Nordicdoor">
 		<button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 	</div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div id="navmenu" class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 	<nav class="flex-column">
 		<div class="nav-item px-3">
-			<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-				<i class="bi bi-house-door-fill"></i> Home
-			</NavLink>
-			<NavLink class="nav-link" href="/swagger/index.html" Match="NavLinkMatch.All">
-				<i class="bi bi-braces-asterisk"></i> Swagger
-			</NavLink>
-			<NavLink class="nav-link" href="/Login" Match="NavLinkMatch.All">
-				<i class="bi bi-person-circle"></i> Login
-			</NavLink>
-            <NavLink class="nav-link" href="/Forslag" Match="NavLinkMatch.All">
-                <i class="bi bi-list-check"></i> Forslag
-            </NavLink>
-            <NavLink class="nav-link" href="/Teamleder" Match="NavLinkMatch.All">
-            	<i class="bi bi-people-fill"></i> Team
-            </NavLink>
-            <NavLink class="nav-link" href="/Profil" Match="NavLinkMatch.All">
-                <i class="bi bi-person-lines-fill"></i> Profil
-            </NavLink>
+			<AuthorizeView>
+				<Authorized>
+					<NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+						<i class="bi bi-list-check"></i> Forslag
+					</NavLink>
+					<NavLink class="nav-link" href="/Analyse" Match="NavLinkMatch.All">
+						<i class="bi bi-bar-chart-fill"></i> Statistikk
+					</NavLink>
+					<NavLink class="nav-link" href="/Profil" Match="NavLinkMatch.All">
+						<i class="bi bi-person-lines-fill"></i> Profil
+					</NavLink>
+				</Authorized>
+			</AuthorizeView>
+
+			<AuthorizeView Roles="teamleder, admin">
+				<Authorized>
+					<hr />
+					<NavLink class="nav-link" href="/Teamleder" Match="NavLinkMatch.All">
+						<i class="bi bi-person-workspace"></i> Teamledere
+					</NavLink>
+				</Authorized>
+			</AuthorizeView>
+
+			<AuthorizeView Roles="admin">
+				<Authorized>
+					<NavLink class="nav-link" href="/TeamAdmin" Match="NavLinkMatch.All">
+						<i class="bi bi-people-fill"></i> Teams
+					</NavLink>
+					<NavLink class="nav-link" href="/BrukerAdmin" Match="NavLinkMatch.All">
+						<i class="bi bi-person-badge"></i> Admin
+					</NavLink>
+				</Authorized>
+			</AuthorizeView>
 		</div>
 	</nav>
 </div>
@@ -41,5 +58,4 @@
 	{
 		collapseNavMenu = !collapseNavMenu;
 	}
-
 }

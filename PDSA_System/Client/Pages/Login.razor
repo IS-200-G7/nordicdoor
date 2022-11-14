@@ -5,64 +5,66 @@
 @inject ILocalStorageService LocalStorage
 @inject NavigationManager NavigationManager
 
-<h3>Login</h3>
-
 <EditForm Model=@_data OnSubmit=@FormSubmitted>
-    <DataAnnotationsValidator/>
-    @if (showError)
-    {
-        <div class="alert alert-danger" role="alert">
-            Feil epostadresse eller passord
-        </div>
-    }
+	<DataAnnotationsValidator />
+	@if (showError)
+	{
+		<div class="alert alert-danger" role="alert">
+			Feil epostadresse eller passord
+		</div>
+	}
+	<div class="logincontainer">
+		<center>
+			<br />
+			<h2 style="color:#777777"><b>Logg inn</b></h2>
+			<br />
+			<input type="text" class="" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="Epostadresse" />
+			<input type="password" name="passwordInput" id="passwordInput" @bind-value="@_data.Passord" class="" placeholder="Passord" />
+			<SubmitInput Text="Logg Inn"/>
+			
+		</center>
+	</div>
 
-    <!--<TextInput BindValue="@_data.Brukernavn" id="usernameInput" name="usernameInput" label="Epostadresse" type="text"/>-->
-    <label for="epostInput">Epostadresse: </label>
-    <input type="text" class="form-control" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="Epostadresse"/>
-
-    <!--<TextInput BindValue="@_data.Passord" id="passwordInput" name="passwordInput" label="Passord" type="password"/>-->
-    <label for="passwordInput">Passord: </label>
-    <input type="password" name="passwordInput" id="passwordInput" @bind-value="@_data.Passord" class="form-control" placeholder="Passord"/>
-
-
-    <SubmitInput/>
 
 </EditForm>
 
 @code {
-    LoginData _data = new LoginData();
-    bool showError = false;
+	LoginData _data = new LoginData();
+	bool showError = false;
 
-    private async void CreateCookie(string name, string value, int days)
-    {
-        var test = await JsRuntime.InvokeAsync<string>("methods.CreateCookie", name, value, days);
-    }
+	public bool HideNavMenu = true;
 
-    void FormSubmitted(EditContext editContext)
-    {
-        bool formIsValid = editContext.Validate();
-        showError = false;
+	
+	private async void CreateCookie(string name, string value, int days)
+	{
+		var test = await JsRuntime.InvokeAsync<string>("methods.CreateCookie", name, value, days);
+	}
 
-        HttpClient.PostAsJsonAsync("/auth/login", _data).ContinueWith(task =>
-        {
-            if (task.Result.IsSuccessStatusCode)
-            {
-                Console.WriteLine("Success");
-                var token = task.Result.Content.ReadAsStringAsync().Result;
+	void FormSubmitted(EditContext editContext)
+	{
+		bool formIsValid = editContext.Validate();
+		showError = false;
 
-                LocalStorage.SetItemAsStringAsync("token", token);
-                //Linje nedenfor brukes av TeamlederPage. Må endres manuelt foreløpig. Teams må inn i local storage.
-                //Endre string data for å endre team.
-                LocalStorage.SetItemAsStringAsync("teamId", "4");
-                NavigationManager.NavigateTo("/", true);
-            }
-            else
-            {
-                showError = true;
-                StateHasChanged();
-                Console.WriteLine("Failed");
-            }
-        });
-    }
+		HttpClient.PostAsJsonAsync("/auth/login", _data).ContinueWith(task =>
+		{
+			if (task.Result.IsSuccessStatusCode)
+			{
+				Console.WriteLine("Success");
+				var token = task.Result.Content.ReadAsStringAsync().Result;
+
+				LocalStorage.SetItemAsStringAsync("token", token);
+				//Linje nedenfor brukes av TeamlederPage. Må endres manuelt foreløpig. Teams må inn i local storage.
+				//Endre string data for å endre team.
+				LocalStorage.SetItemAsStringAsync("teamId", "4");
+				NavigationManager.NavigateTo("/", true);
+			}
+			else
+			{
+				showError = true;
+				StateHasChanged();
+				Console.WriteLine("Failed");
+			}
+		});
+	}
 
 }
