@@ -10,7 +10,7 @@
 	@if (showError)
 	{
 		<div class="alert alert-danger" role="alert">
-			Feil epostadresse eller passord
+			Feil e-postadresse eller passord
 		</div>
 	}
 	<div class="logincontainer">
@@ -18,10 +18,10 @@
 			<br />
 			<h2 style="color:#777777"><b>Login</b></h2>
 			<br />
-			<input type="text" class="" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="Epostadresse" />
+			<input type="text" class="" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="E-postadresse" />
 			<input type="password" name="passwordInput" id="passwordInput" @bind-value="@_data.Passord" class="" placeholder="Passord" />
 			<SubmitInput />
-			
+
 		</center>
 	</div>
 
