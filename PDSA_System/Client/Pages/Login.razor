@@ -16,12 +16,12 @@
 	<div class="logincontainer">
 		<center>
 			<br />
-			<h2 style="color:#777777"><b>Login</b></h2>
+			<h2 style="color:#777777"><b>Logg inn</b></h2>
 			<br />
 			<input type="text" class="" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="E-postadresse" />
 			<input type="password" name="passwordInput" id="passwordInput" @bind-value="@_data.Passord" class="" placeholder="Passord" />
-			<SubmitInput />
-
+			<SubmitInput Text="Logg Inn"/>
+			
 		</center>
 	</div>
 
@@ -32,6 +32,9 @@
 	LoginData _data = new LoginData();
 	bool showError = false;
 
+	public bool HideNavMenu = true;
+
+	
 	private async void CreateCookie(string name, string value, int days)
 	{
 		var test = await JsRuntime.InvokeAsync<string>("methods.CreateCookie", name, value, days);
