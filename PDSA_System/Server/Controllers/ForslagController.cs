@@ -122,40 +122,7 @@ public class ForslagController : Controller
         return Ok(res.Equals(1));
     }
 
-    // status controller
-    [HttpPost("/api/[controller]/setstatus/")]
-    public async Task<ActionResult<bool>> SetStatus([FromQuery] int ForslagId, [FromQuery] string Status)
-    {
-        // Hente til connection string fra appsettings.json og åpne en connection til database
-        var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
-        using var conn = new DbHelper(connString).Connection;
-        conn.Open();
-
-        // En array med statuser som er lov å bruke
-        string[] acceptedStatuses = { "plan", "do", "study", "act" };
-
-        // Sjekker om statusen som vi har fått er i acceptedStatuses
-        if (!acceptedStatuses.Contains(Status))
-        {
-            return StatusCode(400, "Invalid value for 'Status'. Must be 'plan', 'do', 'study' or 'act'");
-        }
-
-        // Prøv skrive statusen inn i databasen
-        try
-        {
-            await conn.QueryAsync("UPDATE Forslag SET Status = @Status WHERE ForslagId = @ForslagId",
-                new { ForslagId = ForslagId, Status = Status });
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"databaseerror: {e.Message}");
-            return StatusCode(500, "En feil har skjedd");
-        }
-
-        return Ok(); // TODO: Burde kanskje returnert noe?
-    }
-
-    //Metode for å oppdatere Bilde-kolonne i forslag
+    // Metode for å oppdatere Bilde-kolonne i forslag
     [HttpPost("/api/[controller]/UpdateBilde/")]
     public async Task<ActionResult<bool>> UpdateBilde(IFormFile imageFile, int forslagId)
     {
