@@ -17,8 +17,10 @@ namespace PDSA_System.Server.Controllers
         {
             this._configuration = configuration;
         }
+
+
         /** GetBrukerStatistikk
-         * @param - int AnsattNr, string Status
+         * @param - int AnsattNr
          * @return - Task
          * 
          * Henter hvor mange forslag en bruker har laget
@@ -53,7 +55,6 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(brukerStatistikk);
         }
-
 
 
         /** GetTeamStatistikk
@@ -138,8 +139,6 @@ namespace PDSA_System.Server.Controllers
          * Henter forsalgene til hvert team som er laget denne uken, gruppert etter TeamId og sortert i synkende rekkefølge.
          */
         [HttpGet("/api/[controller]/Teams/Uke")]
-
-  
         public async Task<ActionResult<List<Statistikk>>> GetTeamsUkentligAktivitet()
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -147,6 +146,8 @@ namespace PDSA_System.Server.Controllers
             var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Count FROM Forslag AS F WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -7 DAY)) > 0 AND DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -7 DAY)) <= 7 GROUP BY TeamId ORDER BY Count DESC");
             return Ok(teamStatistikk);
         }
+
+
         /** GetTeamUkentligAktivitet
          * @param - int BrukerId
          * @return - Task
@@ -172,7 +173,6 @@ namespace PDSA_System.Server.Controllers
          * Henter forsalgene til hvert team gruppert etter TeamId og sortert i synkende rekkefølge.
          */
         [HttpGet("/api/[controller]/Teams/Måned")]
-  
         public async Task<ActionResult<List<Statistikk>>> GetTeamsMånedligAktivitet()
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -180,6 +180,8 @@ namespace PDSA_System.Server.Controllers
             var teamStatistikk = await conn.QueryAsync<Statistikk>("SELECT TeamId, COUNT(*) AS Count FROM Forslag AS F WHERE DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -30 DAY)) > 0 AND DATEDIFF(F.Opprettet, ADDDATE(CURRENT_TIMESTAMP(), INTERVAL  -30 DAY)) <= 30 GROUP BY TeamId ORDER BY Count DESC");
             return Ok(teamStatistikk);
         }
+
+
         /** GetTeamMånedligAktivitet
          * @param - int BrukerId
          * @return - Task
@@ -197,7 +199,6 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(teamStatistikk);
         }
-
 
 
         /** GetTeamStatistikkBetween
@@ -237,6 +238,7 @@ namespace PDSA_System.Server.Controllers
             return Ok(brukerStatistikk);
         }
 
+
         /** GetStatistikkBetween
         * @param - DateTime time01, DateTime time02
         * @return - Task
@@ -254,16 +256,5 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(statistikk);
         }
-
     }
-
-    
-          
-            
-    
-
-          
-    
-    
-  
 }

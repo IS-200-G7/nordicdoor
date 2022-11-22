@@ -15,7 +15,12 @@ namespace PDSA_System.Server.Controllers
             this._configuration = configuration;
         }
 
-        //Dette er en GET request som henter ut alle lagene i databasen.
+
+        /** GetAllTeams
+         * @return - OkObjectResult
+         * 
+         * Hent ut alle teams i databasen
+         */
         [HttpGet]
         public async Task<ActionResult<List<Team>>> GetAllTeams()
         {
@@ -30,9 +35,12 @@ namespace PDSA_System.Server.Controllers
         }
 
 
-        /*
-        Metoden Henter ut et spesifikk lag med param(TeamId)
-        */
+        /** GetTeam
+         * @param - int TeamId
+         * @return - OkObjectResult
+         * 
+         * Hent ut et spesifikk team basert på TeamId
+         */
         [HttpGet("/api/[controller]/{TeamId}")]
         public async Task<ActionResult<Team>> GetTeam(int TeamId)
         {
@@ -45,28 +53,32 @@ namespace PDSA_System.Server.Controllers
         }
 
 
-        /*
-        Denne Metoden lager en Tuppel/Team i DB.
-        */
-
+        /** CreateTeam
+         * @param - Team team
+         * @return - OkObjectResult
+         * 
+         * Lag et nytt team
+         */
         [HttpPost("/api/[controller]/OpprettTeam/")]
-        // denne linjen sier at denne metoden skal kjøres når det kommer en POST request
         public async Task<ActionResult<bool>> CreateTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
+            // Await conn.ExecudeAsync betyr at vi venter på at denne linjen skal bli ferdig før vi fortsetter med neste linje
             var res = await conn.ExecuteAsync("INSERT INTO Team(TeamLederId, Navn, AvdelingId) VALUES (@TeamLederId, @Navn, @AvdelingId)", team);
 
-            // Await conn.ExecudeAsync betyr at vi venter på at denne linjen skal bli ferdig før vi fortsetter med neste linje.
-
-            return Ok(res.Equals(1)); // denne linjen returnerer statuskode 200 og teamet som ble lagt til i database
+            // Returner statuskode 200 og teamet som ble lagt til i database
+            return Ok(res.Equals(1));
         }
 
 
-        /* EditTeam
-        * Denne metoden oppdaterer et Team.
-        */
+        /** EditTeam
+         * @param - Team team
+         * @return - OkObjectResult
+         * 
+         * Oppdater infoen til et team
+         */
         [HttpPut]
         public async Task<ActionResult<Team>> EditTeam(Team team)
         {
@@ -74,13 +86,16 @@ namespace PDSA_System.Server.Controllers
             using var conn = new DbHelper(connString).Connection;
             await conn.ExecuteAsync("UPDATE Team SET TeamLederId = @TeamLederId, Navn = @Navn, AvdelingId = @AvdelingId WHERE TeamId = @TeamId", team);
 
-
             return Ok(await GetTeam(team.TeamId));
         }
 
-        /* DeleteTeam
-        * Denne metoden sletter Teams fra tabellen Team som er like teamid parameteret.
-        */
+
+        /** DeleteTeam
+         * @param - int TeamId
+         * @return - OkObjectResult
+         * 
+         * Slett et team basert på TeamID
+         */
         [HttpDelete("/api/[controller]/{TeamId}")]
         public async Task<ActionResult<bool>> DeleteTeam(int TeamId)
         {
@@ -92,25 +107,32 @@ namespace PDSA_System.Server.Controllers
             return Ok(res.Equals(1));
         }
 
-        /* GetBrukere
-         * Denne henter alle medlemmene tilknyttet et spesefikt team
+
+        /** GetUsersFromTeam
+         * @param - int TeamId
+         * @return - OkObjectResult
+         * 
+         * Hent alle medlemmene tilknyttet et spesefikt team
          */
         [HttpGet("/api/[controller]/GetBrukere")]
         public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeam(int TeamId)
         {
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(conneString).Connection;
-            // denne linjen henter ut teammedlemskap
+            // Hente ut teammedlemskap
             var medlemskap = await conn.QueryAsync<TeamMedlemskap>("SELECT * FROM TeamMedlemskap WHERE TeamId = @id",
                 new { id = TeamId });
 
-            // denne returnerer en statuskode 200 og teamedlemskapet som ble hentet fra databasen
-            //return Ok(brukere);
+            // Returner en statuskode 200 og teamedlemskapet som ble hentet fra databasen
             return Ok(medlemskap);
         }
 
-        /* GetBrukereDetail
-         *Henter brukere tilknyttet et spesifikt team, og bruker SQL Join for å vise data fra andre tabeller
+
+        /** GetUsersFromTeamDetail
+         * @param - int TeamId
+         * @return - OkObjectResult
+         * 
+         * Hent brukere tilknuttet til et spesifikt team
          */
         [HttpGet("/api/[controller]/GetBrukereDetail")]
         public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeamDetail(int TeamId)
@@ -129,9 +151,14 @@ namespace PDSA_System.Server.Controllers
             return Ok(medlemskap);
         }
 
-        /* DeleteBrukere
-         * Denne sletter brukere fra et team ved å slette deres teamedlemskap
-        */
+
+        /** DeleteUsersFromTeam
+         * @param - int AnsattNr
+         * @param - int TeamId
+         * @return - OkObjectResult
+         * 
+         * Slett bruker fra et team basert på AnsattNr og TeamId
+         */
         [HttpDelete("/api/[controller]/DeleteBrukere")]
         public async Task<ActionResult<List<Team>>> DeleteUsersFromTeam(int AnsattNr, int TeamId)
         {

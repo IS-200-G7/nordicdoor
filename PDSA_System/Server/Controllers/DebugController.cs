@@ -14,12 +14,12 @@ public class DebugController : ControllerBase
         this._configuration = configuration;
     }
 
-    // login controller
+    // Login controller
     [HttpGet("/debug/tokenRead")]
     [Authorize]
     public IActionResult Debug()
     {
-        //Returnerer tom string dersom `fornavn` ikke er definert. Slipper da feilmelding på grunn av nullverdier
+        // Returnerer tom string dersom `fornavn` ikke er definert. Slipper da feilmelding på grunn av nullverdier
         var fornavn = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "fornavn")
             ?.Value;
 
