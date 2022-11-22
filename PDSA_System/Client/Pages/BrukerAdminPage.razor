@@ -6,55 +6,48 @@
 
 
 <AuthorizeView Roles="admin">
-<Authorized> 
-<h3>Admin</h3>
-<br/>
-  <h2>Brukere</h2>
-
-
-  <!-- Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST) -->
-<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBruker"))">Legg til bruker</button> 
-<br />
-<br />
-@if (_bruker == null)
-{
-    <p>Error</p>
-} else
-{
-
-    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th class="th-sm">AnsattNr
-                </th>
-                <th class="th-sm">Navn
-                </th>
-                <th class="th-sm">Email
-                </th>
-                <th class="th-sm">Rolle
-                </th>
-                <th class="th-sm">Handlinger
-                </th>
-            </tr>
-        </thead>
-        @foreach (var item in _bruker)
-        {
-            // Bind ansattnr to id for delete
-            <tbody>
-                <tr>
-                    <td>@item.AnsattNr</td>
-                    <td>@item.Fornavn @item.Etternavn</td>
-                    <td>@item.Email</td>
-                    <td>@item.Rolle</td>
-                    <td> <button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
-                        <button class="btn btn-danger" @onclick="@(() => { ModalShowd(); DeletesItem(item.AnsattNr);})">Slett</button>
+	<Authorized>
+		<h3>Admin</h3>
+		<br/>
+		<h2>Brukere</h2>
+		<!-- Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST) -->
+		<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBruker"))">Legg til bruker</button>
+		<br />
+		<br />
+		@if (_bruker == null)
+		{
+			<p>Error</p>
+		} else
+		{
+			<table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th class="th-sm">AnsattNr</th>
+						<th class="th-sm">Navn</th>
+						<th class="th-sm">Email</th>
+						<th class="th-sm">Rolle</th>
+						<th class="th-sm">Handlinger</th>
+					</tr>
+				</thead>
+				@foreach (var item in _bruker)
+				{
+					// Bind ansattnr to id for delete
+					<tbody>
+						<tr>
+							<td>@item.AnsattNr</td>
+							<td>@item.Fornavn @item.Etternavn</td>
+							<td>@item.Email</td>
+							<td>@item.Rolle</td>
+							<td>
+								<button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
+								<button class="btn btn-danger" @onclick="@(() => { ModalShowd(); DeletesItem(item.AnsattNr);})">Slett</button>
                                 <button class=" btn btn-success" @onclick="@(() => {ModalShowPass(); PassordReset(item.AnsattNr);})">Endre passord</button>
-                    </td>
-                </tr>
-            </tbody>
-        }
-    </table>
-}
+							</td>
+						</tr>
+					</tbody>
+				}
+			</table>
+		}
 
 @if (showModal)
 {
@@ -88,10 +81,6 @@
                         <label for="formGroupExampleInput">Email</label>
                         <input type="text" class="form-control" @bind="bruker.Email" id="formGroupExampleInput" placeholder="Email">
                     </div>
-                    @* <div>
-               @* <label for="formGroupExampleInput">PassordHash</label>
-                     <input type="text"  class="form-control" id="formGroupExampleInput" placeholder="PassordHash">
-                 </div>*@
                     <div>
                         <label for="formGroupExampleInput">Rolle</label>
                         <input type="text"  class="form-control" @bind="bruker.Rolle" id="formGroupExampleInput" placeholder="Rolle">
