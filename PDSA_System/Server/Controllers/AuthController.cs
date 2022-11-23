@@ -17,7 +17,12 @@ public class AuthController : ControllerBase
         this._configuration = configuration;
     }
 
-    // login controller
+    /** Login
+     * @param - LoginFormData data
+     * @return - OkObjectResult
+     * 
+     * Login med dataen fra Login
+     */
     [HttpPost("login")]
     public IActionResult Login([FromBody] LoginFormData data)
     {
@@ -47,7 +52,10 @@ public class AuthController : ControllerBase
 
         PasswordHash hasher = new PasswordHash();
 
-        //hashString[0] er hash, hashString[1] er salt
+        /**
+         * hashString[0] er hash
+         * hashString[1] er salt
+         */
         string[] hashString = bruker.PassordHash.Split(':');
         // base64 til byte array
         byte[] hash = Convert.FromBase64String(hashString[0]);
@@ -63,9 +71,9 @@ public class AuthController : ControllerBase
                 bruker.AnsattNr.ToString(), _configuration.GetValue<string>("JwtSettings:Secret"));
 
             var token = claims.GenerateToken();
-            //Eks på forslag til endring der vi returner default eller single teamid:
-            //model={token=token,teamid=2};
-            //return Ok(model);
+            // Eks på forslag til endring der vi returner default eller single teamid:
+            // model={token=token,teamid=2};
+            // return Ok(model);
             return Ok(token);
         }
 

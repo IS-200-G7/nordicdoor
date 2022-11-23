@@ -11,9 +11,7 @@
 			<button type="button" class="btn btn-warning" onmousedown="@togglePeriod.toggleMåned"> Måned @togglePeriod.Måned</button>
 		</div>
 		<hr />
-
 		<!-------------------- Bruker ------------------->
-
 		<h5>Bruker</h5>
 		<div class="input-group">
 			<div class="input-group-prepend">
@@ -23,15 +21,11 @@
 				   aria-describedby="btnGroupAddon" @bind-value="@_brukerQuery.ForfatterId">
 			<input type="text" class="form-control" placeholder="Status" aria-label="Status" aria-describedby="btnGroupAddon"
 				   @bind-value="@_brukerQuery.Status">
-
 		</div>
 		<br />
 		<button type="submit" class="btn btn-primary mb-2" id="bruker" @onclick="@BrukerSubmit"> Se Data </button>
-
 		<br />
-
 		<!-------------------- Lag ------------------->
-
 		<h5>Lag</h5>
 		<div class="input-group">
 			<div class="input-group-prepend">
@@ -44,11 +38,8 @@
 		</div>
 		<br />
 		<button type="submit" class="btn btn-primary mb-2" id="lag" @onclick="@TeamSubmit"> Se Data </button>
-
 		<br />
-
 		<!-------------------- Brukerdefinert Tidsperiode ------------------->
-
 		<h5>Brukerdefinert Tidsperiode</h5>
 		<div class="input-group">
 			<div class="input-group-prepend">
@@ -67,19 +58,12 @@
 		<button type="submit" class="btn btn-primary mb-2" id="brukerdefinert-tidsperiode" @onclick="@BrukerDefinertTidSubmit">
 			Se Data
 		</button>
-
-
-
 		<hr />
-
 		<!-- Visuel fremvisning av Statistikk -->
-
 		<h2>Resultat</h2>
-
 		@if (_brukerStatistikk != null)
 		{
 			<table class="table table-hover" id="bruker">
-
 				@if (_brukerStatistikk.First().Status != null)
 				{
 					<thead>
@@ -128,7 +112,6 @@
 				}
 			</table>
 		}
-
 		@if (_teamStatistikk != null)
 		{
 			@if (_teamStatistikk.First().Status != null)
@@ -173,14 +156,11 @@
 					</tbody>
 				</table>
 			}
-
 		}
-
 		<!---------- BRUKERDEFINERT TIDSPERIODE --------->
 		@if (_tidStatistikk != null && _tidQuery.DatoFra != DateTime.MinValue && _tidQuery.DatoTil != DateTime.MinValue)
 		{
 			Console.WriteLine(_tidStatistikk.First().Count);
-
 			@if (_tidQuery.AnsattNr == 0 && _tidQuery.TeamId == 0)
 			{
 				<table class="table table-hover" id="tid">
@@ -199,7 +179,6 @@
 					</tbody>
 				</table>
 			}
-
 			@if (_tidQuery.AnsattNr != 0)
 			{
 				<table class="table table-hover" id="tid">
@@ -237,7 +216,6 @@
 				</table>
 			}
 		}
-
 	</Authorized>
 	<NotAuthorized>
 		<div class="alert alert-danger" role="alert">
@@ -245,6 +223,7 @@
 		</div>
 	</NotAuthorized>
 </AuthorizeView>
+
 @code {
 
 	private BrukerDefinertTidStatistikk? _tidQuery = new BrukerDefinertTidStatistikk();

@@ -6,270 +6,260 @@
 
 
 <AuthorizeView Roles="admin">
-<Authorized> 
-<h3>Admin</h3>
-<br/>
-  <h2>Brukere</h2>
+	<Authorized>
+		<h3>Admin</h3>
+		<br />
+		<h2>Brukere</h2>
+		<!-- Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST) -->
+		<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBruker"))">Legg til bruker</button>
+		<br />
+		<br />
+		@if (_bruker == null)
+		{
+			<p>Error</p>
+		}
+		else
+		{
+			<table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th class="th-sm">AnsattNr</th>
+						<th class="th-sm">Navn</th>
+						<th class="th-sm">Email</th>
+						<th class="th-sm">Rolle</th>
+						<th class="th-sm">Handlinger</th>
+					</tr>
+				</thead>
+				@foreach (var item in _bruker)
+				{
+					// Bind ansattnr to id for delete
+					<tbody>
+						<tr>
+							<td>@item.AnsattNr</td>
+							<td>@item.Fornavn @item.Etternavn</td>
+							<td>@item.Email</td>
+							<td>@item.Rolle</td>
+							<td>
+								<button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
+								<button class="btn btn-danger" @onclick="@(() => { ModalShowd(); DeletesItem(item.AnsattNr);})">Slett</button>
+								<button class=" btn btn-success" @onclick="@(() => {ModalShowPass(); PassordReset(item.AnsattNr);})">Endre passord</button>
+							</td>
+						</tr>
+					</tbody>
+				}
+			</table>
+		}
+
+		@if (showModal)
+		{
+			<div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">Confirm action</h4>
+							<button type="button" class="close" @onclick="@ModalCancel">&times;</button>
+						</div>
+
+						<!-- Modal body -->
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="formGroupExampleInput">AnsattNr</label>
+									<input disabled type="number" class="form-control" @bind="bruker.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr">
+								</div>
+							</form>
+							<div>
+								<label for="formGroupExampleInput">Fornavn</label>
+								<input type="text" class="form-control" @bind="bruker.Fornavn" id="formGroupExampleInput" placeholder="Fornavn">
+							</div>
+							<div>
+								<label for="formGroupExampleInput">Etternavn</label>
+								<input type="text" class="form-control" @bind="bruker.Etternavn" id="formGroupExampleInput" placeholder="Etternavn">
+							</div>
+							<div>
+								<label for="formGroupExampleInput">Email</label>
+								<input type="text" class="form-control" @bind="bruker.Email" id="formGroupExampleInput" placeholder="Email">
+							</div>
+							<div>
+								<label for="formGroupExampleInput">Rolle</label>
+								<input type="text" class="form-control" @bind="bruker.Rolle" id="formGroupExampleInput" placeholder="Rolle">
+							</div>
+							<div>
+								<label for="formGroupExampleInput">LederId</label>
+								<input type="number" class="form-control" @bind="bruker.LederId" id="formGroupExampleInput" placeholder="LederId">
+							</div>
+						</div>
+
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
+							<button type="button" class="btn btn-success" @onclick="@(()=>SaveItem(bruker.AnsattNr))">Oppdater</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		}
+
+		@if (showModald)
+		{
+			@*Delete Modal *@
+			<div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">Bekreft</h4>
+							<button type="button" class="close" @onclick="@ModalCanceld">&times;</button>
+						</div>
+						<!-- Modal body -->
+						<div class="modal-body">
+							<div></div>
+							<div class="form-group">
+								<h6>Bekfreft at du ønsker å slette denne brukeren</h6>
+								<p>Dette kan ikke omgjøres</p>
+								<div>
+								</div>
+							</div>
+						</div>
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<button type="button" class="btn" @onclick="@ModalCanceld">Avbryt</button>
+							<button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(bruker.AnsattNr))">Slett</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+
+		@*Password Modal *@
+
+		@if (showPassModal)
+		{
+			<div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">Endre Passord</h4>
+							<button type="button" class="close" @onclick="@ModalPassCancel">&times;</button>
+						</div>
+						<!-- Modal body -->
+						<div class="modal-body">
+							<form>
+								<div class="form-group">
+									<label for="formGroupExampleInput">AnsattNr</label>
+									<input disabled type="number" class="form-control" @bind="bruker.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr">
+								</div>
+							</form>
+							<div>
+								<label for="formGroupExampleInput">Passord</label>
+								<input type="text" class="form-control" @bind="byttpassord.Passord" id="formGroupExampleInput" placeholder="Passord">
+							</div>
+							<div>
+							</div>
+						</div>
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<button type="button" class="btn" @onclick="@ModalPassCancel">Avbryt</button>
+							<button type="button" class="btn btn-success" @onclick="@ResetPassord">Endre</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+
+		@*<p> @passgen.GenererPassord(10)</p>*@
+
+		@code {
+		// Koden under er for å vise alle ansatte i databasen(GET)
+		private Bruker[]? _bruker;
 
 
-  @*Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST)*@
-<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBruker"))">Legg til bruker</button> 
-<br />
-<br />
-@if (_bruker == null)
-{
-    <p>Error</p>
-} else
-{
-
-    <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th class="th-sm">AnsattNr
-                </th>
-                <th class="th-sm">Navn
-                </th>
-                <th class="th-sm">Email
-                </th>
-                <th class="th-sm">Rolle
-                </th>
-                <th class="th-sm">Handlinger
-                </th>
-            </tr>
-        </thead>
-        @foreach (var item in _bruker)
-        {
-            // bind ansattnr to id for delete
-            <tbody>
-                <tr>
-                    <td>@item.AnsattNr</td>
-                    <td>@item.Fornavn @item.Etternavn</td>
-                    <td>@item.Email</td>
-                    <td>@item.Rolle</td>
-                    <td> <button class="btn btn-warning" @onclick="@(() => { ModalShow(); EditItem(item.AnsattNr);})">Endre</button>
-                        <button class="btn btn-danger" @onclick="@(() => { ModalShowd(); DeletesItem(item.AnsattNr);})">Slett</button>
-                                <button class=" btn btn-success" @onclick="@(() => {ModalShowPass(); PassordReset(item.AnsattNr);})">Endre passord</button>
-                    </td>
-                </tr>
-            </tbody>
-        }
-    </table>
-}
-
-@if (showModal)
-{
-    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Confirm action</h4>
-                    <button type="button" class="close" @onclick="@ModalCancel">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="formGroupExampleInput">AnsattNr</label>
-                            <input disabled type="number" class="form-control" @bind="bruker.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr">
-                        </div>
-                    </form>
-                    <div>
-                        <label for="formGroupExampleInput">Fornavn</label>
-                        <input type="text" class="form-control" @bind="bruker.Fornavn" id="formGroupExampleInput" placeholder="Fornavn">
-                    </div>
-                    <div>
-                        <label for="formGroupExampleInput">Etternavn</label>
-                        <input type="text"  class="form-control" @bind="bruker.Etternavn" id="formGroupExampleInput" placeholder="Etternavn">
-                    </div>
-                    <div>
-                        <label for="formGroupExampleInput">Email</label>
-                        <input type="text" class="form-control" @bind="bruker.Email" id="formGroupExampleInput" placeholder="Email">
-                    </div>
-                    @* <div>
-               @* <label for="formGroupExampleInput">PassordHash</label>
-                     <input type="text"  class="form-control" id="formGroupExampleInput" placeholder="PassordHash">
-                 </div>*@
-                    <div>
-                        <label for="formGroupExampleInput">Rolle</label>
-                        <input type="text"  class="form-control" @bind="bruker.Rolle" id="formGroupExampleInput" placeholder="Rolle">
-                    </div>
-                    <div>
-                        <label for="formGroupExampleInput">LederId</label>
-                        <input type="number" class="form-control" @bind="bruker.LederId" id="formGroupExampleInput" placeholder="LederId">
-                    </div>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn" @onclick="@ModalCancel">Avbryt</button>
-                    <button type="button" class="btn btn-success" @onclick="@(()=>SaveItem(bruker.AnsattNr))">Oppdater</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
-
-@if (showModald)
-{
-    @*Delete Modal *@
-    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Bekreft</h4>
-                    <button type="button" class="close" @onclick="@ModalCanceld">&times;</button>
-                </div>
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div></div>
-                    <div class="form-group">
-                        <h6>Bekfreft at du ønsker å slette denne brukeren</h6>
-                        <p>Dette kan ikke omgjøres</p>
-                        <div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn" @onclick="@ModalCanceld">Avbryt</button>
-                    <button type="button" class="btn btn-danger" @onclick="@(()=>DeleteItem(bruker.AnsattNr))">Slett</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-@*Password Modal *@
-
-@if (showPassModal)
-{
-    <div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Endre Passord</h4>
-                    <button type="button" class="close" @onclick="@ModalPassCancel">&times;</button>
-                </div>
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="formGroupExampleInput">AnsattNr</label>
-                            <input disabled type="number" class="form-control" @bind="bruker.AnsattNr" id="formGroupExampleInput" placeholder="AnsattNr">
-                        </div>
-                    </form>
-                    <div>
-                        <label for="formGroupExampleInput">Passord</label>
-                        <input type="text" class="form-control" @bind="byttpassord.Passord"  id="formGroupExampleInput" placeholder="Passord">
-                    </div>
-                    <div>
-                    </div>
-                </div>
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn" @onclick="@ModalPassCancel">Avbryt</button>
-                    <button type="button" class="btn btn-success" @onclick="@ResetPassord">Endre</button>
-                </div>
-            </div>
-        </div>
-    </div>
-}
-
-@*<p> @passgen.GenererPassord(10)</p>*@
-
-        @code {
-            // Koden under er for å vise alle ansatte i databasen(GET)
-    private Bruker[]? _bruker;
-
-
-    protected override async Task OnInitializedAsync() =>
-    _bruker = await Http.GetFromJsonAsync<Bruker[]>("/api/Bruker");
+		protected override async Task OnInitializedAsync() =>
+		_bruker = await Http.GetFromJsonAsync<Bruker[]>("/api/Bruker");
 
 
 
-    // Modal for å redigere brukere
-    bool showModal = false;
+		// Modal for å redigere brukere
+		bool showModal = false;
 
-    void ModalShow() => showModal = true;
-    void ModalCancel() => showModal = false;
-    void ModalOk()
-    {
-            Console.WriteLine("Modal ok");
-            showModal = false;
-    }
+		void ModalShow() => showModal = true;
+		void ModalCancel() => showModal = false;
+		void ModalOk()
+		{
+			Console.WriteLine("Modal ok");
+			showModal = false;
+		}
 
-    // Modal For å slette en bruker
-    bool showModald = false;
+		// Modal For å slette en bruker
+		bool showModald = false;
 
-    void ModalShowd() => showModald = true;
-    void ModalCanceld() => showModald = false;
-    void ModalOkd()
-    {
-            Console.WriteLine("Modal ok");
-            showModal = false;
-    }
+		void ModalShowd() => showModald = true;
+		void ModalCanceld() => showModald = false;
+		void ModalOkd()
+		{
+			Console.WriteLine("Modal ok");
+			showModal = false;
+		}
 
-    // Modal for å endre passord
-    bool showPassModal = false;
+		// Modal for å endre passord
+		bool showPassModal = false;
 
-    void ModalShowPass() => showPassModal = true;
-    void ModalPassCancel() => showPassModal = false;
+		void ModalShowPass() => showPassModal = true;
+		void ModalPassCancel() => showPassModal = false;
 
-    void ModalPassOk()
-    {
-            Console.WriteLine("Modal Ok ");
-            showModal = false;
-    }
+		void ModalPassOk()
+		{
+			Console.WriteLine("Modal Ok ");
+			showModal = false;
+		}
 
-    // Edit
+		// Edit
 
-    private Bruker bruker = new Bruker();
+		private Bruker bruker = new Bruker();
 
-    private void EditItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
-
-
-    private async Task SaveItem(int id) =>
-        await Http.PutAsJsonAsync($"/api/bruker/admin/UpdateBruker", bruker);
-
-    private void DeletesItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
-    // Delete section
-    private async Task DeleteItem(int id)
-    {
-            await Http.DeleteAsync($"/api/Bruker/admin/DeleteBruker/{id}");
-
-            NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-    }
-    //NavigationManager.NavigateTo("/admin");
-
-    //Reset Password
-
-    private ByttPassord byttpassord = new ByttPassord();
+		private void EditItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
 
 
-    // Reset
+		private async Task SaveItem(int id) =>
+		await Http.PutAsJsonAsync($"/api/bruker/admin/UpdateBruker", bruker);
 
-    private void PassordReset(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
-    private async Task ResetPassord()
-    {
-            byttpassord.BrukerId = bruker.AnsattNr;
-            var resetPassord = new { Name = byttpassord, IsComplete = false };
-        await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-    }
+		private void DeletesItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
+		// Delete section
+		private async Task DeleteItem(int id)
+		{
+			await Http.DeleteAsync($"/api/Bruker/admin/DeleteBruker/{id}");
 
- 
-   }
-    </Authorized>
-    <NotAuthorized>
-    <h3>403 Ingen tilgang her</h3>
-     </NotAuthorized>
+			NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+		}
+		//NavigationManager.NavigateTo("/admin");
+
+		//Reset Password
+
+		private ByttPassord byttpassord = new ByttPassord();
+
+
+		// Reset
+
+		private void PassordReset(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
+		private async Task ResetPassord()
+		{
+			byttpassord.BrukerId = bruker.AnsattNr;
+			var resetPassord = new { Name = byttpassord, IsComplete = false };
+			await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
+			NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+		}
+
+
+		}
+	</Authorized>
+	<NotAuthorized>
+		<h3>403 Ingen tilgang her</h3>
+	</NotAuthorized>
 
 </AuthorizeView>

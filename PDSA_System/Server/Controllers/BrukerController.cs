@@ -16,13 +16,16 @@ namespace PDSA_System.Server.Controllers
             this._configuration = configuration;
         }
 
-        /**
-         * Henter alle brukerene fra databasen.
-         * Returnerer statuskode 200 dersom det ikke oppstår feil.
+
+        /** GetAllBrukere
+         * @return - OkObjectResult
+         * 
+         * Hente ut alle brukere fra databasen
          */
         [HttpGet]
         public async Task<ActionResult<List<Bruker>>> GetAllBrukere()
         {
+            // Lag en kobling til databasen
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
@@ -32,47 +35,57 @@ namespace PDSA_System.Server.Controllers
         }
 
 
-        /**
-         * Henter en spesifikk bruker iforhold til hvilken route man er på.
-         * URL --> NordicDoor/Bruker/1 vil hente ut bruker med AnsattNr 1.
-         * Returnerer statuskode 200 dersom det ikke oppstår feil.
-        */
+        /** GetBruker
+         * @param - int AnsattNr
+         * @return - OkObjectResult
+         * 
+         * Hente en spesifikk bruker basert på AnsattNr
+         */
         [HttpGet("/api/[controller]/{AnsattNr}")]
         public async Task<ActionResult<Bruker>> GetBruker(int AnsattNr)
         {
+            // Lag en kobling til databasen
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-            var bruker = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE AnsattNr = @id",
-                new { id = AnsattNr });
+            var bruker = await conn.QueryAsync<Bruker>("SELECT * FROM Bruker WHERE AnsattNr = @id", new { id = AnsattNr });
 
             var valgtBruker = bruker.First();
-            valgtBruker.PassordHash = ""; //Gjør at passord ikke sendes og passordhash ikke blir vist i profilpage
+            //Gjør at passord ikke sendes og passordhash ikke blir vist i profilpage
+            valgtBruker.PassordHash = "";
             return Ok(valgtBruker);
         }
 
-        /**
-        * Sjekker om bruker har admin eller teamleder rolle, for å så legge til bruker i et Team
-        */
+
+        /** OppdaterTeam
+         * @param - int AnsattNr
+         * @return - OkObjectResult
+         * 
+         * Sjekker om bruker har admin eller teamleder rolle, for å så legge til bruker i et Team
+         */
         [HttpPost("/api/[controller]/addBrukerToTeam/")]
         public async Task<ActionResult<bool>> OppdaterTeam(TeamMedlemskap teammedlemskap)
         {
+            // Lag en kobling til databasen
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
             var res = await conn.ExecuteAsync("INSERT INTO TeamMedlemskap(TeamId, AnsattNr) Values (@TeamId, @AnsattNr)", teammedlemskap);
 
-
             return Ok(res.Equals(1));
         }
 
 
-        /*
-            Create for en ny Bruker.
+        /** CreateBruker
+         * @param - Bruker bruker
+         * @return - OkObjectResult
+         * 
+         * Lag en ny bruker
          */
         [HttpPost("/api/[controller]/createBruker/")]
         public async Task<ActionResult<Bruker>> CreateBruker(Bruker bruker)
         {
+            // Lag en kobling til databasen
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
@@ -82,25 +95,34 @@ namespace PDSA_System.Server.Controllers
 
             return Ok(res.Equals(1));
         }
-        /*
-         Updater en Bruker --> ikke helt funksjonell enda.
+
+
+        /** UpdateBruker
+         * @param - Bruker bruker
+         * @return - OkObjectResult
+         * 
+         * Oppdater infoen til en bruker
          */
         [HttpPut("/api/[Controller]/admin/UpdateBruker")]
         public async Task<ActionResult<bool>> UpdateBruker(Bruker bruker)
         {
+            // Lag en kobling til databasen
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(connString).Connection;
 
-             var res = await conn.ExecuteAsync(
-                "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, LederId = @LederId, Rolle = @Rolle WHERE AnsattNr = @AnsattNr",
-                bruker);
+            var res = await conn.ExecuteAsync(
+               "UPDATE Bruker SET Fornavn = @Fornavn, Etternavn = @Etternavn, Email = @Email, LederId = @LederId, Rolle = @Rolle WHERE AnsattNr = @AnsattNr",
+               bruker);
 
             return Ok(res.Equals(1));
         }
 
 
-        /*
-         Deleter brukere etter AnsattNr
+        /** DeleteBruker
+         * @param - int AnsattNr
+         * @return - OkObjectResult
+         * 
+         * Slett en bruker basert på AnsattNr
          */
         [HttpDelete("/api/[controller]/admin/DeleteBruker/{AnsattNr}")]
         public async Task<ActionResult<bool>> DeleteBruker(int AnsattNr)
@@ -114,22 +136,12 @@ namespace PDSA_System.Server.Controllers
             return Ok(res.Equals(1));
         }
 
-
-        /*
-        Denne metoden oppdaterer en Bruker sin Rolle med AnsattNr som betingelse.
-        */
-        [HttpPut("/api/[controller]/admin/updateBrukerRolle")]
-        public async Task<ActionResult<bool>> UpdateRolle(string rolle, int AnsattNr)
-        {
-            var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
-            using var conn = new DbHelper(connString).Connection;
-
-            var res = await conn.ExecuteAsync(
-                "UPDATE Bruker SET Rolle = @Rolle WHERE AnsattNr = @Id", new { Rolle = rolle, Id = AnsattNr });
-
-            return Ok(res.Equals(1));
-        }
-
+        /** ByttPassord
+         * @param - ByttPassord data
+         * @return - OkObjectResult
+         * 
+         * Byttpassord fra form data som er brukerId og selve passordet
+         */
         [HttpPost("/api/[controller]/byttPassord/")]
         public async Task<ActionResult<bool>> ByttPassord([FromBody] ByttPassord data)
         {

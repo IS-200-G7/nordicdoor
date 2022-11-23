@@ -20,13 +20,15 @@ public class ForslagController : Controller
         this._configuration = configuration;
     }
 
-    /**
-     * Henter alle Forslag fra databasen.
-     * Returnerer statuskode 200 dersom det ikke oppstår feil.
+    /** GetAllForslag
+     * @return - OkObjectResult
+     * 
+     * Hente ut alle forslagene
      */
     [HttpGet]
     public async Task<ActionResult<List<Forslag>>> GetAllForslag()
     {
+        // Lag en kobling til databasen
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
@@ -35,13 +37,17 @@ public class ForslagController : Controller
         return Ok(forslag);
     }
 
-    /**
-     * Funksjon for å hente ut spesifikke forslag
-     * Returnerer statuskode 200 dersom det ikke oppstår feil.
+
+    /** GetForslag
+     * @param - int forslagsId
+     * @return - OkObjectResult
+     * 
+     * Hente ut spesifikke forslag basert på forslagId
      */
     [HttpGet("/api/[controller]/{forslagId}")]
     public async Task<ActionResult<Forslag>> GetForslag(int forslagId)
     {
+        // Lag en kobling til databasen
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
@@ -51,12 +57,17 @@ public class ForslagController : Controller
         return Ok(forslag.First());
     }
 
-    /**
-     * Funksjon for å hente alle forslag til spesfikke brukere basert på ForfatterId
+
+    /** GetBrukerForslag
+     * @param - int forfatterId
+     * @return - OkObjectResult
+     * 
+     * Hent alle forslag til spesfikke brukere basert på forfatterId
      */
     [HttpGet("/api/[controller]/forfatter/{forfatterId}")]
     public async Task<ActionResult<List<Forslag>>> GetBrukerForslag(int forfatterId)
     {
+        // Lag en kobling til databasen
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
@@ -67,11 +78,15 @@ public class ForslagController : Controller
     }
 
 
-    /**
-    * Funksjon for å opprette forslag
-    * Returnerer statuskode 200 dersom det ikke oppstår feil.
-    * Fjernet bilde da det ikke fungerte å legge til pga kluss med datatype
-    * Hvis den skal testes i swagger fjern bilde stringen og kjør
+    /** CreateForslag
+     * @param - int AnsattNr
+     * @param - string Status
+     * @return - OkObjectResult
+     * 
+     * Oprett et forslag
+     * 
+     * Fjernet bilde da det ikke fungerte å legge til pga kluss med datatype
+     * Hvis den skal testes i swagger fjern bilde stringen og kjør
      */
     [HttpPost("/api/[controller]/createforslag/")]
     [Authorize]
@@ -80,6 +95,7 @@ public class ForslagController : Controller
         var forfatterId = HttpContext.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
         forslag.ForfatterId = int.Parse(forfatterId);
 
+        // Lag en kobling til databasen
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
@@ -90,13 +106,17 @@ public class ForslagController : Controller
         return Ok(res.Equals(1));
     }
 
-    /**
-     * Funksjon for å oppdatere forslag utifra forslagId
-     * Returnerer statuskode 200 dersom det ikke oppstår feil.
+
+    /** UpdateForslag
+     * @param - Forslag forslag 
+     * @return - OkObjectResult
+     * 
+     * Oppdater et forslag utifra forslagId
      */
     [HttpPut("/api/[controller]/updateforslag/{forslagId}")]
     public async Task<ActionResult<bool>> UpdateForslag(Forslag forslag)
     {
+        // Lag en kobling til databasen
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
@@ -107,13 +127,17 @@ public class ForslagController : Controller
         return Ok(res.Equals(1));
     }
 
-    /**
-     * Funksjon for å slette forslag utifra forslagId
-     * Returnerer statuskode 200 dersom det ikke oppstår feil
+
+    /** DeleteForslag
+     * @param - int forslagId 
+     * @return - OkObjectResult
+     * 
+     * Slett et forslag utifra forslagId
      */
     [HttpDelete("/api/[controller]/deleteforslag/{forslagId}")]
     public async Task<ActionResult<bool>> DeleteForslag(int forslagId)
     {
+        // Lag en kobling til databasen
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
@@ -122,43 +146,17 @@ public class ForslagController : Controller
         return Ok(res.Equals(1));
     }
 
-    // status controller
-    [HttpPost("/api/[controller]/setstatus/")]
-    public async Task<ActionResult<bool>> SetStatus([FromQuery] int ForslagId, [FromQuery] string Status)
-    {
-        // Hente til connection string fra appsettings.json og åpne en connection til database
-        var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
-        using var conn = new DbHelper(connString).Connection;
-        conn.Open();
-
-        // En array med statuser som er lov å bruke
-        string[] acceptedStatuses = { "plan", "do", "study", "act" };
-
-        // Sjekker om statusen som vi har fått er i acceptedStatuses
-        if (!acceptedStatuses.Contains(Status))
-        {
-            return StatusCode(400, "Invalid value for 'Status'. Must be 'plan', 'do', 'study' or 'act'");
-        }
-
-        // Prøv skrive statusen inn i databasen
-        try
-        {
-            await conn.QueryAsync("UPDATE Forslag SET Status = @Status WHERE ForslagId = @ForslagId",
-                new { ForslagId = ForslagId, Status = Status });
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"databaseerror: {e.Message}");
-            return StatusCode(500, "En feil har skjedd");
-        }
-
-        return Ok(); // TODO: Burde kanskje returnert noe?
-    }
-
-    //Metode for å oppdatere Bilde-kolonne i forslag
+    /** UpdateBilde
+     * @param - IFormFile imageFile
+     * @param - int forslagId
+     * @return - OkObjectResult
+     * 
+     * Last opp et bilde
+     */
     [HttpPost("/api/[controller]/UpdateBilde/")]
     public async Task<ActionResult<bool>> UpdateBilde(IFormFile imageFile, int forslagId)
     {
+        // Lag en kobling til databasen
         var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
         using var conn = new DbHelper(connString).Connection;
 
