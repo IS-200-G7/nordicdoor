@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace PDSA_System.Shared.Models
 {
     public class Bruker
