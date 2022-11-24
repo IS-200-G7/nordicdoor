@@ -7,9 +7,7 @@
 
 <AuthorizeView Roles="admin">
 	<Authorized>
-		<h3>Admin</h3>
-		<br />
-		<h2>Brukere</h2>
+    <h3>Brukeradministrasjon</h3>
 		<!-- Denne Knappen vil sende brukren til siden lagbrukerpage hvorav det kan lages brukere ved hjelp av HTTP (POST) -->
 		<button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagBruker"))">Legg til bruker</button>
 		<br />
