@@ -84,7 +84,11 @@
 							</div>
 							<div>
 								<label for="formGroupExampleInput">Rolle</label>
-								<input type="text" class="form-control" @bind="bruker.Rolle" id="formGroupExampleInput" placeholder="Rolle">
+								<select name="rolle" @bind="bruker.Rolle">
+									<option value="ansatt">ansatt</option>
+									<option value="teamleder">teamleder</option>
+									<option value="admin">admin</option>
+								</select>
 							</div>
 							<div>
 								<label for="formGroupExampleInput">LederId</label>
@@ -176,7 +180,7 @@
 		@*<p> @passgen.GenererPassord(10)</p>*@
 
 		@code {
-		// Koden under er for å vise alle ansatte i databasen(GET)
+			// Koden under er for å vise alle ansatte i databasen(GET)
 		private Bruker[]? _bruker;
 
 
@@ -226,8 +230,11 @@
 		private void EditItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
 
 
-		private async Task SaveItem(int id) =>
-		await Http.PutAsJsonAsync($"/api/bruker/admin/UpdateBruker", bruker);
+		private async Task SaveItem(int id)
+		{
+			ModalCancel();
+			await Http.PutAsJsonAsync($"/api/bruker/admin/UpdateBruker", bruker);
+		}
 
 		private void DeletesItem(int id) => bruker = _bruker.Single(i => i.AnsattNr == id);
 		// Delete section
