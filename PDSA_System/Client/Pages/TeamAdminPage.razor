@@ -4,10 +4,10 @@
 @inject NavigationManager NavigationManager
 
 <AuthorizeView Roles="admin">
-<Authorized> 
+<Authorized>
 
 
-<h3>Teams</h3>
+<h3>Teamadministrasjon</h3>
 
 <button type="button" class="btn-success rounded" @onclick="@(()=>NavigationManager.NavigateTo("/LagTeam"))">Opprett et Team</button>
 
@@ -24,11 +24,11 @@
                 <th class="th-sm">TeamLederId
                 </th>
                 <th class="th-sm">Navn
-                </th> 
+                </th>
                 <th class="th-sm">AvdelingsId
                 </th>
                 <th class="th-sm">Handlinger
-                </th> 
+                </th>
             </tr>
         </thead>
         @foreach (var item in _team)
