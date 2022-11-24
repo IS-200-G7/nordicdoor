@@ -7,11 +7,11 @@ namespace PDSA_System.Server.Models;
 
 public class JwtClaims
 {
-    private string Epost { get; set; }
-    private string Fornavn { get; set; }
-    private string Etternavn { get; set; }
-    private string Rolle { get; set; } // Admin, bruker, etc.
-    private string AnsattNr { get; set; }
+    public string Epost { get; set; }
+    public string Fornavn { get; set; }
+    public string Etternavn { get; set; }
+    public string Rolle { get; set; } // Admin, bruker, etc.
+    public string AnsattNr { get; set; }
     private string Secret { get; set; }
 
     public JwtClaims(string epost, string fornavn, string etternavn, string rolle, string ansattNr, string jwtSecret)
@@ -33,9 +33,9 @@ public class JwtClaims
             new Claim("etternavn", Etternavn),
             new Claim("epost", Epost),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(ClaimTypes.Role, Rolle), 
+            new Claim(ClaimTypes.Role, Rolle),
             new Claim("brukerId", AnsattNr)
-    
+
         };
 
         // Hente og generere nøkler for autentisering
@@ -63,15 +63,15 @@ public class JwtClaims
 
         if (tokenS == null)
         {
-            return new JwtClaims("", "", "", "", "", null);
+            return new JwtClaims("", "", "", "", "", "");
         }
 
         var epost = tokenS.Claims.First(claim => claim.Type == "epost").Value;
         var fornavn = tokenS.Claims.First(claim => claim.Type == "fornavn").Value;
         var etternavn = tokenS.Claims.First(claim => claim.Type == "etternavn").Value;
-        var rolle = tokenS.Claims.First(claim => claim.Type == "rolle").Value;
+        var rolle = tokenS.Claims.First(claim => claim.Type == ClaimTypes.Role).Value;
         var ansattNr = tokenS.Claims.First(claim => claim.Type == "brukerId").Value;
 
-        return new JwtClaims(epost, fornavn, etternavn, rolle, ansattNr, null);
+        return new JwtClaims(epost, fornavn, etternavn, rolle, ansattNr, "");
     }
 }
