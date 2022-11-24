@@ -6,7 +6,7 @@
 <AuthorizeView Roles="teamleder, admin">
 	<Authorized>
 
-		<h3>TeamAdministration</h3>
+		<h3>Administrasjon av eget team</h3>
 
 		@if (_teamMember == null)
 		{
@@ -47,7 +47,7 @@
 							<td>@item.Navn</td>
 							<td>@item.Fornavn @item.Etternavn</td>
 							<td>@item.Email</td>
-							<td><button type="button" class="btn btn-outline-danger" role="button" @onclick="(() => { ModalShowDelete(); DeleteItem(item.AnsattNr , item.TeamId);})">Slett</button></td>
+							<td><button type="button" class="btn btn-danger" role="button" @onclick="(() => { ModalShowDelete(); DeleteItem(item.AnsattNr , item.TeamId);})">Slett</button></td>
 						</tr>
 					</tbody>
 					@*role="button" er for å støtte assisterende teknologi som skjermleser*@

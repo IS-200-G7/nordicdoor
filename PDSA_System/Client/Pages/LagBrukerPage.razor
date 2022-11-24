@@ -3,6 +3,7 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+
 <AuthorizeView Roles="admin">
 	<Authorized>
 		<h3>Opprett bruker</h3>
@@ -33,8 +34,16 @@
 			</div>
 			<div>
 				<label for="formGroupExampleInput">Rolle</label>
-				<input type="text" @bind="_bruker.Rolle" class="form-control" id="formGroupExampleInput" placeholder="Rolle">
+			<br />
+			<div>
+				<label for="formGroupExampleInput">Rolle</label>
+				<select name="rolle" @bind="_bruker.Rolle">
+					<option value="ansatt">ansatt</option>
+					<option value="teamleder">teamleder</option>
+					<option value="admin">admin</option>
+				</select>
 			</div>
+			<br />
 			<div>
 				<label for="formGroupExampleInput">LederId</label>
 				<input type="number" @bind="_bruker.LederId" class="form-control" id="formGroupExampleInput" placeholder="LederId">
@@ -44,16 +53,14 @@
 				<input type="datetime" @bind="_bruker.Opprettet" class="form-control" id="formGroupExampleInput" placeholder="Opprettet">
 			</div>
 		</form>
+		<br />
 		<button type="button" class="btn btn-success" @onclick="LagBruker">Lag bruker</button>
-
-
 
 		@code {
 			private Bruker _bruker = new Bruker();
 
 			ByttPassord byttpassord = new ByttPassord();
 			// make the button route back to the admin page after adding a new user
-
 
 			private async Task LagBruker()
 			{
@@ -68,6 +75,7 @@
 		<h3>403 Ingen tilgang her</h3>
 	</NotAuthorized>
 </AuthorizeView>
+
 
 
 
