@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace PDSA_System.Shared.Models
 {
     public class Bruker
@@ -8,6 +10,7 @@ namespace PDSA_System.Shared.Models
 
         public string? Etternavn { get; set; }
 
+        [RegularExpression(@"^[a-zA-Z]+$")]
         public string? Email { get; set; }
 
         public string? PassordHash { get; set; } = "";
