@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Bruker
     Rolle       VARCHAR(50),
     LederId     INTEGER                 DEFAULT NULL,
     KEY LederId (LederId),
-    CONSTRAINT FK_Bruker_Bruker FOREIGN KEY (LederId) REFERENCES Bruker (AnsattNr) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT FK_Bruker_Bruker FOREIGN KEY (LederId) REFERENCES Bruker (AnsattNr) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT PK_Bruker PRIMARY KEY (AnsattNr)
 );
 
