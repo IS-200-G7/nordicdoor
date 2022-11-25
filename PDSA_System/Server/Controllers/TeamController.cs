@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using PDSA_System.Shared.Models;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace PDSA_System.Server.Controllers
 {
@@ -22,6 +24,7 @@ namespace PDSA_System.Server.Controllers
          * Hent ut alle teams i databasen
          */
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<List<Team>>> GetAllTeams()
         {
             // denne linjen henter ut connectionstringen fra appsettings.json
@@ -42,6 +45,7 @@ namespace PDSA_System.Server.Controllers
          * Hent ut et spesifikk team basert på TeamId
          */
         [HttpGet("/api/[controller]/{TeamId}")]
+        [Authorize(Roles = "teamleder,admin")]
         public async Task<ActionResult<Team>> GetTeam(int TeamId)
         {
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -60,6 +64,7 @@ namespace PDSA_System.Server.Controllers
          * Lag et nytt team
          */
         [HttpPost("/api/[controller]/OpprettTeam/")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<bool>> CreateTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -80,6 +85,7 @@ namespace PDSA_System.Server.Controllers
          * Oppdater infoen til et team
          */
         [HttpPut]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<Team>> EditTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -97,6 +103,7 @@ namespace PDSA_System.Server.Controllers
          * Slett et team basert på TeamID
          */
         [HttpDelete("/api/[controller]/{TeamId}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<bool>> DeleteTeam(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -115,6 +122,7 @@ namespace PDSA_System.Server.Controllers
          * Hent alle medlemmene tilknyttet et spesefikt team
          */
         [HttpGet("/api/[controller]/GetBrukere")]
+        [Authorize(Roles = "teamleder")]
         public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeam(int TeamId)
         {
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -135,6 +143,7 @@ namespace PDSA_System.Server.Controllers
          * Hent brukere tilknuttet til et spesifikt team
          */
         [HttpGet("/api/[controller]/GetBrukereDetail")]
+        [Authorize(Roles = "admin,teamleder")]
         public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeamDetail(int TeamId)
         {
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -160,6 +169,7 @@ namespace PDSA_System.Server.Controllers
          * Slett bruker fra et team basert på AnsattNr og TeamId
          */
         [HttpDelete("/api/[controller]/DeleteBrukere")]
+        [Authorize(Roles = "teamleder,admin")]
         public async Task<ActionResult<List<Team>>> DeleteUsersFromTeam(int AnsattNr, int TeamId)
         {
             var connString = _configuration.GetValue<String>("ConnectionStrings:DefaultConnection");

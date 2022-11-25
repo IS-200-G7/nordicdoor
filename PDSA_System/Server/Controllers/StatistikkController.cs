@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Dapper;
 using PDSA_System.Shared.Models;
 using PDSA_System.Server.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
+
 namespace PDSA_System.Server.Controllers
 {
     [Route("/api/[controller]")]
@@ -26,6 +29,7 @@ namespace PDSA_System.Server.Controllers
          * Henter hvor mange forslag en bruker har laget
          */
         [HttpGet("/api/[controller]/{AnsattNr}")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetBrukerForslagStatistikk(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -45,6 +49,7 @@ namespace PDSA_System.Server.Controllers
          * Henter hvor mange forslag en bruker har laget, filtrert med status
          */
         [HttpGet("/api/[controller]/{AnsattNr}/{Status}")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetBrukerForslagStatusStatistikk(int AnsattNr, string Status)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -64,6 +69,7 @@ namespace PDSA_System.Server.Controllers
          * Henter hvor mange forslag en bruker har laget
          */
         [HttpGet("/api/[controller]/Team/{TeamId}")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetTeamForslagStatistikk(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -83,6 +89,7 @@ namespace PDSA_System.Server.Controllers
         * Henter hvor mange forslag et team har laget, filtrert med status
         */
         [HttpGet("/api/[controller]/Team/{TeamId}/{Status}")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetTeamForslagStatusStatistikk(int TeamId, string Status)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -103,6 +110,7 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk bruker innen en uke (7 dager).
          */
         [HttpGet("/api/[controller]/Bruker/{AnsattNr}/Uke")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetBrukerUkentligAktivitet(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -121,6 +129,7 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk bruker innen en måned (30 dager).
          */
         [HttpGet("/api/[controller]/Bruker/{AnsattNr}/Måned")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetBrukerMånedligAktivitet(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -139,6 +148,7 @@ namespace PDSA_System.Server.Controllers
          * Henter forsalgene til hvert team som er laget denne uken, gruppert etter TeamId og sortert i synkende rekkefølge.
          */
         [HttpGet("/api/[controller]/Teams/Uke")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetTeamsUkentligAktivitet()
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -155,6 +165,7 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk Team innen en uke (7 dager).
          */
         [HttpGet("/api/[controller]/Team/{TeamId}/Uke")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetTeamUkentligAktivitet(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -173,6 +184,7 @@ namespace PDSA_System.Server.Controllers
          * Henter forsalgene til hvert team gruppert etter TeamId og sortert i synkende rekkefølge.
          */
         [HttpGet("/api/[controller]/Teams/Måned")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetTeamsMånedligAktivitet()
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -189,6 +201,7 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk Team innen en måned (30 dager).
          */
         [HttpGet("/api/[controller]/Team/{TeamId}/Måned")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetTeamMånedligAktivitet(int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -208,6 +221,7 @@ namespace PDSA_System.Server.Controllers
         * Henter alle forslagene til et spesifikk Team innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
         */
         [HttpGet("/api/[controller]/Team/{TeamId}/Between/{time01}/{time02}")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetTeamStatistikkBetween(string time01, string time02, int TeamId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -227,6 +241,7 @@ namespace PDSA_System.Server.Controllers
          * Henter alle forslagene til en spesifikk Bruker innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
          */
         [HttpGet("/api/[controller]/Bruker/{ForfatterId}/Between/{time01}/{time02}")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetBrukerStatistikkBetween(string time01, string time02, int ForfatterId)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -246,6 +261,7 @@ namespace PDSA_System.Server.Controllers
         * Henter alle forslagene innenfor en brukerdefinert periode. Imellom @time01 og @time@2.
         */
         [HttpGet("/api/[controller]/Between/{time01}/{time02}")]
+        [Authorize]
         public async Task<ActionResult<List<Statistikk>>> GetStatistikkBetween(string time01, string time02)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");

@@ -26,6 +26,7 @@ public class ForslagController : Controller
      * Hente ut alle forslagene
      */
     [HttpGet]
+    [Authorize]
     public async Task<ActionResult<List<Forslag>>> GetAllForslag()
     {
         // Lag en kobling til databasen
@@ -45,6 +46,7 @@ public class ForslagController : Controller
      * Hente ut spesifikke forslag basert på forslagId
      */
     [HttpGet("/api/[controller]/{forslagId}")]
+    [Authorize]
     public async Task<ActionResult<Forslag>> GetForslag(int forslagId)
     {
         // Lag en kobling til databasen
@@ -65,6 +67,7 @@ public class ForslagController : Controller
      * Hent alle forslag til spesfikke brukere basert på forfatterId
      */
     [HttpGet("/api/[controller]/forfatter/{forfatterId}")]
+    [Authorize]
     public async Task<ActionResult<List<Forslag>>> GetBrukerForslag(int forfatterId)
     {
         // Lag en kobling til databasen
@@ -114,6 +117,7 @@ public class ForslagController : Controller
      * Oppdater et forslag utifra forslagId
      */
     [HttpPut("/api/[controller]/updateforslag/{forslagId}")]
+    [Authorize]
     public async Task<ActionResult<bool>> UpdateForslag(Forslag forslag)
     {
         // Lag en kobling til databasen
@@ -135,6 +139,7 @@ public class ForslagController : Controller
      * Slett et forslag utifra forslagId
      */
     [HttpDelete("/api/[controller]/deleteforslag/{forslagId}")]
+    [Authorize]
     public async Task<ActionResult<bool>> DeleteForslag(int forslagId)
     {
         // Lag en kobling til databasen

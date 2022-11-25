@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PDSA_System.Shared.Models;
 using PDSA_System.Server.Models;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PDSA_System.Server.Controllers
 {
@@ -23,6 +24,7 @@ namespace PDSA_System.Server.Controllers
          * Hente ut alle brukere fra databasen
          */
         [HttpGet]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<List<Bruker>>> GetAllBrukere()
         {
             // Lag en kobling til databasen
@@ -42,6 +44,7 @@ namespace PDSA_System.Server.Controllers
          * Hente en spesifikk bruker basert på AnsattNr
          */
         [HttpGet("/api/[controller]/{AnsattNr}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<Bruker>> GetBruker(int AnsattNr)
         {
             // Lag en kobling til databasen
@@ -64,6 +67,7 @@ namespace PDSA_System.Server.Controllers
          * Sjekker om bruker har admin eller teamleder rolle, for å så legge til bruker i et Team
          */
         [HttpPost("/api/[controller]/addBrukerToTeam/")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<bool>> OppdaterTeam(TeamMedlemskap teammedlemskap)
         {
             // Lag en kobling til databasen
@@ -83,6 +87,7 @@ namespace PDSA_System.Server.Controllers
          * Lag en ny bruker
          */
         [HttpPost("/api/[controller]/createBruker/")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<Bruker>> CreateBruker(Bruker bruker)
         {
             // Lag en kobling til databasen
@@ -104,6 +109,7 @@ namespace PDSA_System.Server.Controllers
          * Oppdater infoen til en bruker
          */
         [HttpPut("/api/[Controller]/admin/UpdateBruker")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<bool>> UpdateBruker(Bruker bruker)
         {
             // Lag en kobling til databasen
@@ -125,6 +131,7 @@ namespace PDSA_System.Server.Controllers
          * Slett en bruker basert på AnsattNr
          */
         [HttpDelete("/api/[controller]/admin/DeleteBruker/{AnsattNr}")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<bool>> DeleteBruker(int AnsattNr)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -143,6 +150,7 @@ namespace PDSA_System.Server.Controllers
          * Byttpassord fra form data som er brukerId og selve passordet
          */
         [HttpPost("/api/[controller]/byttPassord/")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<bool>> ByttPassord([FromBody] ByttPassord data)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
