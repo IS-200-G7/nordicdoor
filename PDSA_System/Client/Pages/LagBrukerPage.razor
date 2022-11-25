@@ -32,8 +32,6 @@
 				<label for="formGroupExampleInput">Passord</label>
 				<input type="text" @bind="byttpassord.Passord" class="form-control" id="formGroupExampleInput" placeholder="Passord">
 			</div>
-			<div>
-				<label for="formGroupExampleInput">Rolle</label>
 			<br />
 			<div>
 				<label for="formGroupExampleInput">Rolle</label>
@@ -57,18 +55,18 @@
 		<button type="button" class="btn btn-success" @onclick="LagBruker">Lag bruker</button>
 
 		@code {
-			private Bruker _bruker = new Bruker();
+		private Bruker _bruker = new Bruker();
 
-			ByttPassord byttpassord = new ByttPassord();
-			// make the button route back to the admin page after adding a new user
+		ByttPassord byttpassord = new ByttPassord();
+		// make the button route back to the admin page after adding a new user
 
-			private async Task LagBruker()
-			{
-				byttpassord.BrukerId = _bruker.AnsattNr;
-				await Http.PostAsJsonAsync("/api/Bruker/createBruker", _bruker);
-				await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
-				NavigationManager.NavigateTo("/BrukerAdmin");
-			}
+		private async Task LagBruker()
+		{
+			byttpassord.BrukerId = _bruker.AnsattNr;
+			await Http.PostAsJsonAsync("/api/Bruker/createBruker", _bruker);
+			await Http.PostAsJsonAsync("/api/bruker/byttPassord/", byttpassord);
+			NavigationManager.NavigateTo("/BrukerAdmin");
+		}
 		}
 	</Authorized>
 	<NotAuthorized>
