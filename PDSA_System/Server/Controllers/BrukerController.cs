@@ -44,7 +44,7 @@ namespace PDSA_System.Server.Controllers
          * Hente en spesifikk bruker basert på AnsattNr
          */
         [HttpGet("/api/[controller]/{AnsattNr}")]
-        [Authorize(Roles = "admin")]
+        [Authorize]
         public async Task<ActionResult<Bruker>> GetBruker(int AnsattNr)
         {
             // Lag en kobling til databasen
