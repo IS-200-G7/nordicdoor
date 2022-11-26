@@ -21,7 +21,7 @@
 			<input type="text" class="" id="epostInput" name="epostInput" @bind-value="@_data.Brukernavn" placeholder="Epostadresse" />
 			<input type="password" name="passwordInput" id="passwordInput" @bind-value="@_data.Passord" class="" placeholder="Passord" />
 			<SubmitInput Text="Logg Inn"/>
-			
+
 		</center>
 	</div>
 
@@ -34,7 +34,7 @@
 
 	public bool HideNavMenu = true;
 
-	
+
 	private async void CreateCookie(string name, string value, int days)
 	{
 		var test = await JsRuntime.InvokeAsync<string>("methods.CreateCookie", name, value, days);
@@ -53,7 +53,6 @@
 				var token = task.Result.Content.ReadAsStringAsync().Result;
 
 				LocalStorage.SetItemAsStringAsync("token", token);
-				//Endre string data for å endre team.
 				NavigationManager.NavigateTo("/", true);
 			}
 			else
