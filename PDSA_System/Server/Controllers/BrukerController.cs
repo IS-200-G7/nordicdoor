@@ -67,8 +67,8 @@ namespace PDSA_System.Server.Controllers
          * Sjekker om bruker har admin eller teamleder rolle, for å så legge til bruker i et Team
          */
         [HttpPost("/api/[controller]/addBrukerToTeam/")]
-        [Authorize(Roles = "admin")]
-        public async Task<ActionResult<bool>> OppdaterTeam(TeamMedlemskap teammedlemskap)
+        [Authorize(Roles = "teamleder")]
+        public async Task<ActionResult<bool>> OppdaterTeam(TeamMedlemskapPost teammedlemskap)
         {
             // Lag en kobling til databasen
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");

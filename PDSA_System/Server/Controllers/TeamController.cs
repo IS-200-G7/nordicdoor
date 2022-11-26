@@ -3,6 +3,9 @@ using PDSA_System.Shared.Models;
 using Dapper;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Microsoft.AspNetCore.Routing;
+using Org.BouncyCastle.Asn1.X509;
+using System.Collections.Generic;
 
 namespace PDSA_System.Server.Controllers
 {
@@ -85,7 +88,7 @@ namespace PDSA_System.Server.Controllers
          * Oppdater infoen til et team
          */
         [HttpPut]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "teamleder")]
         public async Task<ActionResult<Team>> EditTeam(Team team)
         {
             var connString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
@@ -142,21 +145,16 @@ namespace PDSA_System.Server.Controllers
          * 
          * Hent brukere tilknuttet til et spesifikt team
          */
-        [HttpGet("/api/[controller]/GetBrukereDetail")]
+        [HttpGet("/api/[controller]/GetBrukereDetail/{ansattNr}")]
         [Authorize(Roles = "admin,teamleder")]
-        public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeamDetail(int TeamId)
+        public async Task<ActionResult<List<TeamMedlemskap>>> GetUsersFromTeamDetail(int ansattNr)
         {
             var conneString = _configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             using var conn = new DbHelper(conneString).Connection;
             // denne linjen henter ut teammedlemskap
-            string query = @"SELECT  t.teamId,t.Navn ,tm.AnsattNr,b.Fornavn, b.Etternavn, b.Email FROM TeamMedlemskap tm
-            INNER JOIN Bruker b  ON tm.AnsattNr=b.AnsattNr
-            JOIN Team t ON t.teamId=tm.teamid
-            WHERE tm.teamid  =@id";
-            var medlemskap = await conn.QueryAsync<TeamMedlemskap>(query,
-                new { id = TeamId });
+            var medlemskap = await conn.QueryAsync<TeamMedlemskap>("SELECT  t.teamId, t.Navn, tm.AnsattNr, b.Fornavn, b.Etternavn, b.Email FROM TeamMedlemskap tm INNER JOIN Bruker b  ON tm.AnsattNr = b.AnsattNr JOIN Team t ON t.teamId = tm.teamid WHERE tm.teamid = (Select tm.TeamId from TeamMedlemskap as tm, Bruker as b where b.AnsattNr = @id and tm.AnsattNr = @id and b.Rolle = 'teamleder' order by tm.TeamId desc limit 1)",
+                new { id = ansattNr });
             // denne returnerer en statuskode 200 og teamedlemskapet som ble hentet fra databasen
-            //return Ok(brukere);
             return Ok(medlemskap);
         }
 
