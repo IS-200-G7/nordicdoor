@@ -188,6 +188,8 @@
 				</div>
 			</div>
 		}
+
+
 		@if (showingForslagInfo)
 		{
 			<div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
@@ -221,6 +223,8 @@
 				</div>
 			</div>
 		}
+
+
 		@if (showingEditForslag)
 		{
 			<div class="modal fade show" id="myModal" style="display:block" aria-modal="true" role="dialog">
@@ -300,7 +304,9 @@
 	bool showingCreateForslag = false;
 	void showCreateForslag()
 	{
-		// 'HMS' blir default verdi
+		// 'HMS' blir default verdi slik at noe vises i drop down menyen.
+		// Dette er fordi vi bruker @bind=forslag.Kategori i dropdown. Som default
+		// har den ikke noe verdi. Så de vil vises en tom dropdown og det er ikke fint
 		forslag.Kategori = "HMS";
 		showingCreateForslag = true;
 	}
@@ -310,10 +316,11 @@
 	private Forslag chosenForslag = new Forslag();
 	private Bruker bruker = new Bruker();
 	bool showingForslagInfo = false;
-	void closeForslagInfo() => showingForslagInfo = false;
 
+	void closeForslagInfo() => showingForslagInfo = false;
 	protected async Task showForslagInfo(int forslagId)
 	{
+		// Vis boostrap modalen for å vise infoen om forslaget
 		showingForslagInfo = true;
 		chosenForslag = await Http.GetFromJsonAsync<Forslag>($"/api/Forslag/{forslagId}");
 		bruker = await Http.GetFromJsonAsync<Bruker>($"/api/Bruker/{chosenForslag.ForfatterId}");
@@ -334,6 +341,9 @@
 	bool showingEditForslag = false;
 	void showEditForslag() => showingEditForslag = true;
 	void closeEditForslag() => showingEditForslag = false;
+
+	// Oppdater eller rediger et forslag basert på forslag ID og send in chosenForslag daten som er den nylig oppdaterte
+	// versjonen av forslag infoen
 	private async Task UpdateForslag(int id)
 	{
 		await Http.PutAsJsonAsync($"/api/Forslag/updateforslag/{id}", chosenForslag);
@@ -343,6 +353,7 @@
 
 	}
 
+	// Slett et forslag basert på forslag ID
 	private async Task deleteForslag(int id)
 	{
 		await Http.DeleteAsync($"/api/Forslag/deleteforslag/{id}");
