@@ -38,7 +38,6 @@
                         </th>
                     </tr>
 				</thead>
-				@*Issue: Hva gjøres dersom en leder er medlem i flere team? Typisk avdelingsleder*@
 				@foreach (var item in _teamMember)
 				{
 					<tbody>
@@ -130,20 +129,18 @@
 	</NotAuthorized>
 </AuthorizeView>
 
-@code
-{
-    /*Viser team basert på autorisasjon av bruker som er pålogget. Gjenstår noe arbeid med dette.
-        Teams settes statisk i Login.razor foreløpig*/
+@code {
     private TeamMedlemskap[]? _teamMember;
 
     private AuthenticationState? authState;
 
     protected override async Task OnInitializedAsync()
     {
+        //Henter brukerId claim fra JWT og putter dette i en variabel (ansattNr)
         authState = await GetAuth.GetAuthenticationStateAsync();
         var ansattNr = authState.User.Identities.First().Claims.FirstOrDefault(claim => claim.Type == "brukerId")?.Value;
         Console.WriteLine(ansattNr);
-
+        //ansattNr blir så brukt i en query for å hente ut medlemmene i teamet til den spesifikke brukeren.
         _teamMember = await Http.GetFromJsonAsync<TeamMedlemskap[]>($"/api/Team/GetBrukereDetail/{int.Parse(ansattNr)}");
     }
 
@@ -157,6 +154,13 @@
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
+
+    //Sletter brukere fra team. Parameterene hentes fra binds i modal body.
+    private async Task DeleteItem(int AnsattNr, int TeamId)
+    {
+        await Http.DeleteAsync($"/api/Team/DeleteBrukere?AnsattNr={AnsattNr}&TeamId={TeamId}");
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
 
 
     // Modal
@@ -177,10 +181,4 @@
     void ModalShowDelete() => showModalDelete = true;
     void ModalCancelDelete() => showModalDelete = false;
 
-
-    private async Task DeleteItem(int AnsattNr, int TeamId)
-    {
-        await Http.DeleteAsync($"/api/Team/DeleteBrukere?AnsattNr={AnsattNr}&TeamId={TeamId}");
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-    }
-    }
+}
